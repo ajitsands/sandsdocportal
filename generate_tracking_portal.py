@@ -542,7 +542,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }}
             
             $current_step = 'OTP_INPUT';
-            $auth_success = 'A 6-digit code has been dispatched to <strong>' . htmlspecialchars($input_email) . '</strong>.<br><div style="margin-top:8px; padding:8px 12px; background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; border-radius:6px; font-size:12.5px;">🔑 Instant Verification Code: <strong style="font-family:monospace; font-size:15px; letter-spacing:3px; color:#0a2540;">' . $otp . '</strong></div>';
+            $auth_success = 'A 6-digit verification code has been dispatched to <strong>' . htmlspecialchars($input_email) . '</strong>. Please check your inbox (and spam folder).';
         }}
     }}
 }}
