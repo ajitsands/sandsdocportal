@@ -252,6 +252,77 @@ function get_ip_location($ip) {{
     return $loc;
 }}
 
+function send_enterprise_email($to, $user_name, $otp) {{
+    $msg_id = sprintf("<%s.%s@%s>", time(), mt_rand(10000, 99999), isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'docs.sandslab.com');
+    $date_str = date(DATE_RFC2822);
+    $subject = "Your Verification Code: $otp [Ref #" . substr(md5($otp . time()), 0, 6) . "] - SaNDS Lab";
+    
+    $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "Date: " . $date_str . "\r\n";
+    $headers .= "Message-ID: " . $msg_id . "\r\n";
+    $headers .= "From: SaNDS Lab Security <no-reply@docs.sandslab.com>\r\n";
+    $headers .= "Reply-To: support@sandslab.com\r\n";
+    $headers .= "Return-Path: <no-reply@docs.sandslab.com>\r\n";
+    $headers .= "X-Priority: 1 (Highest)\r\n";
+    $headers .= "Importance: High\r\n";
+    $headers .= "Auto-Submitted: auto-generated\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion();
+    
+    $email_body = "<!DOCTYPE html>
+    <html>
+    <head><meta charset='UTF-8'><title>Verification Code</title></head>
+    <body style='font-family: Arial, sans-serif; background-color: #f4f7fa; margin: 0; padding: 30px;'>
+      <table align='center' border='0' cellpadding='0' cellspacing='0' width='550' style='background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid #e67e22;'>
+        <tr>
+          <td style='background-color: #07192c; padding: 25px 30px; text-align: center;'>
+            <h2 style='color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 0.5px;'>SaNDS Lab • Enterprise Document Portal</h2>
+            <div style='color: #e67e22; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-top: 5px;'>Popular Auto Spare ERP Transformation</div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding: 35px 35px 25px;'>
+            <p style='font-size: 15px; color: #334155; margin-top: 0;'>Hello <strong>$user_name</strong>,</p>
+            <p style='font-size: 14px; color: #475569; line-height: 1.6;'>You requested access to the <strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> ERP Proposal & Architecture Document Repository. Use the 6-digit verification code below to authorize this device:</p>
+            
+            <div style='background-color: #f8fafc; border: 2px dashed #0a2540; border-radius: 8px; padding: 18px; text-align: center; margin: 25px 0;'>
+              <span style='font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #0a2540; font-family: monospace;'>$otp</span>
+            </div>
+            
+            <p style='font-size: 12.5px; color: #64748b; line-height: 1.5;'>This verification code is valid for <strong>15 minutes</strong>. Once verified, this device will remain permanently authenticated.</p>
+            <p style='font-size: 12.5px; color: #e11d48;'>If you did not request this verification code, please ignore this email.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style='background-color: #f8fafc; padding: 18px 35px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8;'>
+            SaNDS Lab Middle East W.L.L • Salmabad, Kingdom of Bahrain • Hotline: +973 35 078 079
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>";
+    
+    // Method 1: Send via sendmail binary pipeline directly into local Exim
+    $sendmail_path = @ini_get('sendmail_path');
+    if (empty($sendmail_path)) $sendmail_path = '/usr/sbin/sendmail -t -i';
+    $process = @popen($sendmail_path . ' -f no-reply@docs.sandslab.com', 'w');
+    if (is_resource($process)) {{
+        fputs($process, "To: $to\r\n");
+        fputs($process, "Subject: $subject\r\n");
+        fputs($process, $headers . "\r\n\r\n");
+        fputs($process, $email_body);
+        $status = @pclose($process);
+        if ($status === 0) return true;
+    }}
+    
+    // Method 2: Standard PHP mail() with envelope parameter
+    $sent = @mail($to, $subject, $email_body, $headers, "-f no-reply@docs.sandslab.com");
+    if ($sent) return true;
+    
+    // Method 3: Fallback standard mail()
+    return @mail($to, $subject, $email_body, $headers);
+}}
+
 function log_document_access($email, $doc_id, $doc_title, $action = 'VIEW_HTML') {{
     global $pdo;
     if (!$pdo || empty($email)) return;
@@ -491,61 +562,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 $log_stmt->execute(array($input_email, $otp, $ip, $loc));
             }}
             
-            // Generate Unique Message-ID and Timestamps to prevent Exim / Gmail deduplication throttling
-            $msg_id = sprintf("<%s.%s@%s>", time(), mt_rand(10000, 99999), isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'docs.sandslab.com');
-            $date_str = date(DATE_RFC2822);
+            // Send Email via Enterprise Multi-Transport Delivery Engine
             $user_name = $user_row['full_name'];
-            $subject = "Your Verification Code: $otp [Ref #" . substr(md5($otp . time()), 0, 6) . "] - SaNDS Lab";
-            
-            $headers  = "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-            $headers .= "Date: " . $date_str . "\r\n";
-            $headers .= "Message-ID: " . $msg_id . "\r\n";
-            $headers .= "From: SaNDS Lab Security <no-reply@docs.sandslab.com>\r\n";
-            $headers .= "Reply-To: support@sandslab.com\r\n";
-            $headers .= "Return-Path: <no-reply@docs.sandslab.com>\r\n";
-            $headers .= "X-Priority: 1 (Highest)\r\n";
-            $headers .= "Importance: High\r\n";
-            $headers .= "Auto-Submitted: auto-generated\r\n";
-            $headers .= "X-Mailer: PHP/" . phpversion();
-            
-            $email_body = "<!DOCTYPE html>
-            <html>
-            <head><meta charset='UTF-8'><title>Verification Code</title></head>
-            <body style='font-family: Arial, sans-serif; background-color: #f4f7fa; margin: 0; padding: 30px;'>
-              <table align='center' border='0' cellpadding='0' cellspacing='0' width='550' style='background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid #e67e22;'>
-                <tr>
-                  <td style='background-color: #07192c; padding: 25px 30px; text-align: center;'>
-                    <h2 style='color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 0.5px;'>SaNDS Lab • Enterprise Document Portal</h2>
-                    <div style='color: #e67e22; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-top: 5px;'>Popular Auto Spare ERP Transformation</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td style='padding: 35px 35px 25px;'>
-                    <p style='font-size: 15px; color: #334155; margin-top: 0;'>Hello <strong>$user_name</strong>,</p>
-                    <p style='font-size: 14px; color: #475569; line-height: 1.6;'>You requested access to the <strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> ERP Proposal & Architecture Document Repository. Use the 6-digit verification code below to authorize this device:</p>
-                    
-                    <div style='background-color: #f8fafc; border: 2px dashed #0a2540; border-radius: 8px; padding: 18px; text-align: center; margin: 25px 0;'>
-                      <span style='font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #0a2540; font-family: monospace;'>$otp</span>
-                    </div>
-                    
-                    <p style='font-size: 12.5px; color: #64748b; line-height: 1.5;'>This verification code is valid for <strong>15 minutes</strong>. Once verified, this device will remain permanently authenticated.</p>
-                    <p style='font-size: 12.5px; color: #e11d48;'>If you did not request this verification code, please ignore this email.</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style='background-color: #f8fafc; padding: 18px 35px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8;'>
-                    SaNDS Lab Middle East W.L.L • Salmabad, Kingdom of Bahrain • Hotline: +973 35 078 079
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>";
-            
-            $sent = @mail($input_email, $subject, $email_body, $headers, "-f no-reply@docs.sandslab.com");
-            if (!$sent) {{
-                @mail($input_email, $subject, $email_body, $headers);
-            }}
+            send_enterprise_email($input_email, $user_name, $otp);
             
             $current_step = 'OTP_INPUT';
             $auth_success = 'A 6-digit verification code has been dispatched to <strong>' . htmlspecialchars($input_email) . '</strong>. Please check your inbox (and spam folder).';
