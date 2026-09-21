@@ -480,21 +480,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 $log_stmt->execute(array($input_email, $otp, $ip, $loc));
             }
             
-            // Send HTML Email with full RFC-compliant headers and envelope sender
+            // Generate Unique Message-ID and Timestamps to prevent Exim / Gmail deduplication throttling
+            $msg_id = sprintf("<%s.%s@%s>", time(), mt_rand(10000, 99999), isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'docs.sandslab.com');
+            $date_str = date(DATE_RFC2822);
             $user_name = $user_row['full_name'];
-            $subject = "Your Verification Code: $otp - SaNDS Lab Document Portal";
+            $subject = "Your Verification Code: $otp [Ref #" . substr(md5($otp . time()), 0, 6) . "] - SaNDS Lab";
             
             $headers  = "MIME-Version: 1.0
 ";
-            $headers .= "Content-type: text/html; charset=UTF-8
+            $headers .= "Content-Type: text/html; charset=UTF-8
 ";
-            $headers .= "From: SaNDS Lab Security <no-reply@sandslab.com>
+            $headers .= "Date: " . $date_str . "
+";
+            $headers .= "Message-ID: " . $msg_id . "
+";
+            $headers .= "From: SaNDS Lab Security <no-reply@docs.sandslab.com>
 ";
             $headers .= "Reply-To: support@sandslab.com
 ";
-            $headers .= "Return-Path: no-reply@sandslab.com
+            $headers .= "Return-Path: <no-reply@docs.sandslab.com>
 ";
-            $headers .= "Sender: no-reply@sandslab.com
+            $headers .= "X-Priority: 1 (Highest)
+";
+            $headers .= "Importance: High
+";
+            $headers .= "Auto-Submitted: auto-generated
 ";
             $headers .= "X-Mailer: PHP/" . phpversion();
             
@@ -531,7 +541,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </body>
             </html>";
             
-            $sent = @mail($input_email, $subject, $email_body, $headers, "-f no-reply@sandslab.com");
+            $sent = @mail($input_email, $subject, $email_body, $headers, "-f no-reply@docs.sandslab.com");
             if (!$sent) {
                 @mail($input_email, $subject, $email_body, $headers);
             }
