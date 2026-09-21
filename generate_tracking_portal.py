@@ -100,6 +100,17 @@ try {{
         cached_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
 
+    // Auto-migrate schema for existing databases seamlessly
+    try {{
+        @$pdo->exec("ALTER TABLE otp_logs ADD COLUMN location TEXT");
+    }} catch (Exception $e) {{}}
+    try {{
+        @$pdo->exec("ALTER TABLE authenticated_devices ADD COLUMN device_name TEXT");
+    }} catch (Exception $e) {{}}
+    try {{
+        @$pdo->exec("ALTER TABLE authenticated_devices ADD COLUMN location TEXT");
+    }} catch (Exception $e) {{}}
+
     // Seed Initial Authorized Users if table is empty
     $check_stmt = $pdo->query("SELECT COUNT(*) as count FROM authorized_users");
     $user_count = $check_stmt->fetchColumn();
