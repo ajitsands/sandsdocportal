@@ -22,7 +22,20 @@ php_code = f'''<?php
  *   - Clean Responsive UI
  */
 
-session_start();
+// Safe Session Save Path Setup for cPanel / CloudLinux PHP environments
+$session_save_dir = __DIR__ . '/.sessions';
+if (!is_dir($session_save_dir)) {{
+    @mkdir($session_save_dir, 0700, true);
+}}
+if (is_dir($session_save_dir) && is_writable($session_save_dir)) {{
+    @session_save_path($session_save_dir);
+}} elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {{
+    @session_save_path(sys_get_temp_dir());
+}}
+
+if (session_status() === PHP_SESSION_NONE) {{
+    @session_start();
+}}
 
 // =========================================================================
 // 1. SQLITE DATABASE INITIALIZATION & AUTO-TABLE SETUP

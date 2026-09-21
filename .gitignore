@@ -1,5 +1,6 @@
 # SQLite Database (Auto-created on server)
 .auth_portal.db
+.sessions/
 
 # OS / Editor Files
 .DS_Store
