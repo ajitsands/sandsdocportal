@@ -626,6 +626,12 @@ if (!$authenticated_user) {{
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- DataTables CSS & Dependencies -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
   <style>
     :root {{
       --primary: #0a2540;
@@ -992,7 +998,7 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
     if ($pdo) {{
         $all_users = $pdo->query("SELECT * FROM authorized_users ORDER BY id ASC")->fetchAll();
         $all_devices = $pdo->query("SELECT d.*, u.full_name FROM authenticated_devices d LEFT JOIN authorized_users u ON LOWER(d.email)=LOWER(u.email) ORDER BY d.verified_at DESC")->fetchAll();
-        $all_logs = $pdo->query("SELECT d.*, u.full_name, u.organization FROM document_access_logs d LEFT JOIN authorized_users u ON LOWER(d.email)=LOWER(u.email) ORDER BY d.accessed_at DESC LIMIT 60")->fetchAll();
+        $all_logs = $pdo->query("SELECT d.*, u.full_name, u.organization FROM document_access_logs d LEFT JOIN authorized_users u ON LOWER(d.email)=LOWER(u.email) ORDER BY d.accessed_at DESC LIMIT 500")->fetchAll();
         
         // Document Views Aggregation
         $doc_stats = $pdo->query("SELECT doc_id, doc_title, 
@@ -1028,6 +1034,12 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- DataTables CSS & Dependencies -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
   <style>
     :root {{
       --primary: #0a2540;
@@ -1135,6 +1147,180 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
     .btn-outline:hover {{
       background: var(--gray-100);
     }}
+
+    /* =========================================================================
+       CUSTOM DATATABLES STYLING (BRAND PALETTE & EXECUTIVE UI)
+       ========================================================================= */
+    .dataTables_wrapper {{
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--gray-700);
+      font-family: 'Inter', sans-serif;
+    }}
+    
+    /* Top Toolbar (Length Selector & Search Filter) */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {{
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }}
+    .dataTables_wrapper .dataTables_length {{
+      float: left;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_length select {{
+      height: 36px;
+      padding: 4px 10px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--gray-700);
+      font-size: 12.5px;
+      margin: 0 6px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }}
+    .dataTables_wrapper .dataTables_length select:focus {{
+      border-color: var(--accent);
+    }}
+    .dataTables_wrapper .dataTables_filter {{
+      float: right;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_filter input {{
+      height: 36px;
+      padding: 6px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--gray-800);
+      font-size: 13px;
+      margin-left: 8px;
+      outline: none;
+      min-width: 240px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }}
+    .dataTables_wrapper .dataTables_filter input:focus {{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(230,126,34,0.15);
+    }}
+
+    /* Table Base & Headers */
+    table.dataTable {{
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin: 12px 0 18px 0 !important;
+      border-spacing: 0;
+      border-bottom: 1px solid var(--gray-200) !important;
+    }}
+    table.dataTable thead th {{
+      background: var(--gray-50) !important;
+      color: var(--primary) !important;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 12px 14px !important;
+      border-top: 1px solid var(--gray-200) !important;
+      border-bottom: 2px solid var(--gray-200) !important;
+      text-transform: none;
+      letter-spacing: 0.2px;
+    }}
+    table.dataTable tbody td {{
+      padding: 12px 14px !important;
+      border-bottom: 1px solid var(--gray-200) !important;
+      vertical-align: middle;
+      font-size: 12.5px;
+    }}
+    table.dataTable tbody tr {{
+      background-color: #ffffff;
+      transition: background-color 0.15s ease;
+    }}
+    table.dataTable tbody tr:hover {{
+      background-color: #f8fafc !important;
+    }}
+    table.dataTable.no-footer {{
+      border-bottom: 1px solid var(--gray-200) !important;
+    }}
+
+    /* Bottom Toolbar (Info + Pagination) */
+    .dataTables_wrapper .dataTables_info {{
+      float: left;
+      padding-top: 14px;
+      font-size: 12.5px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_paginate {{
+      float: right;
+      padding-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button {{
+      padding: 6px 12px !important;
+      border-radius: 6px !important;
+      border: 1px solid var(--gray-200) !important;
+      background: #ffffff !important;
+      color: var(--gray-700) !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 0 2px !important;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {{
+      background: var(--gray-100) !important;
+      border-color: var(--gray-300) !important;
+      color: var(--primary) !important;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {{
+      background: var(--primary) !important;
+      border-color: var(--primary) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 4px rgba(10,37,64,0.15);
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {{
+      opacity: 0.45 !important;
+      background: #ffffff !important;
+      border-color: var(--gray-200) !important;
+      cursor: not-allowed;
+    }}
+
+    /* Clearfix for DataTables */
+    .dataTables_wrapper::after {{
+      content: "";
+      display: table;
+      clear: both;
+    }}
+
+    @media (max-width: 768px) {{
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_paginate {{
+        float: none;
+        text-align: left;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+      }}
+      .dataTables_wrapper .dataTables_filter input {{
+        width: 100%;
+        margin-left: 0;
+        margin-top: 6px;
+      }}
+    }}
+
     .stats-grid {{
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1287,7 +1473,181 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
     }}
 
     @media (max-width: 768px) {{
-      .stats-grid {{ grid-template-columns: 1fr 1fr; }}
+  
+    /* =========================================================================
+       CUSTOM DATATABLES STYLING (BRAND PALETTE & EXECUTIVE UI)
+       ========================================================================= */
+    .dataTables_wrapper {{
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--gray-700);
+      font-family: 'Inter', sans-serif;
+    }}
+    
+    /* Top Toolbar (Length Selector & Search Filter) */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {{
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }}
+    .dataTables_wrapper .dataTables_length {{
+      float: left;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_length select {{
+      height: 36px;
+      padding: 4px 10px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--gray-700);
+      font-size: 12.5px;
+      margin: 0 6px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }}
+    .dataTables_wrapper .dataTables_length select:focus {{
+      border-color: var(--accent);
+    }}
+    .dataTables_wrapper .dataTables_filter {{
+      float: right;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_filter input {{
+      height: 36px;
+      padding: 6px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--gray-800);
+      font-size: 13px;
+      margin-left: 8px;
+      outline: none;
+      min-width: 240px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }}
+    .dataTables_wrapper .dataTables_filter input:focus {{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(230,126,34,0.15);
+    }}
+
+    /* Table Base & Headers */
+    table.dataTable {{
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin: 12px 0 18px 0 !important;
+      border-spacing: 0;
+      border-bottom: 1px solid var(--gray-200) !important;
+    }}
+    table.dataTable thead th {{
+      background: var(--gray-50) !important;
+      color: var(--primary) !important;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 12px 14px !important;
+      border-top: 1px solid var(--gray-200) !important;
+      border-bottom: 2px solid var(--gray-200) !important;
+      text-transform: none;
+      letter-spacing: 0.2px;
+    }}
+    table.dataTable tbody td {{
+      padding: 12px 14px !important;
+      border-bottom: 1px solid var(--gray-200) !important;
+      vertical-align: middle;
+      font-size: 12.5px;
+    }}
+    table.dataTable tbody tr {{
+      background-color: #ffffff;
+      transition: background-color 0.15s ease;
+    }}
+    table.dataTable tbody tr:hover {{
+      background-color: #f8fafc !important;
+    }}
+    table.dataTable.no-footer {{
+      border-bottom: 1px solid var(--gray-200) !important;
+    }}
+
+    /* Bottom Toolbar (Info + Pagination) */
+    .dataTables_wrapper .dataTables_info {{
+      float: left;
+      padding-top: 14px;
+      font-size: 12.5px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }}
+    .dataTables_wrapper .dataTables_paginate {{
+      float: right;
+      padding-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button {{
+      padding: 6px 12px !important;
+      border-radius: 6px !important;
+      border: 1px solid var(--gray-200) !important;
+      background: #ffffff !important;
+      color: var(--gray-700) !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 0 2px !important;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {{
+      background: var(--gray-100) !important;
+      border-color: var(--gray-300) !important;
+      color: var(--primary) !important;
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {{
+      background: var(--primary) !important;
+      border-color: var(--primary) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 4px rgba(10,37,64,0.15);
+    }}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {{
+      opacity: 0.45 !important;
+      background: #ffffff !important;
+      border-color: var(--gray-200) !important;
+      cursor: not-allowed;
+    }}
+
+    /* Clearfix for DataTables */
+    .dataTables_wrapper::after {{
+      content: "";
+      display: table;
+      clear: both;
+    }}
+
+    @media (max-width: 768px) {{
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_paginate {{
+        float: none;
+        text-align: left;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+      }}
+      .dataTables_wrapper .dataTables_filter input {{
+        width: 100%;
+        margin-left: 0;
+        margin-top: 6px;
+      }}
+    }}
+
+    .stats-grid {{ grid-template-columns: 1fr 1fr; }}
       table {{ display: block; overflow-x: auto; }}
     }}
   </style>
@@ -1364,7 +1724,7 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
         <h3>📊 Document View Counts & Reader Engagement</h3>
         <span style="font-size:12px; color:var(--gray-500);">Live Document Audit</span>
       </div>
-      <table>
+      <table id="tableDocMetrics" class="display responsive nowrap admin-datatable" style="width:100%">
         <thead>
           <tr>
             <th>Document Reference</th>
@@ -1375,25 +1735,15 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
           </tr>
         </thead>
         <tbody>
-          <?php if (empty($doc_stats)): ?>
-            <tr>
-              <td><code>SL-POP-ERP-MS-001</code></td>
-              <td><strong>Module 1: PCode Generation & Item Master Milestone</strong></td>
-              <td style="text-align:center;"><span class="badge badge-primary">0 Views</span></td>
-              <td style="text-align:center;">0 Readers</td>
-              <td style="color:var(--gray-500);">No reads recorded yet</td>
-            </tr>
-          <?php else: ?>
-            <?php foreach ($doc_stats as $ds): ?>
-            <tr>
-              <td><code><?php echo htmlspecialchars($ds['doc_id']); ?></code></td>
-              <td><strong><?php echo htmlspecialchars($ds['doc_title']); ?></strong></td>
-              <td style="text-align:center;"><span class="badge badge-warning" style="font-size:12px;"><?php echo $ds['total_views']; ?> views</span></td>
-              <td style="text-align:center;"><span class="badge badge-purple"><?php echo $ds['unique_users']; ?> unique user(s)</span></td>
-              <td style="font-size:12px; color:var(--gray-600);"><?php echo $ds['last_accessed']; ?></td>
-            </tr>
-            <?php endforeach; ?>
-          <?php endif; ?>
+          <?php foreach ($doc_stats as $ds): ?>
+          <tr>
+            <td><code><?php echo htmlspecialchars($ds['doc_id']); ?></code></td>
+            <td><strong><?php echo htmlspecialchars($ds['doc_title']); ?></strong></td>
+            <td style="text-align:center;"><span class="badge badge-warning" style="font-size:12px;"><?php echo $ds['total_views']; ?> views</span></td>
+            <td style="text-align:center;"><span class="badge badge-purple"><?php echo $ds['unique_users']; ?> unique user(s)</span></td>
+            <td style="font-size:12px; color:var(--gray-600);"><?php echo $ds['last_accessed']; ?></td>
+          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
@@ -1404,7 +1754,7 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
         <h3>👤 User Access & Location Summary Matrix</h3>
         <span style="font-size:12px; color:var(--gray-500);">Who accessed what & from where</span>
       </div>
-      <table>
+      <table id="tableUserMatrix" class="display responsive nowrap admin-datatable" style="width:100%">
         <thead>
           <tr>
             <th>User & Organization</th>
@@ -1447,9 +1797,9 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
     <div class="admin-card">
       <div class="card-head">
         <h3>🕵️ Live Document Access Trail (Chronological Logs)</h3>
-        <span style="font-size:12px; color:var(--gray-500);">Last 60 Access Events</span>
+        <span style="font-size:12px; color:var(--gray-500);">Real-Time Event Stream</span>
       </div>
-      <table>
+      <table id="tableAuditLogs" class="display responsive nowrap admin-datatable" style="width:100%">
         <thead>
           <tr>
             <th>Time</th>
@@ -1460,37 +1810,33 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
           </tr>
         </thead>
         <tbody>
-          <?php if (empty($all_logs)): ?>
-            <tr><td colspan="5" style="text-align:center; padding:20px; color:var(--gray-500);">No access events recorded yet. Logs will populate automatically when users view documents.</td></tr>
-          <?php else: ?>
-            <?php foreach ($all_logs as $log): ?>
-            <tr>
-              <td style="font-size:11.5px; color:var(--gray-500); white-space:nowrap;"><?php echo substr($log['accessed_at'], 0, 16); ?></td>
-              <td>
-                <strong><?php echo htmlspecialchars($log['full_name'] ? $log['full_name'] : $log['email']); ?></strong><br>
-                <span style="font-size:11px; color:var(--gray-500);"><?php echo htmlspecialchars($log['email']); ?></span>
-              </td>
-              <td>
-                <?php if ($log['action_type'] === 'VIEW_HTML'): ?>
-                  <span class="badge badge-success">HTML View</span>
-                <?php elseif ($log['action_type'] === 'DOWNLOAD_PDF'): ?>
-                  <span class="badge badge-warning">PDF Download</span>
-                <?php elseif ($log['action_type'] === 'LOGIN_VERIFIED'): ?>
-                  <span class="badge badge-purple">OTP Verified</span>
-                <?php else: ?>
-                  <span class="badge badge-primary">Portal Access</span>
-                <?php endif; ?>
-                <br>
-                <span style="font-size:11.5px; font-weight:600; color:var(--gray-700);"><?php echo htmlspecialchars($log['doc_title']); ?></span>
-              </td>
-              <td style="font-size:11.5px;"><?php echo htmlspecialchars($log['device_name']); ?></td>
-              <td>
-                <code><?php echo htmlspecialchars($log['ip_address']); ?></code><br>
-                <span style="font-size:11.5px; font-weight:600; color:var(--accent-dark);">📍 <?php echo htmlspecialchars($log['location']); ?></span>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          <?php endif; ?>
+          <?php foreach ($all_logs as $log): ?>
+          <tr>
+            <td style="font-size:11.5px; color:var(--gray-500); white-space:nowrap;"><?php echo substr($log['accessed_at'], 0, 16); ?></td>
+            <td>
+              <strong><?php echo htmlspecialchars($log['full_name'] ? $log['full_name'] : $log['email']); ?></strong><br>
+              <span style="font-size:11px; color:var(--gray-500);"><?php echo htmlspecialchars($log['email']); ?></span>
+            </td>
+            <td>
+              <?php if ($log['action_type'] === 'VIEW_HTML'): ?>
+                <span class="badge badge-success">HTML View</span>
+              <?php elseif ($log['action_type'] === 'DOWNLOAD_PDF'): ?>
+                <span class="badge badge-warning">PDF Download</span>
+              <?php elseif ($log['action_type'] === 'LOGIN_VERIFIED'): ?>
+                <span class="badge badge-purple">OTP Verified</span>
+              <?php else: ?>
+                <span class="badge badge-primary">Portal Access</span>
+              <?php endif; ?>
+              <br>
+              <span style="font-size:11.5px; font-weight:600; color:var(--gray-700);"><?php echo htmlspecialchars($log['doc_title']); ?></span>
+            </td>
+            <td style="font-size:11.5px;"><?php echo htmlspecialchars($log['device_name']); ?></td>
+            <td>
+              <code><?php echo htmlspecialchars($log['ip_address']); ?></code><br>
+              <span style="font-size:11.5px; font-weight:600; color:var(--accent-dark);">📍 <?php echo htmlspecialchars($log['location']); ?></span>
+            </td>
+          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
@@ -1502,7 +1848,7 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
         <span style="font-size:12px; color:var(--gray-500);">Add, Edit, Deactivate or Delete</span>
       </div>
 
-      <table>
+      <table id="tableUsers" class="display responsive nowrap admin-datatable" style="width:100%">
         <thead>
           <tr>
             <th>ID</th>
@@ -1578,8 +1924,9 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
     <div class="admin-card">
       <div class="card-head">
         <h3>📱 Remembered Devices Registry (5-Year Active Sessions)</h3>
+        <span style="font-size:12px; color:var(--gray-500);">Active Persistent Sessions</span>
       </div>
-      <table>
+      <table id="tableDevices" class="display responsive nowrap admin-datatable" style="width:100%">
         <thead>
           <tr>
             <th>User</th>
@@ -1590,22 +1937,18 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
           </tr>
         </thead>
         <tbody>
-          <?php if (empty($all_devices)): ?>
-            <tr><td colspan="5" style="text-align:center; color:var(--gray-500); padding:20px;">No authenticated devices registered yet.</td></tr>
-          <?php else: ?>
-            <?php foreach ($all_devices as $dev): ?>
-            <tr>
-              <td><strong><?php echo htmlspecialchars($dev['full_name'] ? $dev['full_name'] : 'User'); ?></strong></td>
-              <td><code><?php echo htmlspecialchars($dev['email']); ?></code></td>
-              <td><?php echo htmlspecialchars($dev['device_name'] ? $dev['device_name'] : $dev['user_agent']); ?></td>
-              <td>
-                <code><?php echo htmlspecialchars($dev['ip_address']); ?></code><br>
-                <span style="font-size:11px; color:var(--accent-dark);">📍 <?php echo htmlspecialchars($dev['location'] ? $dev['location'] : 'Bahrain'); ?></span>
-              </td>
-              <td style="font-size:11.5px; color:var(--gray-500);"><?php echo $dev['verified_at']; ?></td>
-            </tr>
-            <?php endforeach; ?>
-          <?php endif; ?>
+          <?php foreach ($all_devices as $dev): ?>
+          <tr>
+            <td><strong><?php echo htmlspecialchars($dev['full_name'] ? $dev['full_name'] : 'User'); ?></strong></td>
+            <td><code><?php echo htmlspecialchars($dev['email']); ?></code></td>
+            <td><?php echo htmlspecialchars($dev['device_name'] ? $dev['device_name'] : $dev['user_agent']); ?></td>
+            <td>
+              <code><?php echo htmlspecialchars($dev['ip_address']); ?></code><br>
+              <span style="font-size:11px; color:var(--accent-dark);">📍 <?php echo htmlspecialchars($dev['location'] ? $dev['location'] : 'Bahrain'); ?></span>
+            </td>
+            <td style="font-size:11.5px; color:var(--gray-500);"><?php echo $dev['verified_at']; ?></td>
+          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
@@ -1697,6 +2040,74 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {{
   </div>
 
   <script>
+    $(document).ready(function() {{
+      // Shared DataTables default configuration
+      var commonDtOptions = {{
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        language: {{
+          search: "_INPUT_",
+          searchPlaceholder: "Search records...",
+          lengthMenu: "Show _MENU_ entries",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoEmpty: "Showing 0 to 0 of 0 entries",
+          infoFiltered: "(filtered from _MAX_ total)",
+          paginate: {{
+            first: "«",
+            previous: "‹ Prev",
+            next: "Next ›",
+            last: "»"
+          }},
+          emptyTable: "No records found"
+        }}
+      }};
+
+      // 1. Document View Metrics Table
+      $('#tableDocMetrics').DataTable($.extend(true, {{}}, commonDtOptions, {{
+        order: [[2, 'desc']],
+        language: {{
+          emptyTable: "No document view metrics recorded yet."
+        }}
+      }}));
+
+      // 2. User Access & Location Summary Matrix
+      $('#tableUserMatrix').DataTable($.extend(true, {{}}, commonDtOptions, {{
+        order: [[3, 'desc']],
+        language: {{
+          emptyTable: "No user activity matrix data found."
+        }}
+      }}));
+
+      // 3. Live Document Access Trail (Chronological Logs)
+      $('#tableAuditLogs').DataTable($.extend(true, {{}}, commonDtOptions, {{
+        pageLength: 15,
+        order: [[0, 'desc']],
+        language: {{
+          emptyTable: "No access events recorded yet. Logs will populate automatically when users view documents."
+        }}
+      }}));
+
+      // 4. Authorized User Management & Role Settings
+      $('#tableUsers').DataTable($.extend(true, {{}}, commonDtOptions, {{
+        order: [[0, 'asc']],
+        columnDefs: [
+          {{ orderable: false, targets: 6 }}
+        ],
+        language: {{
+          emptyTable: "No authorized users configured."
+        }}
+      }}));
+
+      // 5. Remembered Devices Registry
+      $('#tableDevices').DataTable($.extend(true, {{}}, commonDtOptions, {{
+        order: [[4, 'desc']],
+        language: {{
+          emptyTable: "No authenticated remembered devices registered yet."
+        }}
+      }}));
+    }});
+
     function openAddModal() {{
       document.getElementById('addModal').style.display = 'flex';
     }}
@@ -1782,6 +2193,12 @@ log_document_access($authenticated_user, 'PORTAL_HUB', 'Popular ERP Document Rep
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- DataTables CSS & Dependencies -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
   <style>
     :root {{
       --primary: #0a2540;
