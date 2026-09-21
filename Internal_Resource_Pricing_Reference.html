@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTERNAL ONLY: Resource Cost & Employee Pricing Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a2540;
+      --accent: #d97706;
+      --dark: #0f172a;
+      --gray-800: #1e293b;
+      --gray-700: #334155;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --white: #ffffff;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--gray-700);
+      padding: 30px;
+      font-size: 13px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .badge-confidential {
+      display: inline-block;
+      background: #ef4444;
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--dark);
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    p { margin-bottom: 12px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 12px;
+    }
+    th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .total-row td {
+      background: #0f172a !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+    .card {
+      background: #f1f5f9;
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge-confidential">STRICTLY INTERNAL - NOT FOR CLIENT DISTRIBUTION</div>
+    <h1>SaNDS Lab: Master Employee Pricing & Cost Matrix</h1>
+    <p>This master rate card defines the baseline employee costs in Indian Rupees (INR) and Bahraini Dinars (BHD) used for estimating all 9 ERP process modules for Popular Auto Spare & A/C Parts Co. W.L.L.</p>
+    
+    <h3>1. Monthly Base Rate Card (1 BHD = 220.00 INR)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Designation / Role</th>
+          <th>Monthly Rate (INR)</th>
+          <th>Monthly Rate (BHD)</th>
+          <th>Weekly Rate (BHD)</th>
+          <th>Hourly Rate (160h/mo)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Project Manager</strong></td>
+          <td>₹ 120,000</td>
+          <td><strong>BD 545.455</strong></td>
+          <td>BD 136.364</td>
+          <td>BD 3.409</td>
+        </tr>
+        <tr>
+          <td><strong>Back end Lead Eng</strong></td>
+          <td>₹ 50,000</td>
+          <td><strong>BD 227.273</strong></td>
+          <td>BD 56.818</td>
+          <td>BD 1.420</td>
+        </tr>
+        <tr>
+          <td><strong>Front End Lead Eng</strong></td>
+          <td>₹ 50,000</td>
+          <td><strong>BD 227.273</strong></td>
+          <td>BD 56.818</td>
+          <td>BD 1.420</td>
+        </tr>
+        <tr>
+          <td><strong>Database and Cloud</strong></td>
+          <td>₹ 45,000</td>
+          <td><strong>BD 204.545</strong></td>
+          <td>BD 51.136</td>
+          <td>BD 1.278</td>
+        </tr>
+        <tr>
+          <td><strong>QA (Testing)</strong></td>
+          <td>₹ 35,000</td>
+          <td><strong>BD 159.091</strong></td>
+          <td>BD 39.773</td>
+          <td>BD 0.994</td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Total Dedicated Team (Per Month)</strong></td>
+          <td><strong>₹ 300,000</strong></td>
+          <td><strong>BD 1,363.636</strong></td>
+          <td><strong>BD 340.909</strong></td>
+          <td><strong>BD 8.523</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2. Module 1: PCode Generation Cost Summary (10 Weeks / 2.5 Months)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Effort Allocation</th>
+          <th>Total Cost (INR)</th>
+          <th>Total Cost (BHD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Project Manager</td>
+          <td>2.5 Months (10 Wks)</td>
+          <td>₹ 300,000.00</td>
+          <td>BD 1,363.638</td>
+        </tr>
+        <tr>
+          <td>Back end Lead Eng</td>
+          <td>2.5 Months (10 Wks)</td>
+          <td>₹ 125,000.00</td>
+          <td>BD 568.183</td>
+        </tr>
+        <tr>
+          <td>Front End Lead Eng</td>
+          <td>2.5 Months (10 Wks)</td>
+          <td>₹ 125,000.00</td>
+          <td>BD 568.183</td>
+        </tr>
+        <tr>
+          <td>Database and Cloud</td>
+          <td>2.5 Months (10 Wks)</td>
+          <td>₹ 112,500.00</td>
+          <td>BD 511.363</td>
+        </tr>
+        <tr>
+          <td>QA (Testing)</td>
+          <td>2.5 Months (10 Wks)</td>
+          <td>₹ 87,500.00</td>
+          <td>BD 397.728</td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Total Module 1 Baseline Cost</strong></td>
+          <td><strong>2.5 Months</strong></td>
+          <td><strong>₹ 750,000.00</strong></td>
+          <td><strong>BD 3,409.091</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card">
+      <strong>Note for Future Modules (Modules 2 to 9):</strong>
+      <p style="margin-top: 5px; margin-bottom: 0;">Use the monthly rate of <strong>BD 1,363.636 / month</strong> (or ₹ 300,000 / month) for calculating delivery costs across upcoming process modules (Centralized Procurement, Inventory, POS, Wholesale, Garage, Accounts, HRMS, and BI Analytics).</p>
+    </div>
+  </div>
+</body>
+</html>

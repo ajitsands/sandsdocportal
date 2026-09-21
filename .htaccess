@@ -1,0 +1,15 @@
+# Simple Apache Configuration
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Allow direct access to real files (like .pdf, images)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Route clean document IDs to index.php
+    RewriteRule ^popular/(.*)$ popular/index.php?doc=$1 [L,QSA]
+</IfModule>
