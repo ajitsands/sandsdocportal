@@ -83,6 +83,33 @@ try {
         accessed_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
 
+        $pdo->exec("CREATE TABLE IF NOT EXISTS document_signatures (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        doc_id TEXT NOT NULL,
+        email TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        organization TEXT NOT NULL,
+        role TEXT NOT NULL,
+        status TEXT DEFAULT 'SIGNED',
+        signature_data TEXT,
+        disagree_reason TEXT,
+        ip_address TEXT,
+        device_name TEXT,
+        signed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    $pdo->exec("CREATE TABLE IF NOT EXISTS document_meta (
+        doc_id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        status TEXT DEFAULT 'IN_REVIEW',
+        finalized_by TEXT,
+        finalized_at DATETIME,
+        finalized_notes TEXT
+    )");
+
+    // Seed default status for SL-POP-ERP-MS-001 if not exists
+    $pdo->exec("INSERT OR IGNORE INTO document_meta (doc_id, title, status) VALUES ('SL-POP-ERP-MS-001', 'Module 1: PCode Generation & Item Master Milestone & Payment Structure', 'IN_REVIEW')");
+
     $pdo->exec("CREATE TABLE IF NOT EXISTS ip_cache (
         ip TEXT PRIMARY KEY,
         location TEXT,
@@ -135,7 +162,7 @@ $routes = array(
         'timeline' => '10 Working Weeks (50 Days)',
         'scope'    => 'Multi Branch System',
         'ba_ref'   => 'DOC-001 (Ver 1.0)',
-        'date'     => '21-Sep-2026',
+        'date'     => '21/09/2026',
         'desc'     => 'Comprehensive 10-week implementation roadmap, dedicated resource allocation matrix, 5 milestone deliverables, payment schedule (BD 3,409.091 + BD 5,000 Advance), 15-day grace period SLA, Bahrain public holidays working calendar, hardware procurement policies, and Force Majeure provisions.'
     ),
 );
@@ -298,7 +325,9 @@ function send_enterprise_email($to, $user_name, $otp) {
           </td>
         </tr>
       </table>
-    </body>
+
+</body>
+
     </html>";
     
     // Method 1: Send via sendmail binary pipeline directly into local Exim
@@ -339,6 +368,17 @@ function log_document_access($email, $doc_id, $doc_title, $action = 'VIEW_HTML')
         $stmt->execute(array($email, $doc_id, $doc_title, $action, $ip, $dev, $ua, $loc));
     } catch (Exception $e) {
         error_log("Document Access Log Error: " . $e->getMessage());
+    }
+}
+
+function trigger_pdf_regeneration() {
+    $script_path = __DIR__ . '/build_documents.py';
+    if (!file_exists($script_path)) {
+        $script_path = dirname(__DIR__) . '/build_documents.py';
+    }
+    if (file_exists($script_path)) {
+        $base_dir = dirname($script_path);
+        @exec('cd ' . escapeshellarg($base_dir) . ' && python ' . escapeshellarg($script_path) . ' 2>&1');
     }
 }
 
@@ -500,6 +540,71 @@ if ($is_super_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ad
         }
     }
     
+    // 6. FINALIZE & LOCK DOCUMENT
+    if ($action === 'finalize_document') {
+        $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+        try {
+            $stmt = $pdo->prepare("UPDATE document_meta SET status = 'FINALIZED_AND_LOCKED', finalized_by = 'ajit@sandslab.com', finalized_at = datetime('now') WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            log_document_access($authenticated_user, $doc_id, 'Document Finalized & Locked Officially', 'FINALIZED_DOCUMENT');
+            trigger_pdf_regeneration();
+            $admin_msg = 'Document <strong>' . htmlspecialchars($doc_id) . '</strong> has been formally Finalized and Locked! Signature pads are now closed and execution certificates are active.';
+        } catch (Exception $e) {
+            $admin_error = 'Error finalizing document: ' . $e->getMessage();
+        }
+    }
+
+    // 7. REOPEN DOCUMENT FOR REVISIONS (WITH OPTION TO CLEAR SIGNATURES)
+    if ($action === 'reopen_document') {
+        $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+        $clear_sigs = (isset($_POST['clear_signatures']) && $_POST['clear_signatures'] == '1');
+        try {
+            $stmt = $pdo->prepare("UPDATE document_meta SET status = 'IN_REVIEW', finalized_at = NULL, finalized_by = NULL WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            if ($clear_sigs) {
+                $del_stmt = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+                $del_stmt->execute(array($doc_id));
+                log_document_access($authenticated_user, $doc_id, 'Document Reopened & All Signatures Cleared', 'REOPENED_CLEARED_SIGNATURES');
+                $admin_msg = 'Document <strong>' . htmlspecialchars($doc_id) . '</strong> has been reopened and all previous signatures cleared for fresh signing.';
+            } else {
+                log_document_access($authenticated_user, $doc_id, 'Document Reopened for Stakeholder Revisions', 'REOPENED_DOCUMENT');
+                $admin_msg = 'Document <strong>' . htmlspecialchars($doc_id) . '</strong> reopened for stakeholder review (existing signatures preserved).';
+            }
+            trigger_pdf_regeneration();
+        } catch (Exception $e) {
+            $admin_error = 'Error reopening document: ' . $e->getMessage();
+        }
+    }
+
+    // 8. CLEAR INDIVIDUAL STAKEHOLDER SIGNATURE
+    if ($action === 'clear_signature') {
+        $target_email = strtolower(trim($_POST['user_email']));
+        $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+        try {
+            $stmt = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+            $stmt->execute(array($doc_id, $target_email));
+            log_document_access($authenticated_user, $doc_id, 'Cleared signature for ' . $target_email, 'CLEARED_SIGNATURE');
+            trigger_pdf_regeneration();
+            $admin_msg = 'Signature for <strong>' . htmlspecialchars($target_email) . '</strong> has been cleared. The stakeholder can now sign again.';
+        } catch (Exception $e) {
+            $admin_error = 'Error clearing signature: ' . $e->getMessage();
+        }
+    }
+
+    // 9. CLEAR ALL SIGNATURES
+    if ($action === 'clear_all_signatures') {
+        $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+        try {
+            $stmt = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            log_document_access($authenticated_user, $doc_id, 'Cleared all signatures for document', 'CLEARED_ALL_SIGNATURES');
+            trigger_pdf_regeneration();
+            $admin_msg = 'All signatures for document <strong>' . htmlspecialchars($doc_id) . '</strong> have been cleared successfully.';
+        } catch (Exception $e) {
+            $admin_error = 'Error clearing all signatures: ' . $e->getMessage();
+        }
+    }
+
     // 5. DELETE USER
     if ($action === 'delete_user') {
         $user_id = intval($_POST['user_id']);
@@ -526,6 +631,184 @@ if ($is_super_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ad
 }
 
 // =========================================================================
+// =========================================================================
+// 5B. AJAX DOCUMENT SIGNATURE & DISAGREEMENT HANDLERS
+// =========================================================================
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'sign_document') {
+    header('Content-Type: application/json');
+    $auth_u = is_device_authenticated();
+    if (!$auth_u) {
+        echo json_encode(array('success' => false, 'message' => 'Authentication required. Please log in with OTP.'));
+        exit;
+    }
+
+    $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+    $sig_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
+    $s_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
+    $s_org  = isset($_POST['signer_org']) ? trim($_POST['signer_org']) : '';
+    $s_role = isset($_POST['signer_role']) ? trim($_POST['signer_role']) : 'Stakeholder';
+
+    if (empty($sig_data)) {
+        echo json_encode(array('success' => false, 'message' => 'Please draw your signature before submitting.'));
+        exit;
+    }
+
+    // Check if document is finalized & locked
+    $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+    $meta_stmt->execute(array($doc_id));
+    $d_status = $meta_stmt->fetchColumn();
+
+    if ($d_status === 'FINALIZED_AND_LOCKED') {
+        echo json_encode(array('success' => false, 'message' => 'This document is finalized and locked by Super Admin. No further signature edits are permitted.'));
+        exit;
+    }
+
+    $ip = get_client_ip();
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    $dev = parse_device_info($ua);
+
+    // Upsert into document_signatures
+    $check = $pdo->prepare("SELECT id FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+    $check->execute(array($doc_id, $auth_u));
+    $existing_id = $check->fetchColumn();
+
+    if ($existing_id) {
+        $up = $pdo->prepare("UPDATE document_signatures SET full_name = ?, organization = ?, role = ?, status = 'SIGNED', signature_data = ?, disagree_reason = NULL, ip_address = ?, device_name = ?, signed_at = datetime('now') WHERE id = ?");
+        $up->execute(array($s_name, $s_org, $s_role, $sig_data, $ip, $dev, $existing_id));
+    } else {
+        $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, email, full_name, organization, role, status, signature_data, ip_address, device_name) VALUES (?, ?, ?, ?, ?, 'SIGNED', ?, ?, ?)");
+        $ins->execute(array($doc_id, $auth_u, $s_name, $s_org, $s_role, $sig_data, $ip, $dev));
+    }
+
+    log_document_access($auth_u, $doc_id, 'Module 1: PCode Milestone Agreement', 'SIGNED_DOCUMENT');
+    trigger_pdf_regeneration();
+    echo json_encode(array('success' => true, 'message' => 'Milestone document successfully signed and recorded!'));
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'disagree_document') {
+    header('Content-Type: application/json');
+    $auth_u = is_device_authenticated();
+    if (!$auth_u) {
+        echo json_encode(array('success' => false, 'message' => 'Authentication required.'));
+        exit;
+    }
+
+    $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+    $reason = isset($_POST['disagree_reason']) ? trim($_POST['disagree_reason']) : '';
+
+    if (empty($reason)) {
+        echo json_encode(array('success' => false, 'message' => 'Please provide a descriptive reason for disagreement.'));
+        exit;
+    }
+
+    $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+    $meta_stmt->execute(array($doc_id));
+    $d_status = $meta_stmt->fetchColumn();
+
+    if ($d_status === 'FINALIZED_AND_LOCKED') {
+        echo json_encode(array('success' => false, 'message' => 'This document is finalized and locked.'));
+        exit;
+    }
+
+    // Get user details
+    $u_stmt = $pdo->prepare("SELECT full_name, organization, role FROM authorized_users WHERE LOWER(email) = LOWER(?)");
+    $u_stmt->execute(array($auth_u));
+    $user_info = $u_stmt->fetch();
+    $s_name = $user_info ? $user_info['full_name'] : $auth_u;
+    $s_org  = $user_info ? $user_info['organization'] : 'Client Team';
+    $s_role = $user_info ? $user_info['role'] : 'Stakeholder';
+
+    $ip = get_client_ip();
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    $dev = parse_device_info($ua);
+
+    $check = $pdo->prepare("SELECT id FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+    $check->execute(array($doc_id, $auth_u));
+    $existing_id = $check->fetchColumn();
+
+    if ($existing_id) {
+        $up = $pdo->prepare("UPDATE document_signatures SET full_name = ?, organization = ?, role = ?, status = 'DISAGREED', signature_data = NULL, disagree_reason = ?, ip_address = ?, device_name = ?, signed_at = datetime('now') WHERE id = ?");
+        $up->execute(array($s_name, $s_org, $s_role, $reason, $ip, $dev, $existing_id));
+    } else {
+        $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, email, full_name, organization, role, status, disagree_reason, ip_address, device_name) VALUES (?, ?, ?, ?, ?, 'DISAGREED', ?, ?, ?)");
+        $ins->execute(array($doc_id, $auth_u, $s_name, $s_org, $s_role, $reason, $ip, $dev));
+    }
+
+    log_document_access($auth_u, $doc_id, 'Module 1: Revision Requested: ' . substr($reason, 0, 40), 'DISAGREED_DOCUMENT');
+    trigger_pdf_regeneration();
+    echo json_encode(array('success' => true, 'message' => 'Revision request submitted and logged for Super Admin review.'));
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'admin_clear_signature') {
+    header('Content-Type: application/json');
+    $auth_u = is_device_authenticated();
+    if (!$auth_u || strtolower($auth_u) !== 'ajit@sandslab.com') {
+        echo json_encode(array('success' => false, 'message' => 'Unauthorized. Super Admin access required.'));
+        exit;
+    }
+    $target_email = strtolower(trim($_POST['target_email']));
+    $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+    try {
+        $stmt = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+        $stmt->execute(array($doc_id, $target_email));
+        log_document_access($auth_u, $doc_id, 'Cleared signature for ' . $target_email, 'CLEARED_SIGNATURE');
+        trigger_pdf_regeneration();
+        echo json_encode(array('success' => true, 'message' => 'Signature cleared successfully. Stakeholder can now sign again.'));
+    } catch (Exception $e) {
+        echo json_encode(array('success' => false, 'message' => 'Error: ' . $e->getMessage()));
+    }
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'admin_clear_all_signatures') {
+    header('Content-Type: application/json');
+    $auth_u = is_device_authenticated();
+    if (!$auth_u || strtolower($auth_u) !== 'ajit@sandslab.com') {
+        echo json_encode(array('success' => false, 'message' => 'Unauthorized. Super Admin access required.'));
+        exit;
+    }
+    $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+    try {
+        $stmt = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+        $stmt->execute(array($doc_id));
+        log_document_access($auth_u, $doc_id, 'Cleared all signatures for document', 'CLEARED_ALL_SIGNATURES');
+        trigger_pdf_regeneration();
+        echo json_encode(array('success' => true, 'message' => 'All signatures have been cleared successfully.'));
+    } catch (Exception $e) {
+        echo json_encode(array('success' => false, 'message' => 'Error: ' . $e->getMessage()));
+    }
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'admin_reopen_document') {
+    header('Content-Type: application/json');
+    $auth_u = is_device_authenticated();
+    if (!$auth_u || strtolower($auth_u) !== 'ajit@sandslab.com') {
+        echo json_encode(array('success' => false, 'message' => 'Unauthorized. Super Admin access required.'));
+        exit;
+    }
+    $doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : 'SL-POP-ERP-MS-001';
+    $clear_sigs = (isset($_POST['clear_signatures']) && ($_POST['clear_signatures'] === '1' || $_POST['clear_signatures'] === 'true' || $_POST['clear_signatures'] === true));
+    try {
+        $stmt = $pdo->prepare("UPDATE document_meta SET status = 'IN_REVIEW', finalized_at = NULL, finalized_by = NULL WHERE doc_id = ?");
+        $stmt->execute(array($doc_id));
+        if ($clear_sigs) {
+            $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+            $del->execute(array($doc_id));
+            log_document_access($auth_u, $doc_id, 'Document Reopened & All Signatures Cleared', 'REOPENED_CLEARED_SIGNATURES');
+        } else {
+            log_document_access($auth_u, $doc_id, 'Document Reopened for Stakeholder Revisions', 'REOPENED_DOCUMENT');
+        }
+        trigger_pdf_regeneration();
+        echo json_encode(array('success' => true, 'message' => 'Document reopened successfully.'));
+    } catch (Exception $e) {
+        echo json_encode(array('success' => false, 'message' => 'Error: ' . $e->getMessage()));
+    }
+    exit;
+}
+
 // 5. AJAX / POST AUTHENTICATION HANDLERS (Send OTP & Verify OTP)
 // =========================================================================
 $auth_error = '';
@@ -635,6 +918,7 @@ if (!$authenticated_user) {
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --primary: #0a2540;
@@ -680,6 +964,21 @@ if (!$authenticated_user) {
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes docSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .inline-spinner {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: 2px solid rgba(153, 27, 27, 0.25);
+      border-top-color: #991b1b;
+      border-radius: 50%;
+      animation: docSpin 0.75s linear infinite;
+      vertical-align: middle;
+      margin-right: 3px;
     }
     .auth-header {
       background: linear-gradient(135deg, #07192c 0%, #0d2b4d 100%);
@@ -856,6 +1155,8 @@ if (!$authenticated_user) {
       color: rgba(255, 255, 255, 0.6);
     }
   </style>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -874,6 +1175,21 @@ if (!$authenticated_user) {
 
       <?php if (!empty($auth_success)): ?>
         <div class="alert alert-success"><?php echo $auth_success; ?></div>
+      <?php endif; ?>
+
+      <?php
+        $client_ip_check = get_client_ip();
+        $is_local_dev = in_array($client_ip_check, array('127.0.0.1', '::1')) || (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false));
+      ?>
+      <?php if ($is_local_dev): ?>
+        <div style="background:#eff6ff; border:1px dashed #3b82f6; border-radius:8px; padding:10px 14px; margin-bottom:18px; font-size:12px; color:#1e40af;">
+          <div style="font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Local Dev Mode Active
+          </div>
+          <div>Master Bypass OTP: <strong style="background:#dbeafe; padding:2px 6px; border-radius:4px; font-family:monospace; color:#1d4ed8; letter-spacing:1px;">789012</strong></div>
+          <div style="margin-top:4px; font-size:11px; color:#475569;">Authorized Emails: <code>ajit@sandslab.com</code> | <code>director@popularbahrain.com</code> | <code>consultant@uniglobal.com</code></div>
+        </div>
       <?php endif; ?>
 
       <?php if ($current_step === 'EMAIL_INPUT'): ?>
@@ -967,7 +1283,12 @@ if (!$authenticated_user) {
             updateCombined();
             if (combinedOtp.value.length !== 6) {
               e.preventDefault();
-              alert('Please enter all 6 digits.');
+              Swal.fire({
+                icon: 'warning',
+                title: 'Incomplete Code',
+                text: 'Please enter all 6 digits of your verification code.',
+                confirmButtonColor: '#0a2540'
+              });
             }
           });
         </script>
@@ -981,6 +1302,59 @@ if (!$authenticated_user) {
   </div>
 
   <div class="copyright">&copy; 2026 SaNDS Lab Middle East W.L.L</div>
+  <script>
+    function confirmFinalizeDoc() {
+      Swal.fire({
+        title: 'Finalize & Lock Document?',
+        text: 'All signature pads will be permanently closed and official execution certificates will be active.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#15803d',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Finalize & Lock',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('finalizeForm').submit();
+        }
+      });
+    }
+
+    function confirmReopenDoc() {
+      Swal.fire({
+        title: 'Re-Open Document?',
+        text: 'This will re-enable signature pads and allow stakeholders to submit revised signatures.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#b45309',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Re-Open',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('reopenForm').submit();
+        }
+      });
+    }
+
+    function confirmDeleteUser(form, email) {
+      Swal.fire({
+        title: 'Delete Authorized User?',
+        html: 'Are you sure you want to remove <strong>' + email + '</strong> from the authorized registry?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Delete',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>
 <?php
@@ -1003,6 +1377,16 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
         $all_devices = $pdo->query("SELECT d.*, u.full_name FROM authenticated_devices d LEFT JOIN authorized_users u ON LOWER(d.email)=LOWER(u.email) ORDER BY d.verified_at DESC")->fetchAll();
         $all_logs = $pdo->query("SELECT d.*, u.full_name, u.organization FROM document_access_logs d LEFT JOIN authorized_users u ON LOWER(d.email)=LOWER(u.email) ORDER BY d.accessed_at DESC LIMIT 500")->fetchAll();
         
+        // Document Signatures & Metadata for SL-POP-ERP-MS-001
+        $doc_meta_stmt = $pdo->query("SELECT * FROM document_meta WHERE doc_id = 'SL-POP-ERP-MS-001'");
+        $doc_meta_data = $doc_meta_stmt ? $doc_meta_stmt->fetch() : null;
+        $doc_is_locked = ($doc_meta_data && $doc_meta_data['status'] === 'FINALIZED_AND_LOCKED');
+
+        $doc_sigs_stmt = $pdo->query("SELECT s.*, u.email as auth_email FROM authorized_users u 
+                                     LEFT JOIN document_signatures s ON LOWER(u.email) = LOWER(s.email) AND s.doc_id = 'SL-POP-ERP-MS-001'
+                                     ORDER BY u.id ASC");
+        $all_stakeholder_sigs = $doc_sigs_stmt ? $doc_sigs_stmt->fetchAll() : array();
+
         // Document Views Aggregation
         $doc_stats = $pdo->query("SELECT doc_id, doc_title, 
                                         COUNT(*) as total_views, 
@@ -1043,6 +1427,7 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --primary: #0a2540;
@@ -1654,6 +2039,8 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
       table { display: block; overflow-x: auto; }
     }
   </style>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -1719,6 +2106,115 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
         </div>
         <div class="stat-label">Active Users</div>
       </div>
+    </div>
+
+    <!-- 0. STAKEHOLDER SIGN-OFF & APPROVAL REGISTRY -->
+    <div class="admin-card" style="border: 2px solid <?php echo $doc_is_locked ? '#15803d' : '#0a2540'; ?>;">
+      <div class="card-head" style="border-bottom: 2px solid var(--gray-200);">
+        <div>
+          <h3>🖋️ Stakeholder Milestone Sign-Off & Approval Registry</h3>
+          <span style="font-size:12px; color:var(--gray-500);">Document Reference: <code>SL-POP-ERP-MS-001</code> &bull; PCode Generation & Item Master Milestone</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <?php if ($doc_is_locked): ?>
+            <span class="badge badge-success" style="font-size:12px; padding:6px 14px;">🔒 Finalized & Locked</span>
+            <button type="button" onclick="confirmReopenDocOptions()" class="btn btn-sm btn-outline" style="color:#b45309; border-color:#fcd34d;">🔓 Re-open Document</button>
+            <button type="button" onclick="confirmClearAllSigs()" class="btn btn-sm btn-outline" style="color:#b91c1c; border-color:#fca5a5;">🧹 Clear All Signatures</button>
+          <?php else: ?>
+            <span class="badge badge-warning" style="font-size:12px; padding:6px 14px;">⏳ In Stakeholder Review</span>
+            <button type="button" onclick="confirmFinalizeDoc()" class="btn btn-sm btn-primary" style="background:#15803d; border-color:#166534;">
+              🔒 Finalize & Lock Milestone
+            </button>
+            <button type="button" onclick="confirmClearAllSigs()" class="btn btn-sm btn-outline" style="color:#b91c1c; border-color:#fca5a5;">🧹 Clear All Signatures</button>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <!-- Hidden Forms for Admin Actions -->
+      <form method="POST" action="" id="finalizeForm" style="display:none;">
+        <input type="hidden" name="admin_action" value="finalize_document">
+        <input type="hidden" name="doc_id" value="SL-POP-ERP-MS-001">
+      </form>
+      <form method="POST" action="" id="reopenForm" style="display:none;">
+        <input type="hidden" name="admin_action" value="reopen_document">
+        <input type="hidden" name="doc_id" value="SL-POP-ERP-MS-001">
+        <input type="hidden" name="clear_signatures" id="reopenClearSigs" value="0">
+      </form>
+      <form method="POST" action="" id="clearAllSigsForm" style="display:none;">
+        <input type="hidden" name="admin_action" value="clear_all_signatures">
+        <input type="hidden" name="doc_id" value="SL-POP-ERP-MS-001">
+      </form>
+      <form method="POST" action="" id="clearUserSigForm" style="display:none;">
+        <input type="hidden" name="admin_action" value="clear_signature">
+        <input type="hidden" name="doc_id" value="SL-POP-ERP-MS-001">
+        <input type="hidden" name="user_email" id="clearUserSigEmail" value="">
+      </form>
+
+      <table id="tableSignatures" class="display responsive nowrap admin-datatable" style="width:100%">
+        <thead>
+          <tr>
+            <th>Stakeholder & Organization</th>
+            <th>Authorized Email</th>
+            <th>Role</th>
+            <th style="text-align:center;">Decision Status</th>
+            <th>Signature / Disagreement Details</th>
+            <th>Signed Timestamp & Location</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($all_stakeholder_sigs as $stk): ?>
+          <tr>
+            <td>
+              <strong><?php echo htmlspecialchars($stk['full_name'] ? $stk['full_name'] : 'Authorized Stakeholder'); ?></strong><br>
+              <span style="font-size:11.5px; color:var(--gray-500);"><?php echo htmlspecialchars($stk['organization'] ? $stk['organization'] : 'Popular Auto Spare'); ?></span>
+            </td>
+            <td><code><?php echo htmlspecialchars($stk['auth_email']); ?></code></td>
+            <td><span class="badge badge-primary"><?php echo htmlspecialchars($stk['role'] ? $stk['role'] : 'Stakeholder'); ?></span></td>
+            <td style="text-align:center;">
+              <?php if ($stk['status'] === 'SIGNED'): ?>
+                <span class="badge badge-success" style="font-size:12px;">✅ Signed</span>
+              <?php elseif ($stk['status'] === 'DISAGREED'): ?>
+                <span class="badge badge-danger" style="font-size:12px;">⚠️ Disagreed</span>
+              <?php else: ?>
+                <span class="badge" style="background:#f1f5f9; color:#64748b; font-size:12px;">⏳ Pending</span>
+              <?php endif; ?>
+            </td>
+            <td>
+              <?php if ($stk['status'] === 'SIGNED' && !empty($stk['signature_data'])): ?>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <img src="<?php echo $stk['signature_data']; ?>" style="max-height:40px; border:1px solid #e2e8f0; border-radius:4px; padding:2px 8px; background:#ffffff;" alt="Signature" />
+                  <span style="font-size:11px; color:#15803d; font-weight:600;">Verified Digital Ink</span>
+                </div>
+              <?php elseif ($stk['status'] === 'DISAGREED'): ?>
+                <div style="background:#fff1f2; border:1px solid #fecdd3; padding:6px 10px; border-radius:6px; font-size:12px; color:#9f1239;">
+                  <strong>Reason:</strong> "<?php echo htmlspecialchars($stk['disagree_reason']); ?>"
+                </div>
+              <?php else: ?>
+                <span style="font-size:12px; color:var(--gray-500);">Awaiting review and signature</span>
+              <?php endif; ?>
+            </td>
+            <td style="font-size:11.5px; color:var(--gray-500);">
+              <?php if ($stk['status']): ?>
+                <?php echo $stk['signed_at']; ?><br>
+                <span style="font-size:11px; color:var(--primary); font-weight:600;">📍 IP: <?php echo htmlspecialchars($stk['ip_address'] ? $stk['ip_address'] : 'Online'); ?></span>
+              <?php else: ?>
+                Never
+              <?php endif; ?>
+            </td>
+            <td style="text-align:right;">
+              <?php if ($stk['status'] === 'SIGNED' || $stk['status'] === 'DISAGREED'): ?>
+                <button type="button" onclick="confirmClearUserSig(this, '<?php echo htmlspecialchars($stk['auth_email'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($stk['full_name'], ENT_QUOTES); ?>')" class="btn btn-sm btn-outline" style="color:#b91c1c; border-color:#fca5a5; padding:3px 9px; font-size:11px; display:inline-flex; align-items:center;" title="Clear signature">
+                  🗑️ Clear Signature
+                </button>
+              <?php else: ?>
+                <span style="color:#94a3b8; font-size:11px;">—</span>
+              <?php endif; ?>
+            </td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
 
     <!-- 1. DOCUMENT VIEW METRICS TABLE -->
@@ -1908,10 +2404,10 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
 
                 <?php if (strtolower($user['email']) !== 'ajit@sandslab.com'): ?>
                 <!-- Delete User -->
-                <form method="POST" action="" style="display:inline;" onsubmit="return confirm('Delete user <?php echo htmlspecialchars($user['email']); ?>?');">
+                <form method="POST" action="" style="display:inline;">
                   <input type="hidden" name="admin_action" value="delete_user">
                   <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                  <button type="submit" class="btn btn-sm btn-del">Delete</button>
+                  <button type="button" onclick="confirmDeleteUser(this.form, '<?php echo htmlspecialchars($user['email']); ?>')" class="btn btn-sm btn-del">Delete</button>
                 </form>
                 <?php endif; ?>
 
@@ -2066,6 +2562,17 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
         }
       };
 
+      // 0. Stakeholder Signatures Table
+      $('#tableSignatures').DataTable($.extend(true, {}, commonDtOptions, {
+        order: [[3, 'asc']],
+        columnDefs: [
+          { orderable: false, targets: 6 }
+        ],
+        language: {
+          emptyTable: "No stakeholder signature records found."
+        }
+      }));
+
       // 1. Document View Metrics Table
       $('#tableDocMetrics').DataTable($.extend(true, {}, commonDtOptions, {
         order: [[2, 'desc']],
@@ -2127,6 +2634,126 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
     }
     function closeEditModal() {
       document.getElementById('editModal').style.display = 'none';
+    }
+  </script>
+
+  <script>
+    function showAdminLoading(title, text) {
+      Swal.fire({
+        title: title || 'Processing Request...',
+        html: '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; margin:16px 0 6px 0;">' +
+              '  <div style="width:42px; height:42px; border:4px solid #fecdd3; border-top-color:#e11d48; border-radius:50%; animation:docSpin 0.75s linear infinite;"></div>' +
+              '  <div style="font-size:13px; color:#475569; font-weight:500;">' + (text || 'Please wait while we update documents & synchronize PDF...') + '</div>' +
+              '</div>',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    }
+
+    function confirmFinalizeDoc() {
+      Swal.fire({
+        title: 'Finalize & Lock Document?',
+        text: 'All signature pads will be permanently closed and official execution certificates will be active.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#15803d',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Finalize & Lock',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          showAdminLoading('Finalizing & Locking...', 'Generating official locked PDF & digital execution certificates...');
+          document.getElementById('finalizeForm').submit();
+        }
+      });
+    }
+
+    function confirmReopenDocOptions() {
+      Swal.fire({
+        title: 'Re-Open Milestone Document?',
+        html: 'Choose whether you want to re-open the document for revisions while preserving current signatures, or clear all signatures for a fresh sign-off.',
+        icon: 'warning',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#b45309',
+        denyButtonColor: '#be123c',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: '🔓 Re-Open (Keep Signatures)',
+        denyButtonText: '🧹 Re-Open & Clear All Signatures',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          showAdminLoading('Re-opening Document...', 'Updating status & synchronizing portal...');
+          document.getElementById('reopenClearSigs').value = '0';
+          document.getElementById('reopenForm').submit();
+        } else if (result.isDenied) {
+          showAdminLoading('Re-opening & Clearing...', 'Clearing signatures & synchronizing clean document...');
+          document.getElementById('reopenClearSigs').value = '1';
+          document.getElementById('reopenForm').submit();
+        }
+      });
+    }
+
+    function confirmClearAllSigs() {
+      Swal.fire({
+        title: 'Clear All Recorded Signatures?',
+        html: 'Are you sure you want to <strong>delete all stakeholder signatures</strong> for this document? All stakeholders will need to sign again.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#be123c',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Clear All Signatures',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          showAdminLoading('Clearing All Signatures...', 'Deleting ink signatures & regenerating clean PDF...');
+          document.getElementById('clearAllSigsForm').submit();
+        }
+      });
+    }
+
+    function confirmClearUserSig(btn, email, name) {
+      Swal.fire({
+        title: 'Clear Stakeholder Signature?',
+        html: 'Are you sure you want to clear the signature for <strong>' + name + '</strong> (' + email + ')?<br><br><span style="font-size:12px; color:#64748b;">Their signature will be removed, and they will be able to sign again.</span>',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#be123c',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Clear Signature',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (btn && btn.tagName === 'BUTTON') {
+            btn.innerHTML = '<span class="inline-spinner"></span> Clearing...';
+            btn.disabled = true;
+          }
+          showAdminLoading('Clearing Signature...', 'Removing signature for ' + name + ' & regenerating PDF...');
+          document.getElementById('clearUserSigEmail').value = email;
+          document.getElementById('clearUserSigForm').submit();
+        }
+      });
+    }
+
+    function confirmDeleteUser(form, email) {
+      Swal.fire({
+        title: 'Delete Authorized User?',
+        html: 'Are you sure you want to remove <strong>' + email + '</strong> from the authorized registry?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Delete',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
     }
   </script>
 
@@ -2491,6 +3118,8 @@ log_document_access($authenticated_user, 'PORTAL_HUB', 'Popular ERP Document Rep
       .doc-actions .btn { width: 100%; justify-content: center; }
     }
   </style>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -2604,6 +3233,59 @@ log_document_access($authenticated_user, 'PORTAL_HUB', 'Popular ERP Document Rep
     </footer>
 
   </div>
+
+  <script>
+    function confirmFinalizeDoc() {
+      Swal.fire({
+        title: 'Finalize & Lock Document?',
+        text: 'All signature pads will be permanently closed and official execution certificates will be active.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#15803d',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Finalize & Lock',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('finalizeForm').submit();
+        }
+      });
+    }
+
+    function confirmReopenDoc() {
+      Swal.fire({
+        title: 'Re-Open Document?',
+        text: 'This will re-enable signature pads and allow stakeholders to submit revised signatures.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#b45309',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Re-Open',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('reopenForm').submit();
+        }
+      });
+    }
+
+    function confirmDeleteUser(form, email) {
+      Swal.fire({
+        title: 'Delete Authorized User?',
+        html: 'Are you sure you want to remove <strong>' + email + '</strong> from the authorized registry?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Yes, Delete',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>

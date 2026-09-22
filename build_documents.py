@@ -1,10 +1,39 @@
 import base64
 import subprocess
 import os
+import shutil
 import fitz
+import sqlite3
 
-def get_b64(path):
-    with open(path, 'rb') as f:
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Ensure popular/logos directory exists and has all logos
+pop_logos = os.path.join(BASE_DIR, 'popular', 'logos')
+os.makedirs(pop_logos, exist_ok=True)
+logos_dir = os.path.join(BASE_DIR, 'logos')
+if os.path.exists(logos_dir):
+    for fn in os.listdir(logos_dir):
+        sp = os.path.join(logos_dir, fn)
+        dp = os.path.join(pop_logos, fn)
+        if os.path.isfile(sp):
+            shutil.copyfile(sp, dp)
+
+# Auto-sync SQLite DB between root and popular/
+db_root = os.path.join(BASE_DIR, '.auth_portal.db')
+db_popular = os.path.join(BASE_DIR, 'popular', '.auth_portal.db')
+if os.path.exists(db_popular) and os.path.exists(db_root):
+    if os.path.getmtime(db_popular) >= os.path.getmtime(db_root):
+        shutil.copyfile(db_popular, db_root)
+    else:
+        shutil.copyfile(db_root, db_popular)
+elif os.path.exists(db_popular):
+    shutil.copyfile(db_popular, db_root)
+elif os.path.exists(db_root):
+    shutil.copyfile(db_root, db_popular)
+
+def get_b64(rel_path):
+    full_path = os.path.join(BASE_DIR, rel_path)
+    with open(full_path, 'rb') as f:
         return 'data:image/png;base64,' + base64.b64encode(f.read()).decode('utf-8')
 
 logo_sands_white = get_b64('logos/SaNDSLab-LogoNewUpdatedWhite.png')
@@ -22,6 +51,7 @@ html_content = f"""<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {{
       --primary: #0a2540;
@@ -598,46 +628,52 @@ html_content = f"""<!DOCTYPE html>
       margin-top: 15px;
     }}
 
-    /* Approval Grid */
+        /* Approval Grid */
     .approval-container {{
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
     }}
 
     .approval-box {{
       background: var(--white);
       border: 1px solid var(--gray-200);
       border-radius: 6px;
-      padding: 16px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-width: 0;
     }}
 
     .approval-header {{
       border-bottom: 1px solid var(--gray-200);
-      padding-bottom: 10px;
-      margin-bottom: 10px;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
     }}
 
     .approval-logo-wrap {{
-      min-height: 40px;
+      min-height: 48px;
       display: flex;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }}
 
     .approval-logo-img {{
-      max-height: 36px;
-      max-width: 140px;
+      max-height: 38px;
+      max-width: 145px;
       width: auto;
       object-fit: contain;
     }}
 
+    .approval-logo-img.sands-approval-logo {{
+      max-height: 48px;
+      max-width: 175px;
+    }}
+
     .approval-role {{
-      font-size: 9.5px;
+      font-size: 9px;
       text-transform: uppercase;
       font-weight: 700;
       letter-spacing: 0.8px;
@@ -646,28 +682,68 @@ html_content = f"""<!DOCTYPE html>
 
     .approval-org {{
       font-family: 'Outfit', sans-serif;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--dark);
       margin-top: 2px;
     }}
 
     .sig-line {{
-      margin-top: 30px;
+      margin-top: 20px;
       border-top: 1px dashed var(--gray-300);
-      padding-top: 6px;
-      font-size: 10.5px;
+      padding-top: 5px;
+      font-size: 10px;
       color: var(--gray-500);
     }}
 
     .sig-field {{
-      margin-bottom: 5px;
-      font-size: 11px;
+      margin-bottom: 3px;
+      font-size: 10.5px;
     }}
 
     .sig-field span {{
       font-weight: 600;
       color: var(--dark);
+    }}
+
+    .sig-img-preview {{
+      max-height: 42px;
+      max-width: 90%;
+      object-fit: contain;
+      margin: 4px auto;
+      display: block;
+    }}
+
+    .sig-status-badge {{
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+    }}
+
+    .sig-status-signed {{
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }}
+
+    @keyframes docSpin {{
+      0% {{ transform: rotate(0deg); }}
+      100% {{ transform: rotate(360deg); }}
+    }}
+
+    .inline-spinner {{
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: 2px solid rgba(153, 27, 27, 0.25);
+      border-top-color: #991b1b;
+      border-radius: 50%;
+      animation: docSpin 0.75s linear infinite;
+      vertical-align: middle;
+      margin-right: 3px;
     }}
 
     /* Numeric tabular styling */
@@ -681,11 +757,11 @@ html_content = f"""<!DOCTYPE html>
     .doc-footer {{
       background: var(--gray-50);
       border-top: 1px solid var(--gray-200);
-      padding: 16px 45px;
+      padding: 14px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--gray-500);
     }}
 
@@ -716,7 +792,7 @@ html_content = f"""<!DOCTYPE html>
     }}
 
     .portal-logo {{
-      height: 24px;
+      height: 36px;
       width: auto;
     }}
 
@@ -749,53 +825,50 @@ html_content = f"""<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 7px 14px;
-      border-radius: 5px;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
+      transition: all 0.2s;
     }}
 
     .btn-pdf-download {{
-      background: #e67e22;
+      background: var(--accent);
       color: #ffffff;
-      box-shadow: 0 2px 8px rgba(230,126,34,0.35);
+      border: 1px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(230, 126, 34, 0.3);
     }}
 
     .btn-pdf-download:hover {{
-      background: #d35400;
-      transform: translateY(-1px);
+      background: var(--accent-dark);
     }}
 
     .btn-print {{
-      background: rgba(255,255,255,0.12);
+      background: #1e3a5f;
+      color: #ffffff;
+      border: 1px solid #2d5584;
+    }}
+
+    .btn-print:hover {{
+      background: #25466f;
+    }}
+
+    .btn-hub {{
+      background: rgba(255,255,255,0.1);
       color: #ffffff;
       border: 1px solid rgba(255,255,255,0.2);
     }}
 
-    .btn-print:hover {{
+    .btn-hub:hover {{
       background: rgba(255,255,255,0.2);
     }}
 
-    .btn-hub {{
-      background: transparent;
-      color: #cbd5e1;
-      border: 1px solid rgba(255,255,255,0.15);
-    }}
-
-    /* ==================== MOBILE RESPONSIVE DESIGN ==================== */
+    /* Responsive */
     @media screen and (max-width: 900px) {{
-      body {{
-        padding: 0;
-        margin: 0;
-      }}
-
       .document-container {{
-        margin: 0 !important;
+        margin: 0;
         border-radius: 0 !important;
         box-shadow: none !important;
         max-width: 100% !important;
@@ -946,51 +1019,306 @@ html_content = f"""<!DOCTYPE html>
       }}
     }}
 
-    /* Print Formatting */
+    /* Interactive Signature & Pad Styles */
+    .sign-interactive-card {{
+      background: #f8fafc;
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }}
+    .sign-interactive-head {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }}
+    .sign-interactive-head h3 {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+    .canvas-container {{
+      position: relative;
+      background: #ffffff;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      touch-action: none;
+    }}
+    #sigCanvas {{
+      width: 100%;
+      height: 160px;
+      display: block;
+      cursor: crosshair;
+      background: #ffffff;
+    }}
+    .canvas-placeholder-text {{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #94a3b8;
+      font-size: 13px;
+      pointer-events: none;
+      user-select: none;
+    }}
+    .canvas-tools {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }}
+    .btn-tool {{
+      background: #f8fafc;
+      border: 1px solid var(--gray-300);
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }}
+    .btn-tool:hover {{
+      background: #e2e8f0;
+      color: var(--primary);
+    }}
+    .signer-info-grid {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }}
+    .signer-input-group label {{
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 4px;
+    }}
+    .signer-input-group input {{
+      width: 100%;
+      height: 36px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      border: 1px solid var(--gray-300);
+      border-radius: 5px;
+      background: #f8fafc;
+      color: var(--gray-800);
+      outline: none;
+    }}
+    .sign-action-bar {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-200);
+      flex-wrap: wrap;
+      gap: 12px;
+    }}
+    .btn-sign-submit {{
+      background: #15803d;
+      color: #ffffff;
+      border: none;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(21,128,61,0.25);
+      transition: all 0.2s;
+    }}
+    .btn-sign-submit:hover {{
+      background: #166534;
+      transform: translateY(-1px);
+    }}
+    .btn-disagree {{
+      background: #fff1f2;
+      color: #be123c;
+      border: 1px solid #fecdd3;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }}
+    .btn-disagree:hover {{
+      background: #ffe4e6;
+      border-color: #fda4af;
+    }}
+
+    /* Finalized Execution Certificate */
+    .finalized-cert-wrap {{
+      margin-top: 14px;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border: 2px solid #15803d;
+      border-radius: 8px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 15px rgba(21,128,61,0.06);
+      box-sizing: border-box;
+      width: 100%;
+    }}
+    .finalized-badge-pill {{
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #15803d;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }}
+    .cert-seal-grid {{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }}
+    .cert-seal-card {{
+      background: #ffffff;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 8px 10px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+      box-sizing: border-box;
+      min-width: 0;
+    }}
+
+    /* Modal for Disagreement */
+    .sig-modal-overlay {{
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }}
+    .sig-modal-card {{
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 520px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }}
+
+    .swal2-popup {{
+      font-family: 'Inter', sans-serif !important;
+      border-radius: 12px !important;
+    }}
+    .swal2-title {{
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700 !important;
+      color: var(--primary) !important;
+    }}
+
     @media print {{
-      .web-action-bar {{
+      @page {{
+        size: A4;
+        margin: 8mm 10mm;
+      }}
+      .no-print {{
         display: none !important;
       }}
-
+      .sign-interactive-card {{
+        display: none !important;
+      }}
       body {{
-        background-color: #ffffff;
+        background: #ffffff !important;
+        font-size: 12.5px !important;
       }}
-
       .document-container {{
-        max-width: 100%;
-        margin: 0;
-        box-shadow: none;
-        border-radius: 0;
+        box-shadow: none !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
       }}
-
-      .doc-header {{
-        padding: 20px 25px 15px;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }}
-
       .doc-content {{
-        padding: 20px 25px;
+        padding: 20px 30px 25px !important;
       }}
-
-      .page-break {{
-        page-break-before: always;
+      .approval-container {{
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }}
-
-      .avoid-break {{
-        page-break-inside: avoid;
+      .cert-seal-grid {{
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }}
-
-      th, .ms-tag, .badge, .partner-badge-box, .roadmap-item.active, .card-primary, .card-accent, .card-secondary, .card-danger, .payment-total-row, .contract-grand-total-row, .advance-summary-row {{
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      .finalized-cert-wrap {{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 10px !important;
+        padding: 10px 14px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        border: 2px solid #15803d !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+      }}
+      .cert-seal-card {{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        padding: 6px 8px !important;
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+        border: 1px solid #bbf7d0 !important;
+      }}
+      .avoid-break, section.section-block:last-of-type {{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }}
+      .doc-footer {{
+        padding: 10px 30px !important;
+        page-break-inside: avoid !important;
       }}
     }}
-
-    @page {{
-      size: A4 portrait;
-      margin: 10mm 10mm 10mm 10mm;
+    @media screen and (max-width: 600px) {{
+      .signer-info-grid {{ grid-template-columns: 1fr; }}
+      .cert-seal-grid {{ grid-template-columns: 1fr; }}
     }}
+
   </style>
 </head>
 <body>
@@ -1064,7 +1392,7 @@ html_content = f"""<!DOCTYPE html>
       </div>
       <div class="meta-item">
         <span class="meta-title">Date of Submission</span>
-        <span class="meta-val">21-September-2026</span>
+        <span class="meta-val">21/09/2026</span>
       </div>
       <div class="meta-item">
         <span class="meta-title">Execution Timeline</span>
@@ -1726,6 +2054,141 @@ html_content = f"""<!DOCTYPE html>
 
     </section>
 
+    <?php
+    // Dynamic Signature & Finalization State Setup
+    global $pdo, $authenticated_user;
+    $doc_id = 'SL-POP-ERP-MS-001';
+    $doc_status = 'FINALIZED_AND_LOCKED';
+    $finalized_at = date('Y-m-d H:i');
+    $finalized_by = 'ajit@sandslab.com';
+    $all_signatures = array();
+    $my_sig = null;
+    $user_record = null;
+
+    if (!isset($pdo) || !$pdo) {{
+        $db_candidates = array(
+            __DIR__ . '/.auth_portal.db',
+            __DIR__ . '/popular/.auth_portal.db',
+            dirname(__DIR__) . '/.auth_portal.db',
+            dirname(__DIR__) . '/popular/.auth_portal.db'
+        );
+        $best_db = null;
+        $best_mtime = 0;
+        foreach ($db_candidates as $cand) {{
+            if (file_exists($cand) && filemtime($cand) > $best_mtime) {{
+                $best_db = $cand;
+                $best_mtime = filemtime($cand);
+            }}
+        }}
+        if ($best_db) {{
+            try {{
+                $pdo = new PDO('sqlite:' . $best_db);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            }} catch (Exception $e) {{}}
+        }}
+    }}
+
+    if (isset($pdo) && $pdo) {{
+        $meta_stmt = $pdo->prepare("SELECT * FROM document_meta WHERE doc_id = ?");
+        $meta_stmt->execute(array($doc_id));
+        $meta_row = $meta_stmt->fetch();
+        if ($meta_row) {{
+            $doc_status = $meta_row['status'];
+            $finalized_at = $meta_row['finalized_at'];
+            $finalized_by = $meta_row['finalized_by'];
+        }}
+
+        $sig_stmt = $pdo->prepare("SELECT * FROM document_signatures WHERE doc_id = ? ORDER BY signed_at ASC");
+        $sig_stmt->execute(array($doc_id));
+        $all_signatures = $sig_stmt->fetchAll();
+
+        if (!empty($authenticated_user)) {{
+            $u_stmt = $pdo->prepare("SELECT * FROM authorized_users WHERE LOWER(email) = LOWER(?)");
+            $u_stmt->execute(array($authenticated_user));
+            $user_record = $u_stmt->fetch();
+
+            foreach ($all_signatures as $s) {{
+                if (strtolower($s['email']) === strtolower($authenticated_user)) {{
+                    $my_sig = $s;
+                    break;
+                }}
+            }}
+        }}
+    }}
+
+    $is_finalized = ($doc_status === 'FINALIZED_AND_LOCKED');
+
+    $sands_sig = null;
+    $uniglobal_sig = null;
+    $popular_sig = null;
+
+    foreach ($all_signatures as $s) {{
+        if ($s['status'] === 'SIGNED') {{
+            $org = strtolower($s['organization']);
+            $role = strtolower($s['role']);
+            $email = strtolower($s['email']);
+            $name = strtolower($s['full_name']);
+            if (strpos($org, 'sands') !== false || strpos($email, 'sandslab') !== false || strpos($name, 'ajit') !== false || strpos($role, 'super admin') !== false) {{
+                $sands_sig = $s;
+            }} elseif (strpos($org, 'uniglobal') !== false || strpos($email, 'uniglobal') !== false || strpos($name, 'consultant') !== false || strpos($role, 'consultant') !== false || strpos($name, 'jp') !== false) {{
+                $uniglobal_sig = $s;
+            }} elseif (strpos($org, 'popular') !== false || strpos($email, 'popular') !== false || strpos($name, 'indar') !== false || strpos($role, 'client') !== false || strpos($role, 'director') !== false || strpos($name, 'director') !== false) {{
+                $popular_sig = $s;
+            }}
+        }}
+    }}
+    ?>
+
+    <!-- Top Floating Back & Print Controls (No Print) -->
+    <div class="no-print" style="max-width:1040px; margin:15px auto 0; display:flex; justify-content:space-between; align-items:center; padding:0 10px;">
+      <a href="?" style="display:inline-flex; align-items:center; gap:6px; color:#0a2540; text-decoration:none; font-size:13px; font-weight:700; background:#ffffff; padding:8px 16px; border-radius:6px; border:1px solid #cbd5e1; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+        &larr; Return to Client Portal Hub
+      </a>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <?php if ($is_finalized): ?>
+          <span class="badge badge-success" style="font-size:12px; padding:6px 12px;">🔒 Document Finalized & Locked</span>
+        <?php else: ?>
+          <span class="badge badge-warning" style="font-size:12px; padding:6px 12px;">⏳ In Stakeholder Review Phase</span>
+        <?php endif; ?>
+        <button onclick="window.print()" class="btn-tool" style="padding:8px 16px; font-size:12.5px; background:#0a2540; color:#ffffff; border-color:#0a2540;">
+          🖨️ Print / Save as PDF
+        </button>
+      </div>
+    </div>
+
+    <?php if (!empty($authenticated_user) && strtolower($authenticated_user) === 'ajit@sandslab.com'): ?>
+      <!-- Super Admin Quick Controls Banner (No Print) -->
+      <div class="no-print" style="max-width:1040px; margin:15px auto 0; background:#07192c; border:2px solid #e67e22; border-radius:8px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="background:#e67e22; color:#ffffff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px;">👑 Super Admin</span>
+          <span style="font-size:13px; font-weight:600; color:#e2e8f0;">
+            Status: <?php echo $is_finalized ? '<strong style="color:#4ade80;">🔒 Finalized & Locked</strong>' : '<strong style="color:#facc15;">⏳ In Stakeholder Review</strong>'; ?>
+          </span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <?php if ($is_finalized): ?>
+            <button type="button" onclick="adminPromptReopenDoc()" class="btn-tool" style="background:#b45309; color:#ffffff; border-color:#d97706; font-weight:700; cursor:pointer;">
+              🔓 Re-Open Document
+            </button>
+            <button type="button" onclick="adminConfirmClearAllSigs()" class="btn-tool" style="background:#be123c; color:#ffffff; border-color:#e11d48; font-weight:700; cursor:pointer;">
+              🧹 Clear All Signatures
+            </button>
+          <?php else: ?>
+            <button type="button" onclick="adminConfirmFinalizeDoc()" class="btn-tool" style="background:#15803d; color:#ffffff; border-color:#16a34a; font-weight:700; cursor:pointer;">
+              🔒 Finalize & Lock Milestone
+            </button>
+            <button type="button" onclick="adminConfirmClearAllSigs()" class="btn-tool" style="background:#be123c; color:#ffffff; border-color:#e11d48; font-weight:700; cursor:pointer;">
+              🧹 Clear All Signatures
+            </button>
+          <?php endif; ?>
+          <a href="/popular" class="btn-tool" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.2); text-decoration:none;">
+            📊 Admin Panel
+          </a>
+        </div>
+      </div>
+    <?php endif; ?>
+
     <!-- SECTION 7: FORMAL APPROVAL & SIGN-OFF WITH LOGOS -->
     <section class="section-block avoid-break">
       <div class="section-title-wrap">
@@ -1734,64 +2197,768 @@ html_content = f"""<!DOCTYPE html>
       </div>
 
       <p>
-        By signing below, the authorized representatives of <strong>SaNDS Lab Middle East W.L.L</strong>, <strong>UniGlobal Consultant</strong>, and <strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> agree to the milestone schedule, resource commitments, payment structure, SLA delivery guarantees, working calendar & holiday rules, Force Majeure provisions, and legal terms specified in this document.
+        By signing below, the authorized representatives of <strong>SaNDS Lab Middle East W.L.L</strong>, <strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong>, and <strong>UniGlobal Consultancy</strong> agree to the milestone schedule, resource commitments, payment structure, SLA delivery guarantees, working calendar & holiday rules, Force Majeure provisions, and legal terms specified in this document.
       </p>
 
       <div class="approval-container">
         
-        <!-- Service Provider -->
+        <!-- 1. Service Provider (SaNDS Lab - LEFT) -->
         <div class="approval-box">
           <div class="approval-header">
             <div class="approval-logo-wrap">
-              <img class="approval-logo-img" src="{logo_sands_color}" alt="SaNDS Lab" />
+              <img class="approval-logo-img sands-approval-logo" src="{logo_sands_color}" alt="SaNDS Lab" />
             </div>
             <div class="approval-role">SERVICE PROVIDER</div>
-            <div class="approval-org">SaNDS Lab Middle East W.L.L</div>
+            <div class="approval-org"><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['organization']) ? $sands_sig['organization'] : 'SaNDS Lab Middle East W.L.L'); ?></div>
           </div>
           <div>
-            <div class="sig-field">Name: <span>Ajit Kumar KV</span></div>
-            <div class="sig-field">Title: <span>CEO & Managing Director</span></div>
-            <div class="sig-field">Date: <span>21-Sep-2026</span></div>
+            <div class="sig-field">Name: <span><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['full_name']) ? $sands_sig['full_name'] : 'Ajit Kumar KV'); ?></span></div>
+            <div class="sig-field">Title: <span><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['role']) ? $sands_sig['role'] : 'Super Admin'); ?></span></div>
+            <div class="sig-field">Date: <span><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['signed_at']) ? date('d/m/Y', strtotime($sands_sig['signed_at'])) : '—'); ?></span></div>
           </div>
-          <div class="sig-line">Authorized Signature & Seal</div>
-        </div>
-
-        <!-- Consultant -->
-        <div class="approval-box">
-          <div class="approval-header">
-            <div class="approval-logo-wrap">
-              <img class="approval-logo-img" src="{logo_uniglobal_color}" alt="UniGlobal Consultancy" />
+          <?php if ($sands_sig && !empty($sands_sig['signature_data'])): ?>
+            <div style="text-align:center; padding:5px 0;">
+              <img class="sig-img-preview" src="<?php echo $sands_sig['signature_data']; ?>" alt="Signature" />
+              <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
+                <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
+                <?php if (!empty($authenticated_user) && strtolower($authenticated_user) === 'ajit@sandslab.com'): ?>
+                  <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($sands_sig['email']) ? $sands_sig['email'] : 'ajit@sandslab.com', ENT_QUOTES); ?>', 'SaNDS Lab')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:10px; font-weight:700; border-radius:4px; padding:2px 6px; cursor:pointer; display:inline-flex; align-items:center;" title="Clear signature">🗑️ Clear</button>
+                <?php endif; ?>
+              </div>
             </div>
-            <div class="approval-role">CONSULTANT & ARCHITECT</div>
-            <div class="approval-org">UniGlobal Consultants</div>
-          </div>
-          <div>
-            <div class="sig-field">Name: <span>Lead ERP Consultant</span></div>
-            <div class="sig-field">Title: <span>Principal Business Analyst</span></div>
-            <div class="sig-field">Date: <span>___-___-2026</span></div>
-          </div>
-          <div class="sig-line">Review & Recommendation Signature</div>
+          <?php else: ?>
+            <div class="sig-line">Authorized Signature & Seal</div>
+          <?php endif; ?>
         </div>
 
-        <!-- Client -->
+        <!-- 2. Client Representative (Popular Auto Spare - ALWAYS CENTER) -->
         <div class="approval-box">
           <div class="approval-header">
             <div class="approval-logo-wrap">
               <img class="approval-logo-img" src="{logo_popular}" alt="Popular Auto Spare" />
             </div>
             <div class="approval-role">CLIENT REPRESENTATIVE</div>
-            <div class="approval-org">Popular Auto Spare & A/C Parts Co.</div>
+            <div class="approval-org"><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['organization']) ? $popular_sig['organization'] : 'Popular Auto Spare & A/C Parts Co. W.L.L'); ?></div>
           </div>
           <div>
-            <div class="sig-field">Name: <span>Managing Director / CTO</span></div>
-            <div class="sig-field">Title: <span>Executive Director</span></div>
-            <div class="sig-field">Date: <span>___-___-2026</span></div>
+            <div class="sig-field">Name: <span><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['full_name']) ? $popular_sig['full_name'] : 'Managing Director'); ?></span></div>
+            <div class="sig-field">Title: <span><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['role']) ? $popular_sig['role'] : 'Client Director'); ?></span></div>
+            <div class="sig-field">Date: <span><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['signed_at']) ? date('d/m/Y', strtotime($popular_sig['signed_at'])) : '—'); ?></span></div>
           </div>
-          <div class="sig-line">Client Acceptance & Approval Signature</div>
+          <?php if ($popular_sig && !empty($popular_sig['signature_data'])): ?>
+            <div style="text-align:center; padding:5px 0;">
+              <img class="sig-img-preview" src="<?php echo $popular_sig['signature_data']; ?>" alt="Signature" />
+              <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
+                <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
+                <?php if (!empty($authenticated_user) && strtolower($authenticated_user) === 'ajit@sandslab.com'): ?>
+                  <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($popular_sig['email']) ? $popular_sig['email'] : 'indar@popularbahrain.com', ENT_QUOTES); ?>', 'Popular Auto Spare')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:10px; font-weight:700; border-radius:4px; padding:2px 6px; cursor:pointer; display:inline-flex; align-items:center;" title="Clear signature">🗑️ Clear</button>
+                <?php endif; ?>
+              </div>
+            </div>
+          <?php else: ?>
+            <div class="sig-line">Client Acceptance & Approval Signature</div>
+          <?php endif; ?>
+        </div>
+
+        <!-- 3. Consultant & Architect (UniGlobal - RIGHT) -->
+        <div class="approval-box">
+          <div class="approval-header">
+            <div class="approval-logo-wrap">
+              <img class="approval-logo-img" src="{logo_uniglobal_color}" alt="UniGlobal Consultancy" />
+            </div>
+            <div class="approval-role">CONSULTANT & ARCHITECT</div>
+            <div class="approval-org"><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['organization']) ? $uniglobal_sig['organization'] : 'UniGlobal Consultancy'); ?></div>
+          </div>
+          <div>
+            <div class="sig-field">Name: <span><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['full_name']) ? $uniglobal_sig['full_name'] : 'Lead IT Consultant'); ?></span></div>
+            <div class="sig-field">Title: <span><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['role']) ? $uniglobal_sig['role'] : 'Consultant'); ?></span></div>
+            <div class="sig-field">Date: <span><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['signed_at']) ? date('d/m/Y', strtotime($uniglobal_sig['signed_at'])) : '—'); ?></span></div>
+          </div>
+          <?php if ($uniglobal_sig && !empty($uniglobal_sig['signature_data'])): ?>
+            <div style="text-align:center; padding:5px 0;">
+              <img class="sig-img-preview" src="<?php echo $uniglobal_sig['signature_data']; ?>" alt="Signature" />
+              <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
+                <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
+                <?php if (!empty($authenticated_user) && strtolower($authenticated_user) === 'ajit@sandslab.com'): ?>
+                  <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($uniglobal_sig['email']) ? $uniglobal_sig['email'] : 'consultant@uniglobal.com', ENT_QUOTES); ?>', 'UniGlobal Consultancy')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:10px; font-weight:700; border-radius:4px; padding:2px 6px; cursor:pointer; display:inline-flex; align-items:center;" title="Clear signature">🗑️ Clear</button>
+                <?php endif; ?>
+              </div>
+            </div>
+          <?php else: ?>
+            <div class="sig-line">Review & Recommendation Signature</div>
+          <?php endif; ?>
         </div>
 
       </div>
+
+      <!-- =========================================================================
+           A. IF FINALIZED: OFFICIAL DIGITAL EXECUTION CERTIFICATE (PRINT & DOWNLOAD)
+           ========================================================================= -->
+      <?php if ($is_finalized): ?>
+        <div class="finalized-cert-wrap">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #bbf7d0; padding-bottom:12px; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="finalized-badge-pill">🔒 OFFICIALLY EXECUTED & LOCKED</span>
+              <h3 style="font-family:'Outfit',sans-serif; color:#15803d; font-size:16px; margin:0;">Digital Execution Certificate of Agreement</h3>
+            </div>
+            <div style="font-size:11.5px; color:#475569;">
+              Finalized By: <strong><?php echo htmlspecialchars(!empty($finalized_by) ? $finalized_by : 'ajit@sandslab.com'); ?></strong> &bull; <?php echo !empty($finalized_at) ? date('d/m/Y H:i:s', strtotime($finalized_at)) : date('d/m/Y H:i:s'); ?>
+            </div>
+          </div>
+          <p style="font-size:12px; color:#334155; margin-bottom:12px;">
+            This document has completed full stakeholder verification. All terms, milestone dates, resource commits, payment schedules, SLA penalties, and Bahrain legal jurisdiction clauses are legally binding and sealed.
+          </p>
+          <div class="cert-seal-grid">
+            <!-- 1. SaNDS Lab (Service Provider - LEFT) -->
+            <div class="cert-seal-card">
+              <div style="font-weight:700; color:#0a2540; font-size:12px; margin-bottom:2px;"><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['full_name']) ? $sands_sig['full_name'] : 'Ajit Kumar KV'); ?></div>
+              <div style="font-size:10.5px; color:#334155; font-weight:600; line-height:1.25;"><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['organization']) ? $sands_sig['organization'] : 'SaNDS Lab Middle East W.L.L'); ?></div>
+              <div style="font-size:10px; color:#64748b; margin-top:2px; margin-bottom:4px;"><?php echo htmlspecialchars($sands_sig && !empty($sands_sig['role']) ? $sands_sig['role'] : 'Super Admin'); ?></div>
+              <?php if ($sands_sig && !empty($sands_sig['signature_data'])): ?>
+                <img src="<?php echo $sands_sig['signature_data']; ?>" style="max-height:40px; margin:4px auto; display:block;" alt="Signature" />
+                <div style="font-size:10.5px; color:#15803d; font-weight:600;">Verified: <?php echo !empty($sands_sig['signed_at']) ? date('d/m/Y H:i', strtotime($sands_sig['signed_at'])) : date('d/m/Y H:i'); ?></div>
+                <div style="font-size:9.5px; color:#94a3b8;">IP: <?php echo htmlspecialchars(!empty($sands_sig['ip_address']) ? $sands_sig['ip_address'] : '::1'); ?></div>
+              <?php else: ?>
+                <div style="font-size:11px; color:#94a3b8; padding:10px 0; font-style:italic;">⏳ Sign-off Pending</div>
+              <?php endif; ?>
+            </div>
+
+            <!-- 2. Popular Auto Spare (Client Representative - ALWAYS CENTER) -->
+            <div class="cert-seal-card">
+              <div style="font-weight:700; color:#0a2540; font-size:12px; margin-bottom:2px;"><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['full_name']) ? $popular_sig['full_name'] : 'Managing Director'); ?></div>
+              <div style="font-size:10.5px; color:#334155; font-weight:600; line-height:1.25;"><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['organization']) ? $popular_sig['organization'] : 'Popular Auto Spare & A/C Parts Co. W.L.L'); ?></div>
+              <div style="font-size:10px; color:#64748b; margin-top:2px; margin-bottom:4px;"><?php echo htmlspecialchars($popular_sig && !empty($popular_sig['role']) ? $popular_sig['role'] : 'Client Director'); ?></div>
+              <?php if ($popular_sig && !empty($popular_sig['signature_data'])): ?>
+                <img src="<?php echo $popular_sig['signature_data']; ?>" style="max-height:40px; margin:4px auto; display:block;" alt="Signature" />
+                <div style="font-size:10.5px; color:#15803d; font-weight:600;">Verified: <?php echo !empty($popular_sig['signed_at']) ? date('d/m/Y H:i', strtotime($popular_sig['signed_at'])) : date('d/m/Y H:i'); ?></div>
+                <div style="font-size:9.5px; color:#94a3b8;">IP: <?php echo htmlspecialchars(!empty($popular_sig['ip_address']) ? $popular_sig['ip_address'] : '::1'); ?></div>
+              <?php else: ?>
+                <div style="font-size:11px; color:#94a3b8; padding:10px 0; font-style:italic;">⏳ Sign-off Pending</div>
+              <?php endif; ?>
+            </div>
+
+            <!-- 3. UniGlobal (Consultant & Architect - RIGHT) -->
+            <div class="cert-seal-card">
+              <div style="font-weight:700; color:#0a2540; font-size:12px; margin-bottom:2px;"><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['full_name']) ? $uniglobal_sig['full_name'] : 'Lead IT Consultant'); ?></div>
+              <div style="font-size:10.5px; color:#334155; font-weight:600; line-height:1.25;"><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['organization']) ? $uniglobal_sig['organization'] : 'UniGlobal Consultancy'); ?></div>
+              <div style="font-size:10px; color:#64748b; margin-top:2px; margin-bottom:4px;"><?php echo htmlspecialchars($uniglobal_sig && !empty($uniglobal_sig['role']) ? $uniglobal_sig['role'] : 'Consultant'); ?></div>
+              <?php if ($uniglobal_sig && !empty($uniglobal_sig['signature_data'])): ?>
+                <img src="<?php echo $uniglobal_sig['signature_data']; ?>" style="max-height:40px; margin:4px auto; display:block;" alt="Signature" />
+                <div style="font-size:10.5px; color:#15803d; font-weight:600;">Verified: <?php echo !empty($uniglobal_sig['signed_at']) ? date('d/m/Y H:i', strtotime($uniglobal_sig['signed_at'])) : date('d/m/Y H:i'); ?></div>
+                <div style="font-size:9.5px; color:#94a3b8;">IP: <?php echo htmlspecialchars(!empty($uniglobal_sig['ip_address']) ? $uniglobal_sig['ip_address'] : '::1'); ?></div>
+              <?php else: ?>
+                <div style="font-size:11px; color:#94a3b8; padding:10px 0; font-style:italic;">⏳ Sign-off Pending</div>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+
+      <!-- =========================================================================
+           B. IF IN REVIEW: INTERACTIVE TOUCH/MOUSE SIGNATURE PAD OR STATUS
+           ========================================================================= -->
+      <?php else: ?>
+        
+        <?php if ($my_sig && $my_sig['status'] === 'SIGNED'): ?>
+          <div class="sign-interactive-card" style="border-color:#16a34a; background:#f0fdf4;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="background:#16a34a; color:#ffffff; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">✓</div>
+                <div>
+                  <h4 style="font-family:'Outfit',sans-serif; color:#15803d; font-size:16px; margin:0;">You Have Digitally Signed This Milestone Document</h4>
+                  <p style="font-size:12px; color:#334155; margin:0;">Signed as <strong><?php echo htmlspecialchars($my_sig['full_name']); ?></strong> (<?php echo htmlspecialchars($my_sig['role']); ?>) on <?php echo !empty($my_sig['signed_at']) ? date('d/m/Y H:i', strtotime($my_sig['signed_at'])) : date('d/m/Y H:i'); ?> &bull; IP: <?php echo htmlspecialchars($my_sig['ip_address']); ?></p>
+                </div>
+              </div>
+              <div class="no-print">
+                <button type="button" onclick="toggleSignaturePad(true)" class="btn-tool">
+                  ✏️ Redraw / Update Signature
+                </button>
+              </div>
+            </div>
+            <div style="margin-top:12px; padding-top:12px; border-top:1px solid #bbf7d0; display:flex; align-items:center; gap:20px;">
+              <?php if (!empty($my_sig['signature_data'])): ?>
+                <img src="<?php echo $my_sig['signature_data']; ?>" style="max-height:50px; background:#ffffff; border:1px solid #bbf7d0; padding:4px 12px; border-radius:6px;" alt="My Signature" />
+              <?php endif; ?>
+              <div style="font-size:11.5px; color:#166534;">Your signature is officially logged and pending Super Admin final lock.</div>
+            </div>
+          </div>
+        <?php elseif ($my_sig && $my_sig['status'] === 'DISAGREED'): ?>
+          <div class="sign-interactive-card" style="border-color:#e11d48; background:#fff1f2;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h4 style="font-family:'Outfit',sans-serif; color:#be123c; font-size:16px; margin:0;">⚠️ Revision Requested by You</h4>
+                <p style="font-size:12px; color:#334155; margin:3px 0 0;">Submitted on <?php echo !empty($my_sig['signed_at']) ? date('d/m/Y H:i', strtotime($my_sig['signed_at'])) : date('d/m/Y H:i'); ?> &bull; Feedback logged to Super Admin</p>
+                <div style="background:#ffffff; border:1px solid #fecdd3; border-radius:6px; padding:10px 14px; margin-top:8px; font-size:12.5px; color:#881337;">
+                  <strong>Your Reason:</strong> "<?php echo htmlspecialchars($my_sig['disagree_reason']); ?>"
+                </div>
+              </div>
+              <div class="no-print">
+                <button type="button" onclick="toggleSignaturePad(true)" class="btn-sign-submit" style="background:#0a2540;">
+                  🖋️ Sign Document Now
+                </button>
+              </div>
+            </div>
+          </div>
+        <?php endif; ?>
+
+        <!-- Active Signature Pad (Visible if not signed, or toggled) -->
+        <div id="sigPadSection" class="sign-interactive-card no-print" style="<?php echo ($my_sig && $my_sig['status'] === 'SIGNED') ? 'display:none;' : ''; ?>">
+          <div class="sign-interactive-head">
+            <div>
+              <h3>🖋️ Stakeholder Digital Signature Authorization</h3>
+              <p style="font-size:12px; color:var(--gray-500); margin:0;">Use your mobile touchscreen or desktop mouse to draw your signature below.</p>
+            </div>
+            <div style="font-size:12px; color:var(--primary); font-weight:700;">
+              Active User: <code><?php echo htmlspecialchars($authenticated_user ? $authenticated_user : 'Client'); ?></code>
+            </div>
+          </div>
+
+          <form id="docSignForm" onsubmit="submitDigitalSignature(event)">
+            <div class="signer-info-grid">
+              <div class="signer-input-group">
+                <label>Signer Full Name</label>
+                <input type="text" id="signerName" required value="<?php echo htmlspecialchars($user_record ? $user_record['full_name'] : ($my_sig ? $my_sig['full_name'] : '')); ?>" placeholder="e.g. John Doe">
+              </div>
+              <div class="signer-input-group">
+                <label>Organization / Company</label>
+                <input type="text" id="signerOrg" required value="<?php echo htmlspecialchars($user_record ? $user_record['organization'] : ($my_sig ? $my_sig['organization'] : 'Popular Auto Spare & A/C Parts Co. W.L.L')); ?>" placeholder="e.g. Popular Auto Spare">
+              </div>
+              <div class="signer-input-group">
+                <label>Designation / Role</label>
+                <input type="text" id="signerRole" required value="<?php echo htmlspecialchars($user_record ? $user_record['role'] : ($my_sig ? $my_sig['role'] : 'Client Director')); ?>" placeholder="e.g. Managing Director">
+              </div>
+            </div>
+
+            <!-- HTML5 Touch / Mouse Signature Canvas -->
+            <div class="canvas-container">
+              <canvas id="sigCanvas"></canvas>
+              <div id="canvasPlaceholder" class="canvas-placeholder-text">
+                ✍️ Draw signature here using finger (touch) or mouse pointer
+              </div>
+            </div>
+
+            <div class="canvas-tools">
+              <div style="display:flex; gap:8px;">
+                <button type="button" onclick="clearSignatureCanvas()" class="btn-tool">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  Clear Pad
+                </button>
+                <button type="button" onclick="undoSignatureStroke()" class="btn-tool">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                  Undo Stroke
+                </button>
+              </div>
+              <div style="font-size:11.5px; color:var(--gray-500);">
+                High-Resolution Encrypted Electronic Signature
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:15px;">
+              <input type="checkbox" id="signConsent" required style="width:18px; height:18px; margin-top:2px; cursor:pointer;">
+              <label for="signConsent" style="font-size:12px; color:var(--gray-700); cursor:pointer; line-height:1.4;">
+                I hereby confirm that I have reviewed the implementation milestones, resource matrix, payment milestones (BD 3,409.091 + Advance), 15-day grace SLA, and Bahrain legal jurisdiction, and I formally execute this document with my binding electronic signature.
+              </label>
+            </div>
+
+            <div class="sign-action-bar">
+              <button type="button" onclick="openDisagreeModal()" class="btn-disagree">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                Disagree / Request Changes
+              </button>
+
+              <div style="display:flex; gap:10px; align-items:center;">
+                <?php if ($my_sig && $my_sig['status'] === 'SIGNED'): ?>
+                  <button type="button" onclick="toggleSignaturePad(false)" class="btn-tool">Cancel</button>
+                <?php endif; ?>
+                <button type="submit" id="btnSubmitSign" class="btn-sign-submit">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Submit & Authorize Milestone
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      <?php endif; ?>
+
     </section>
+
+    <!-- Disagreement Feedback Modal (No Print) -->
+    <div id="disagreeModal" class="sig-modal-overlay no-print">
+      <div class="sig-modal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+          <h3 style="font-family:'Outfit',sans-serif; color:#be123c; font-size:17px; margin:0; display:flex; align-items:center; gap:8px;">
+            ⚠️ Request Milestone Revision / Disagree
+          </h3>
+          <button type="button" onclick="closeDisagreeModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:#64748b;">&times;</button>
+        </div>
+        <p style="font-size:12.5px; color:#475569; margin-bottom:14px;">
+          Please provide the specific reason, clause, or milestone adjustment requested. Your comments will be immediately logged into the Super Admin audit registry for amicable review.
+        </p>
+        <form onsubmit="submitDisagreementFeedback(event)">
+          <div style="margin-bottom:16px;">
+            <label style="display:block; font-size:11.5px; font-weight:700; text-transform:uppercase; color:#334155; margin-bottom:5px;">Reason for Disagreement / Revision Details *</label>
+            <textarea id="disagreeReason" required rows="4" style="width:100%; padding:10px; font-size:13px; border:1px solid #cbd5e1; border-radius:6px; outline:none; font-family:'Inter',sans-serif;" placeholder="State your required changes, timeline concerns, or scope clarifications..."></textarea>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" onclick="closeDisagreeModal()" class="btn-tool">Cancel</button>
+            <button type="submit" id="btnSubmitDisagree" class="btn-disagree" style="background:#be123c; color:#ffffff; border-color:#be123c;">
+              Submit Revision Request
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Client-Side Signature Canvas Script (Touch & Mouse Support) -->
+    <script class="no-print">
+      var canvas = document.getElementById('sigCanvas');
+      var ctx = canvas ? canvas.getContext('2d') : null;
+      var isDrawing = false;
+      var hasDrawn = false;
+      var strokes = [];
+      var currentStroke = [];
+
+      function initSignaturePad() {{
+        if (!canvas) return;
+        var rect = canvas.getBoundingClientRect();
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        ctx.strokeStyle = '#0a2540';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Mouse Events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch Events (Mobile/Tablet Friendly)
+        canvas.addEventListener('touchstart', function(e) {{
+          e.preventDefault();
+          var touch = e.touches[0];
+          var mouseEvent = new MouseEvent('mousedown', {{
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          }});
+          canvas.dispatchEvent(mouseEvent);
+        }}, {{ passive: false }});
+
+        canvas.addEventListener('touchmove', function(e) {{
+          e.preventDefault();
+          var touch = e.touches[0];
+          var mouseEvent = new MouseEvent('mousemove', {{
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          }});
+          canvas.dispatchEvent(mouseEvent);
+        }}, {{ passive: false }});
+
+        canvas.addEventListener('touchend', function(e) {{
+          e.preventDefault();
+          var mouseEvent = new MouseEvent('mouseup', {{}});
+          canvas.dispatchEvent(mouseEvent);
+        }}, {{ passive: false }});
+      }}
+
+      function getCanvasPos(e) {{
+        var rect = canvas.getBoundingClientRect();
+        return {{
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        }};
+      }}
+
+      function startDrawing(e) {{
+        isDrawing = true;
+        hasDrawn = true;
+        var placeholder = document.getElementById('canvasPlaceholder');
+        if (placeholder) placeholder.style.display = 'none';
+        var pos = getCanvasPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        currentStroke = [pos];
+      }}
+
+      function draw(e) {{
+        if (!isDrawing) return;
+        var pos = getCanvasPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        currentStroke.push(pos);
+      }}
+
+      function stopDrawing() {{
+        if (isDrawing) {{
+          isDrawing = false;
+          strokes.push(currentStroke);
+          currentStroke = [];
+        }}
+      }}
+
+      function clearSignatureCanvas() {{
+        if (!canvas || !ctx) return;
+        var rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        strokes = [];
+        hasDrawn = false;
+        var placeholder = document.getElementById('canvasPlaceholder');
+        if (placeholder) placeholder.style.display = 'block';
+      }}
+
+      function undoSignatureStroke() {{
+        if (!canvas || !ctx || strokes.length === 0) return;
+        strokes.pop();
+        var rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        if (strokes.length === 0) {{
+          hasDrawn = false;
+          var placeholder = document.getElementById('canvasPlaceholder');
+          if (placeholder) placeholder.style.display = 'block';
+          return;
+        }}
+        // Redraw remaining strokes
+        for (var i = 0; i < strokes.length; i++) {{
+          var s = strokes[i];
+          if (s.length > 0) {{
+            ctx.beginPath();
+            ctx.moveTo(s[0].x, s[0].y);
+            for (var j = 1; j < s.length; j++) {{
+              ctx.lineTo(s[j].x, s[j].y);
+            }}
+            ctx.stroke();
+          }}
+        }}
+      }}
+
+      function toggleSignaturePad(show) {{
+        var pad = document.getElementById('sigPadSection');
+        if (pad) {{
+          pad.style.display = show ? 'block' : 'none';
+          if (show) {{
+            setTimeout(initSignaturePad, 100);
+          }}
+        }}
+      }}
+
+      function openDisagreeModal() {{
+        document.getElementById('disagreeModal').style.display = 'flex';
+      }}
+      function closeDisagreeModal() {{
+        document.getElementById('disagreeModal').style.display = 'none';
+      }}
+
+      function submitDigitalSignature(e) {{
+        e.preventDefault();
+        if (!hasDrawn || strokes.length === 0) {{
+          Swal.fire({{
+            icon: 'warning',
+            title: 'Signature Required',
+            text: 'Please draw your signature in the signature area before submitting.',
+            confirmButtonColor: '#0a2540',
+            confirmButtonText: 'OK'
+          }});
+          return;
+        }}
+
+        var sigData = canvas.toDataURL('image/png');
+        var name = document.getElementById('signerName').value.trim();
+        var org = document.getElementById('signerOrg').value.trim();
+        var role = document.getElementById('signerRole').value.trim();
+        var btn = document.getElementById('btnSubmitSign');
+        btn.disabled = true;
+        btn.innerText = 'Recording Signature...';
+
+        var formData = new FormData();
+        formData.append('action', 'sign_document');
+        formData.append('doc_id', 'SL-POP-ERP-MS-001');
+        formData.append('signature_data', sigData);
+        formData.append('signer_name', name);
+        formData.append('signer_org', org);
+        formData.append('signer_role', role);
+
+        fetch('', {{
+          method: 'POST',
+          body: formData
+        }})
+        .then(function(res) {{ return res.json(); }})
+        .then(function(data) {{
+          if (data.success) {{
+            Swal.fire({{
+              icon: 'success',
+              title: 'Signature Recorded!',
+              text: 'Milestone document signed and recorded successfully!',
+              confirmButtonColor: '#15803d',
+              confirmButtonText: 'Great!'
+            }}).then(function() {{
+              window.location.reload();
+            }});
+          }} else {{
+            Swal.fire({{
+              icon: 'error',
+              title: 'Notice',
+              text: data.message,
+              confirmButtonColor: '#be123c'
+            }});
+            btn.disabled = false;
+            btn.innerText = 'Submit & Authorize Milestone';
+          }}
+        }})
+        .catch(function(err) {{
+          Swal.fire({{
+            icon: 'error',
+            title: 'Network Error',
+            text: 'Unable to record signature. Please try again.',
+            confirmButtonColor: '#be123c'
+          }});
+          btn.disabled = false;
+          btn.innerText = 'Submit & Authorize Milestone';
+        }});
+      }}
+
+      function submitDisagreementFeedback(e) {{
+        e.preventDefault();
+        var reason = document.getElementById('disagreeReason').value.trim();
+        if (reason.length < 5) {{
+          Swal.fire({{
+            icon: 'warning',
+            title: 'Details Required',
+            text: 'Please provide a descriptive reason (minimum 5 characters).',
+            confirmButtonColor: '#0a2540'
+          }});
+          return;
+        }}
+
+        var btn = document.getElementById('btnSubmitDisagree');
+        btn.disabled = true;
+        btn.innerText = 'Submitting Feedback...';
+
+        var formData = new FormData();
+        formData.append('action', 'disagree_document');
+        formData.append('doc_id', 'SL-POP-ERP-MS-001');
+        formData.append('disagree_reason', reason);
+
+        fetch('', {{
+          method: 'POST',
+          body: formData
+        }})
+        .then(function(res) {{ return res.json(); }})
+        .then(function(data) {{
+          if (data.success) {{
+            closeDisagreeModal();
+            Swal.fire({{
+              icon: 'info',
+              title: 'Feedback Submitted',
+              text: 'Your milestone revision request has been logged for Super Admin review.',
+              confirmButtonColor: '#0a2540'
+            }}).then(function() {{
+              window.location.reload();
+            }});
+          }} else {{
+            Swal.fire({{
+              icon: 'error',
+              title: 'Notice',
+              text: data.message,
+              confirmButtonColor: '#be123c'
+            }});
+            btn.disabled = false;
+            btn.innerText = 'Submit Revision Request';
+          }}
+        }})
+        .catch(function(err) {{
+          Swal.fire({{
+            icon: 'error',
+            title: 'Network Error',
+            text: 'Network Error submitting revision request. Please try again.',
+            confirmButtonColor: '#be123c'
+          }});
+          btn.disabled = false;
+          btn.innerText = 'Submit Revision Request';
+        }});
+      }}
+
+      function showLoadingModal(title, text) {{
+        Swal.fire({{
+          title: title || 'Processing Request...',
+          html: '<div style=\"display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; margin:16px 0 6px 0;\">' +
+                '  <div style=\"width:42px; height:42px; border:4px solid #fecdd3; border-top-color:#e11d48; border-radius:50%; animation:docSpin 0.75s linear infinite;\"></div>' +
+                '  <div style=\"font-size:13px; color:#475569; font-weight:500;\">' + (text || 'Please wait while we update documents & synchronize PDF...') + '</div>' +
+                '</div>',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          didOpen: () => {{
+            Swal.showLoading();
+          }}
+        }});
+      }}
+
+      function adminPromptReopenDoc() {{
+        Swal.fire({{
+          title: 'Re-Open Milestone Document?',
+          html: 'Choose whether you want to re-open the document for revisions while preserving current signatures, or clear all signatures for a fresh sign-off.',
+          icon: 'warning',
+          showCancelButton: true,
+          showDenyButton: true,
+          confirmButtonColor: '#b45309',
+          denyButtonColor: '#be123c',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: '🔓 Re-Open (Keep Signatures)',
+          denyButtonText: '🧹 Re-Open & Clear All Signatures',
+          cancelButtonText: 'Cancel'
+        }}).then(function(result) {{
+          if (result.isConfirmed) {{
+            adminExecuteReopen(false);
+          }} else if (result.isDenied) {{
+            adminExecuteReopen(true);
+          }}
+        }});
+      }}
+
+      function adminExecuteReopen(clearSigs) {{
+        showLoadingModal('Re-opening Document...', 'Updating document lifecycle status & regenerating PDF...');
+        var fd = new FormData();
+        fd.append('action', 'admin_reopen_document');
+        fd.append('doc_id', 'SL-POP-ERP-MS-001');
+        fd.append('clear_signatures', clearSigs ? '1' : '0');
+
+        fetch('', {{ method: 'POST', body: fd }})
+        .then(function(r) {{ return r.json(); }})
+        .then(function(d) {{
+          if (d.success) {{
+            Swal.fire({{ icon: 'success', title: 'Document Reopened', text: d.message, confirmButtonColor: '#15803d' }})
+            .then(function() {{ window.location.reload(); }});
+          }} else {{
+            Swal.fire({{ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' }});
+          }}
+        }})
+        .catch(function(err) {{
+          Swal.fire({{ icon: 'error', title: 'Network Error', text: 'Operation failed. Please check network connection.', confirmButtonColor: '#be123c' }});
+        }});
+      }}
+
+      function adminConfirmFinalizeDoc() {{
+        Swal.fire({{
+          title: 'Finalize & Lock Document?',
+          text: 'This will permanently close signature pads and activate official digital execution certificates.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#15803d',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Yes, Finalize & Lock',
+          cancelButtonText: 'Cancel'
+        }}).then(function(result) {{
+          if (result.isConfirmed) {{
+            showLoadingModal('Finalizing & Sealing Document...', 'Generating official locked PDF & Digital Execution Certificates...');
+            var fd = new FormData();
+            fd.append('action', 'finalize_document');
+            fd.append('admin_action', 'finalize_document');
+            fd.append('doc_id', 'SL-POP-ERP-MS-001');
+
+            fetch('', {{ method: 'POST', body: fd }})
+            .then(function() {{
+              Swal.fire({{ icon: 'success', title: 'Document Finalized', text: 'Document is locked and certificates activated.', confirmButtonColor: '#15803d' }})
+              .then(function() {{ window.location.reload(); }});
+            }})
+            .catch(function(err) {{
+              Swal.fire({{ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' }});
+            }});
+          }}
+        }});
+      }}
+
+      function adminConfirmClearAllSigs() {{
+        Swal.fire({{
+          title: 'Clear All Recorded Signatures?',
+          text: 'Are you sure you want to delete all recorded signatures for this milestone document?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#be123c',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Yes, Clear All Signatures',
+          cancelButtonText: 'Cancel'
+        }}).then(function(result) {{
+          if (result.isConfirmed) {{
+            showLoadingModal('Clearing All Signatures...', 'Deleting digital ink signatures and rebuilding fresh document...');
+            var fd = new FormData();
+            fd.append('action', 'admin_clear_all_signatures');
+            fd.append('doc_id', 'SL-POP-ERP-MS-001');
+
+            fetch('', {{ method: 'POST', body: fd }})
+            .then(function(r) {{ return r.json(); }})
+            .then(function(d) {{
+              if (d.success) {{
+                Swal.fire({{ icon: 'success', title: 'Signatures Cleared', text: d.message, confirmButtonColor: '#15803d' }})
+                .then(function() {{ window.location.reload(); }});
+              }} else {{
+                Swal.fire({{ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' }});
+              }}
+            }})
+            .catch(function(err) {{
+              Swal.fire({{ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' }});
+            }});
+          }}
+        }});
+      }}
+
+      function adminClearSingleSig(btn, email, name) {{
+        Swal.fire({{
+          title: 'Clear Stakeholder Signature?',
+          html: 'Are you sure you want to clear the signature for <strong>' + name + '</strong> (' + email + ')?<br><br><span style=\"font-size:12px; color:#64748b;\">Their signature will be removed, and they will be able to sign again.</span>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#be123c',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Yes, Clear Signature',
+          cancelButtonText: 'Cancel'
+        }}).then(function(result) {{
+          if (result.isConfirmed) {{
+            if (btn && btn.tagName === 'BUTTON') {{
+              btn.innerHTML = '<span class=\"inline-spinner\"></span> Clearing...';
+              btn.disabled = true;
+            }}
+            showLoadingModal('Clearing Signature...', 'Removing signature for ' + name + ' and synchronizing PDF...');
+            var fd = new FormData();
+            fd.append('action', 'admin_clear_signature');
+            fd.append('doc_id', 'SL-POP-ERP-MS-001');
+            fd.append('target_email', email);
+
+            fetch('', {{ method: 'POST', body: fd }})
+            .then(function(r) {{ return r.json(); }})
+            .then(function(d) {{
+              if (d.success) {{
+                Swal.fire({{ icon: 'success', title: 'Signature Cleared', text: d.message, confirmButtonColor: '#15803d' }})
+                .then(function() {{ window.location.reload(); }});
+              }} else {{
+                if (btn && btn.tagName === 'BUTTON') {{
+                  btn.innerHTML = '🗑️ Clear';
+                  btn.disabled = false;
+                }}
+                Swal.fire({{ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' }});
+              }}
+            }})
+            .catch(function(err) {{
+              if (btn && btn.tagName === 'BUTTON') {{
+                btn.innerHTML = '🗑️ Clear';
+                btn.disabled = false;
+              }}
+              Swal.fire({{ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' }});
+            }});
+          }}
+        }});
+      }}
+
+      window.addEventListener('load', function() {{
+        initSignaturePad();
+      }});
+      window.addEventListener('resize', function() {{
+        initSignaturePad();
+      }});
+    </script>
+
 
   </main>
 
@@ -1806,38 +2973,71 @@ html_content = f"""<!DOCTYPE html>
 </body>
 </html>"""
 
-with open('PCode_Milestone_and_Payment_Structure.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
+# Save HTML across all root and popular directories
+html_outputs = [
+    os.path.join(BASE_DIR, 'PCode_Milestone_and_Payment_Structure.html'),
+    os.path.join(BASE_DIR, 'SL-POP-ERP-MS-001.html'),
+    os.path.join(BASE_DIR, 'popular', 'PCode_Milestone_and_Payment_Structure.html'),
+    os.path.join(BASE_DIR, 'popular', 'SL-POP-ERP-MS-001.html'),
+    os.path.join(BASE_DIR, 'popular', 'SL-POP-ERP-MS-001', 'index.html'),
+]
 
-with open('SL-POP-ERP-MS-001.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
+for hp in html_outputs:
+    os.makedirs(os.path.dirname(hp), exist_ok=True)
+    with open(hp, 'w', encoding='utf-8') as f:
+        f.write(html_content)
 
-print('PCode_Milestone_and_Payment_Structure.html and SL-POP-ERP-MS-001.html generated successfully.')
+print('PCode_Milestone_and_Payment_Structure.html and SL-POP-ERP-MS-001.html distributed successfully.')
+
+# Render through PHP first so all dynamic variables, signatures, names, and seals are fully evaluated from DB
+rendered_html_path = os.path.join(BASE_DIR, 'rendered_for_pdf.html')
+with open(rendered_html_path, 'w', encoding='utf-8') as rf:
+    subprocess.run(['php', '-f', os.path.join(BASE_DIR, 'SL-POP-ERP-MS-001.html')], stdout=rf, check=True, cwd=BASE_DIR)
 
 chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
-html_path = os.path.abspath('SL-POP-ERP-MS-001.html')
-pdf_path_1 = os.path.abspath('PCode_Milestone_and_Payment_Structure.pdf')
-pdf_path_2 = os.path.abspath('SL-POP-ERP-MS-001.pdf')
+pdf_output_root_1 = os.path.join(BASE_DIR, 'PCode_Milestone_and_Payment_Structure.pdf')
+pdf_output_root_2 = os.path.join(BASE_DIR, 'SL-POP-ERP-MS-001.pdf')
 
 cmd = [
     chrome_path,
     '--headless',
     '--disable-gpu',
     '--run-all-compositor-stages-before-draw',
-    f'--print-to-pdf={pdf_path_2}',
+    f'--print-to-pdf={pdf_output_root_2}',
     '--no-pdf-header-footer',
-    html_path
+    rendered_html_path
 ]
 
 res = subprocess.run(cmd, capture_output=True, text=True)
 print('PDF conversion exit code:', res.returncode)
 
-import shutil
-shutil.copyfile(pdf_path_2, pdf_path_1)
-print('Generated SL-POP-ERP-MS-001.pdf and PCode_Milestone_and_Payment_Structure.pdf')
+if os.path.exists(rendered_html_path):
+    os.remove(rendered_html_path)
 
-doc = fitz.open(pdf_path_2)
+shutil.copyfile(pdf_output_root_2, pdf_output_root_1)
+
+# Distribute PDFs to popular/ directories
+for dst_dir in [
+    os.path.join(BASE_DIR, 'popular'),
+    os.path.join(BASE_DIR, 'popular', 'SL-POP-ERP-MS-001')
+]:
+    os.makedirs(dst_dir, exist_ok=True)
+    shutil.copyfile(pdf_output_root_2, os.path.join(dst_dir, 'SL-POP-ERP-MS-001.pdf'))
+    shutil.copyfile(pdf_output_root_1, os.path.join(dst_dir, 'PCode_Milestone_and_Payment_Structure.pdf'))
+
+print('Generated and distributed SL-POP-ERP-MS-001.pdf and PCode_Milestone_and_Payment_Structure.pdf')
+
+doc = fitz.open(pdf_output_root_2)
 print('Generated PDF Page Count:', len(doc))
 for i in range(len(doc)):
     page = doc[i]
     print(f'Page {i+1} rect: {page.rect}, text length: {len(page.get_text())}')
+
+# Save Page 10 preview PNG
+if len(doc) >= 10:
+    page_10 = doc[9]
+    pix = page_10.get_pixmap(dpi=150)
+    preview_p = os.path.join(BASE_DIR, 'page_10_preview.png')
+    pix.save(preview_p)
+    print('Saved preview image:', preview_p)
+

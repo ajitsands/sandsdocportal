@@ -1,12 +1,15 @@
-# Directory index for /popular/
-DirectoryIndex index.html index.php
+# Simple Apache Configuration
+DirectoryIndex index.php index.html
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /popular/
+    RewriteBase /
 
-    # If physical file or folder exists, serve directly
+    # Allow direct access to real files (like .pdf, images)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
+
+    # Route clean document IDs to index.php
+    RewriteRule ^popular/(.*)$ popular/index.php?doc=$1 [L,QSA]
 </IfModule>
