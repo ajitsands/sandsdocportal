@@ -1,0 +1,36 @@
+y: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+
+    .web-action-right {{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }}
+
+    .btn {{
+      font-family: 'Inter', sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: none;
+    }}
+
+    .btn-primary {{ background: #0284c7; color: #ffffff; }}
+    .btn-primary:hover {{ background: #0369a1; }}
+
+    .btn-accent {{ background: #d97706; color: #ffffff; }}
+ 

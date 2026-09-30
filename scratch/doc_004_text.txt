@@ -1,0 +1,2998 @@
+=== PAGE 1 ===
+BUSINESS
+ANALYSIS
+REPORT
+client
+Popular Auto Spare and A/C Parts Co. W.L.L
+30-03-2026
+DOC - 004
+Ver 1..0
+Prepared By
+SaNDS Lab Middle East W.L.L
+Consultant
+SALES PROCESS 
+DATE: 30-MAR-2026
+
+
+=== PAGE 2 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 2
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+PREFACE
+The Sales Counter Process is a critical component of the overall business 
+operation, ensuring smooth, accurate, and accountable handling of day-to-day 
+sales activities. This document outlines the standardized procedures for managing 
+sales transactions, return handling, sales posting, and inventory closing, forming a 
+structured workflow that enhances operational efficiency and financial transparency.
+At the sales counter level, every transaction—whether a sale or a return—directly 
+impacts inventory levels, financial records, and customer satisfaction. Therefore, 
+it is essential to maintain a controlled and well-defined process. The system is 
+designed to ensure that all sales are recorded accurately, returns are processed 
+based on defined policies such as “Return Allowed,” and unauthorized actions are 
+prevented through system validations.
+Sales posting plays a vital role in transferring transactional data into the 
+accounting system, ensuring that revenue, taxes, and receivables are properly 
+recorded. Similarly, inventory closing ensures that stock movements are validated, 
+reconciled, and locked for a specific period, preventing discrepancies and 
+unauthorized modifications.
+This document aims to provide clear guidance to users and administrators on how 
+to effectively operate the sales counter system while maintaining data integrity, 
+accountability, and compliance with business rules. By following these processes, 
+organizations can achieve better control over sales operations, minimize errors, 
+and ensure accurate financial and inventory reporting.
+
+
+=== PAGE 3 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 3
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+TABLE OF CONTENT
+1.-Sales���������������������������������������������������������������������������������������������������������5
+1.1.- Objective------------------------------------------------------------------------------------------------- 5
+1.2.- Business Overview and Operational Context----------------------------------------------------------- 5
+1.3.- Customer Master Management- ------------------------------------------------------------------------ 6
+1.4.- Sales Initiation and Customer Interaction-------------------------------------------------------------- 9
+1.5.- Item Identification, Intelligent Search & Pricing Control--------------------------------------------- 10
+1.6.- Sales Process with Handheld Devices ----------------------------------------------------------------- 13
+1.7.- Sales Attribution & Performance Accountability (Cart-to-Billing Ownership)------------------------ 18
+1.8.- Sales Return Management Module--------------------------------------------------------------------- 20
+1.9.- Inventory Impact and Item Handling in Sales Return------------------------------------------------ 28
+1.10. Commission Adjustment on Sales Return------------------------------------------------------------ 29
+1.11. Settlement Adjustment on Sales Return------------------------------------------------------------- 30
+1.12. Less Item Handling Module (DOC-002 Reference)- ------------------------------------------------- 30
+1.13. Branch-to-Branch Transfer (DOC-003 Reference)--------------------------------------------------- 32
+1.14. Branch-to-Garage Sales------------------------------------------------------------------------------- 32
+1.15. Sales Document Modules----------------------------------------------------------------------------- 32
+1.16. Other Accounting Documents Handling in Branches ------------------------------------------------ 45
+1.17. Accounting & Branch Financial Control Module - ---------------------------------------------------- 50
+1.18. Daily Closing Process---------------------------------------------------------------------------------- 54
+1.19. Audit & Control---------------------------------------------------------------------------------------- 55
+1.20.  Pricing Update Notification--------------------------------------------------------------------------- 56
+1.21.  Conclusion- ------------------------------------------------------------------------------------------- 56
+
+
+=== PAGE 4 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 4
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By 
+SaNDS Lab
+Ancy Varghese Thekkan 
+(Software Architect)
+27-Mar-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+30-Mar-2026
+Checked & 
+Verified 
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 004
+v1.0
+0
+30-Mar-2026
+Initial Draft
+
+
+=== PAGE 5 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 5
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+1.	 Sales
+1.1.	Objective
+The Sales Module is a core component of the ERP system designed to manage and optimize the complete 
+sales lifecycle across all branches of Popular Auto Spare Parts Company. The module is intended to 
+support high-speed operations in a spare parts environment, where accuracy, speed of identification, 
+and pricing control are critical.
+Each branch operates semi-independently with its own inventory, sales team, and customer interactions. 
+However, all branches follow standardized processes governed by centralized controls such as pricing 
+policies, approval workflows, and promotional rules. The system ensures seamless coordination between 
+branches, management, and customers while maintaining real-time data synchronization.
+This document defines the combined Business Requirements and Functional Specifications for 
+the Sales Module of the ERP system. The module is designed to support and streamline the complete 
+sales lifecycle across multiple branches of the organization, ensuring operational efficiency, pricing 
+control, inventory accuracy, and enhanced customer service.
+The system must support high transaction volumes, rapid item identification, and flexible sales workflows 
+while maintaining strict governance over pricing, approvals, and financial accounting.
+1.2.	Business Overview and Operational Context
+The organization operates as a geographically distributed enterprise with a multi-country and multi-
+branch structure, where each branch functions as an independent operational unit while remaining 
+fully integrated within a centralized ERP ecosystem.
+Each branch is established within a specific country and operates under that country’s regulatory, taxation, 
+and currency requirements. At the same time, all branches adhere to standardized organizational policies 
+related to inventory control, sales processes, and reporting. This ensures consistency in operations while 
+allowing flexibility to address local market conditions.
+Every branch is managed by a Branch Manager and supported by a team of sales personnel. Each 
+branch maintains its own inventory, customer base, and day-to-day sales operations. However, data 
+across all branches and countries is synchronized in real time to provide centralized visibility and control 
+for management.
+Stock is transferred to branches either from a central warehouse, regional distribution centres, or 
+through local procurement processes. Upon receipt, the Branch Manager is responsible for verifying the 
+stock and recording it into the branch inventory system.
+Within each branch, items are organized according to a predefined location structure, which is designed 
+to optimize storage efficiency and retrieval speed. Sales personnel are responsible for placing items 
+in their designated locations and confirming placement using P-Code scanning. This ensures accurate 
+tracking of item locations and supports quick identification during sales transactions.
+
+
+=== PAGE 6 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 6
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system must support:
+	•
+Multi-country operations with country-specific configurations such as currency, tax rules, and 
+compliance requirements 
+	•
+Multi-branch inventory management with real-time synchronization 
+	•
+Centralized control over pricing, promotions, and approvals 
+1.3.	Customer Master Management
+The Customer Master module serves as the centralized repository for maintaining all customer-related 
+information across the organization. It is a critical component that supports sales operations, credit 
+management, and financial tracking across multiple branches.
+Given the organization operates in a multi-branch and multi-location environment, the system is 
+designed to ensure that customer data is managed centrally while still allowing branches the flexibility 
+to perform day-to-day operations efficiently. This approach enables consistency, prevents duplication, 
+and ensures that financial exposure and customer relationships are managed at an organizational level 
+rather than in isolation.
+The module is tightly integrated with key business functions including sales, accounting, credit control, 
+and reporting, thereby enabling a seamless flow of information across the system.
+1.3.1  Business Objectives
+The primary objective of the Customer Master module is to establish a single source of truth for customer 
+information across all branches. This ensures that all customer interactions, transactions, and financial 
+records are consistently maintained and easily accessible.
+The system is designed to:
+	•
+Maintain centralized and standardized customer data 
+	•
+Prevent duplicate customer creation across branches 
+	•
+Enable effective credit management and control 
+	•
+Support multiple customer categories with different business rules 
+	•
+Provide consolidated visibility of customer transactions and outstanding balances 
+	•
+Allow controlled access for branches to perform customer-related operations 
+The system supports both globally shared customers and, where required, branch-specific customer 
+records. All customer records remain accessible across branches, while the system identifies and 
+maintains the originating branch as the primary branch for each customer.
+1.3.2  Customer Classification
+Customers are categorized based on their nature of business and transactional behaviour. This 
+classification allows the system to apply appropriate pricing policies, credit rules, and operational 
+workflows.
+
+
+=== PAGE 7 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 7
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+Customer types include retail customers, corporate clients, company, garages, dealers, and credit 
+customers. Each category is associated with specific characteristics such as transaction volume, pricing 
+agreements, and credit eligibility.
+For example, retail customers typically operate on a cash basis with minimal data requirements, 
+whereas corporate and company customers may have defined credit limits, negotiated pricing, and 
+formal contractual arrangements. Garage and dealer customers often engage in frequent transactions 
+and may benefit from specialized pricing structures or discounts.
+This classification ensures that the system can adapt dynamically to different customer profiles and 
+business requirements.
+1.3.3  Customer Information Management
+The system captures comprehensive customer information to support operational, financial, and 
+compliance requirements.
+At a basic level, each customer record includes a unique system-generated customer code, 
+customer name, type, status, and primary branch association. Customers can also be categorized 
+into segments to support reporting and analysis.
+Detailed contact information is maintained, including contact person details, mobile numbers, phone 
+numbers, email addresses, and preferred communication methods and multipul attachments. 
+This ensures effective communication and relationship management.
+The system supports multiple addresses for each customer, including billing and shipping addresses, 
+along with location details such as city and country. 
+To meet regulatory and compliance requirements, the system also captures legal identifiers such as 
+commercial registration numbers, VAT or tax numbers, and other relevant documentation 
+depending on the customer type.
+Banking details are maintained for customers where applicable, particularly for corporate and credit 
+customers. These details include bank name, account holder name, account number or IBAN, 
+SWIFT code, and branch information, supporting financial transactions such as refunds and 
+settlements.
+1.3.4  Credit Management
+A key aspect of the Customer Master module is credit control. For customers operating on credit, the 
+system maintains detailed credit-related parameters including credit limit, credit period, current 
+outstanding balance, and allowable credit variation.
+Before processing any credit transaction, the system validates the customer’s available credit. If the 
+transaction exceeds the defined limit, the system generates warnings and restricts further processing 
+based on configured rules.
+In situations where exceptions are required, the system supports a structured approval workflow 
+for credit overrides. Requests for exceeding the defined credit limits can be routed to authorized 
+personnel such as the Branch Manager, Chief Purchase Officer (CPO), or Accounts Department.
+
+
+=== PAGE 8 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 8
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system allows a controlled level of flexibility by permitting overrides within a predefined percentage 
+threshold. Sales users or branch managers may proceed with transactions within this allowable variation 
+without requiring higher-level approval (if applicable).
+However, if the requested override exceeds the predefined threshold, the system will enforce mandatory 
+approval from higher management. Such requests must be escalated to authorized personnel, ensuring 
+that all exceptions beyond the permitted limits are reviewed and approved before processing.
+This approach ensures that financial risks are effectively controlled while still providing operational 
+flexibility within defined boundaries.
+1.3.5  Customer Creation and Data Control
+To maintain data integrity, customer creation is governed by strict validation and control mechanisms. 
+Customers can be created either directly from the Customer Master module or during the sales process.
+The system performs duplicate checks based on key identifiers such as mobile number, commercial 
+registration number, and customer name to prevent redundancy. For certain customer types, 
+especially those involving credit or corporate relationships, the system may enforce an approval workflow 
+before the customer record becomes active.
+This ensures that customer data remains accurate, consistent, and reliable across the organization.
+1.3.6  Multi-Branch Customer Handling
+In a multi-branch setup, it is common for customers to transact with more than one branch. The system 
+is designed to handle this efficiently through a centralized customer model.
+Under this model, a single customer record is shared across all branches. While transactions are recorded 
+at the branch level, the system maintains both branch-wise transaction history and consolidated financial 
+exposure.
+Credit limits are enforced at a global level. For example, if a customer has a credit limit of 10,000 and 
+has already utilized 6,000 in one branch, only the remaining 4,000 is available for transactions across 
+other branches. This ensures unified control over credit exposure.
+Branches are allowed to access and use customer records for transactions, but modification rights can 
+be restricted based on user roles and permissions, ensuring centralized governance.
+1.3.7  Customer Financial Tracking
+The system maintains a comprehensive financial history for each customer through an integrated ledger. 
+This includes all invoices, payments, returns, and adjustments.
+Users can view outstanding invoices, overdue amounts, and overall account balances. The system 
+supports flexible payment allocation, allowing settlements against specific invoices or as on-account 
+payments.
+This level of financial visibility enables better credit control, faster collections, and improved customer 
+relationship management.
+
+
+=== PAGE 9 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 9
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+1.3.8  Customer Settlement Management
+The Customer Settlement Management process within the Sales Module governs the reconciliation of all 
+financial transactions between the organization and its customers, ensuring that outstanding balances, 
+payments, credit sales, and adjustments are accurately tracked and settled in a controlled and auditable 
+manner. The system maintains a running ledger for each customer that reflects invoices, cash memos, 
+credit notes, returns, payments received, and any other financial adjustments. It enables branches 
+and the accounts department to monitor customer outstanding balances, credit utilization, and aging 
+analysis in real time across a multi-branch environment. Settlement activities may include recording 
+payments against specific invoices or as general receipts, adjusting advances, applying credit notes, and 
+reconciling discrepancies between expected and received amounts.
+From a control perspective, the system shall enforce validation of customer credit limits, payment terms, 
+and outstanding balances before allowing further credit-based transactions. Any settlement involving 
+adjustments, write-offs, or exceptions shall be routed through an approval workflow based on predefined 
+thresholds and authorization levels, ensuring proper oversight by branch managers or the accounts 
+department. The system shall maintain a complete audit trail of all settlement activities, including the 
+initiating user, approving authority, timestamps, and remarks, ensuring full traceability and compliance.
+Additionally, the Customer Settlement Management process integrates closely with accounting and 
+reporting modules to automatically generate the necessary journal entries for payments, receivables 
+adjustments, and reconciliations. It also supports branch-level and centralized (head office) visibility, 
+enabling consolidated financial monitoring as well as branch-specific settlement tracking. Overall, this 
+module ensures accurate financial reconciliation, strengthens credit control, reduces outstanding risks, 
+and provides clear visibility into customer financial positions across the organization.
+1.3.9  Approval and Governance
+To ensure proper control and governance, the system incorporates approval mechanisms for critical 
+customer-related actions. These include changes to credit limits, customer blocking or unblocking, and 
+eligibility for special pricing.
+Such actions require authorization from designated roles such as Branch Managers, the CPO, or the 
+Accounts Department. This layered approval structure ensures accountability and reduces the risk of 
+unauthorized decisions.
+The implementation of a centralized Customer Master module enables the organization to achieve 
+consistent and reliable customer data management across all branches. It strengthens credit control, 
+enhances operational efficiency, and improves financial visibility.
+By eliminating duplication, enforcing standardized processes, and integrating with core business 
+functions, the system supports better decision-making and contributes to improved customer service 
+and organizational performance.
+1.4.	Sales Initiation and Customer Interaction
+Sales activities within the organization are initiated through multiple customer engagement channels, 
+reflecting the dynamic and fast-paced nature of the spare parts business. These channels include walk-
+in customers at branch locations, phone enquiries, WhatsApp communications, and email requests. The 
+
+
+=== PAGE 10 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 10
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+system must be capable of supporting seamless interaction and tracking across all these channels to 
+ensure no customer enquiry is missed or delayed.
+Customers interacting with the business are broadly categorized into different segments such as retail 
+customers, corporate clients, and company accounts. Each category may have distinct business rules 
+associated with it, including discount eligibility, credit terms, and service priorities. The system must be 
+capable of identifying the customer category at the time of interaction and automatically applying the 
+relevant rules and configurations during the sales process.
+Customers may initiate transactions in two primary ways. In some cases, customers approach the 
+branch with a clear intent to make an immediate purchase. In other situations, especially for bulk 
+or corporate requirements, customers may request a formal quotation before confirming the order. 
+The system must therefore support both direct billing workflows and quotation-based sales processes, 
+allowing smooth conversion from enquiry to quotation and ultimately to invoicing.
+A key challenge in the spare parts industry is that customers often do not possess complete or accurate 
+information about the required items. Instead of providing exact part numbers, customers may share 
+partial or indirect details such as vehicle model, VIN (Vehicle Identification Number), chassis number, or 
+even bring physical samples of the required parts. 
+To address this, the system must be designed to handle flexible and incomplete inputs, enabling sales 
+personnel to efficiently interpret customer requirements and identify the correct items. This requires 
+strong integration between customer interaction processes and item identification capabilities, ensuring 
+that even with limited information, the salesperson can quickly arrive at accurate results and provide 
+reliable service.
+Overall, the system must enhance the customer interaction experience by enabling faster response 
+times, reducing dependency on individual expertise, and ensuring consistent service quality across all 
+branches and sales channels.
+1.5.	Item Identification, Intelligent Search & Pricing Control
+Accurate and efficient item identification is a critical success factor in the spare parts sales process. 
+Due to the nature of the business, customers often provide incomplete or indirect information such as 
+vehicle model, VIN/chassis number, or physical samples instead of exact part numbers. This makes the 
+identification process highly dependent on both salesperson expertise and system intelligence.
+To address this challenge, the system is designed to support multiple identification methods and provide 
+a highly responsive and intelligent search mechanism. The objective is to enable salespersons to quickly 
+and accurately identify the required parts, suggest alternatives where necessary, and proceed with the 
+sales process without delays.
+In addition to identification, the system must support real-time access to relevant transactional 
+and pricing data. This ensures that salespersons can make informed decisions while interacting with 
+customers, especially in competitive or negotiation scenarios.
+1.5.1  Item Identification Approaches
+The system shall support three primary methods of item identification to accommodate different types 
+
+
+=== PAGE 11 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 11
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+of customer inputs and real-world scenarios.
+1.	Sample-Based Identification
+When a customer provides a physical sample, the salesperson identifies the item using a combination 
+of personal knowledge and system-assisted search.
+The system must allow searching through item master data using multiple parameters such as:
+	•
+Item name 
+	•
+Vehicle compatibility (Such as Brands Modal, Year of Manufacturing, Vehicle Brands etc)
+	•
+Part number 
+	•
+Internal P-Code 
+This approach ensures flexibility and supports cases where no structured data is available from the 
+customer.
+2.	VIN / Chassis-Based Identification
+When a customer provides a VIN or chassis number, the salesperson uses external tools (such as 
+Partsouq) to decode the vehicle details and retrieve OEM part numbers.
+The retrieved OEM number is then used within the ERP system to:
+	•
+Identify corresponding items 
+	•
+Display available brands and alternatives 
+	•
+Validate fitment details, variants, and specifications 
+This method ensures high accuracy in part identification and reduces the risk of incorrect sales.
+3.	Measurement-Based Identification
+For specific categories such as bushes, oil seals, and pistons, identification is based on physical 
+measurements.
+Salespersons use tools such as calipers to measure dimensions and input these values into the system. 
+The system then maps the measurements to matching items stored in the database.
+This approach is essential for items where visual or numerical matching is required rather than standard 
+part references.
+1.5.2  Intelligent Item Search and Data Retrieval
+The efficiency of the sales process is heavily dependent on the speed and intelligence of the item search 
+functionality. The system shall provide a high-performance search engine capable of retrieving results 
+instantly based on any input, including partial or incomplete keywords.
+Search Capabilities
+The system shall support search using:
+
+
+=== PAGE 12 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 12
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Item name 
+	•
+OEM number 
+	•
+P-Code 
+	•
+Vehicle details (Such as Brands Modal, Year of Manufacturing, Vehicle Brands etc)
+	•
+Any keyword or partial text 
+Search Results Behaviour
+The system shall:
+	•
+Display exact matching items 
+	•
+Display mapped or alternative items 
+	•
+Include mappings maintained in item master (including comments, notes or related fields) 
+This ensures that salespersons can quickly identify not only the requested item but also suitable 
+alternatives, improving sales conversion and customer satisfaction.
+Contextual Data for Decision Support
+To support pricing decisions and customer negotiations, the system shall provide real-time access to 
+relevant transactional data for each item.
+The system shall display:
+	•
+Last 20 sales transactions (excluding local purchase transactions) 
+	•
+Last selling price 
+	•
+Maximum Retail Price (MRP) 
+	•
+Customer-wise sales history 
+Additionally, the system may allow users to retrieve extended transaction history beyond the last 20 
+records when required.
+This information enables salespersons to make informed pricing decisions while maintaining consistency 
+with past transactions.
+1.5.3  Pricing Control and Approval Mechanism
+Pricing governance is a critical control within the sales module to ensure consistency, profitability, and 
+compliance with company policies.
+The system shall enforce restrictions that prevent items from being sold below the last recorded selling 
+price without proper authorization.
+Pricing Validation
+	•
+The system shall validate selling price against last selling price 
+	•
+If the entered price is below the allowed threshold, the system shall block the transaction or require 
+approval 
+
+
+=== PAGE 13 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 13
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+Approval Workflow
+If a salesperson needs to offer a price below the allowed limit:
+1.	A request shall be initiated by the Branch Manager 
+2.	The request shall include justification/remarks 
+3.	The request shall be routed to the Chief Purchase Officer (CPO) 
+4.	The CPO shall review and either: 
+	• Approve the request 
+	• Reject the request 
+The system shall notify the branch of the decision in real time.
+1.5.4  Special Pricing and Promotions
+The system shall support centrally managed pricing strategies defined by the CPO, including:
+	•
+Special discounted pricing 
+	•
+Zero pricing (in exceptional cases) 
+	•
+Customer-specific pricing 
+	•
+Bulk or invoice-based discounts 
+All such pricing rules shall:
+	•
+Be time-bound with defined validity periods 
+	•
+Define whether it is applicable to all branches or defined branches
+During the active period of promotions, pricing shall be locked as per defined rules to ensure consistency.
+1.6.	Sales Process with Handheld Devices 
+The handheld device-based sales process is designed to enable fast, flexible, and mobile billing operations 
+within branch environments. It allows salespersons to interact directly with customers on the shop floor, 
+identify items, build carts, and complete transactions without being restricted to a fixed billing counter.
+The system must support both standard sales flow and real-world exceptions such as transaction 
+holding, multi-salesperson collaboration, and cart transfer. The goal is to ensure uninterrupted customer 
+service even during peak hours while maintaining data accuracy, control, and traceability.
+1.6.1  Activity 1: Cart Creation and Item Addition
+Salespersons use handheld devices to create a sales cart while interacting with customers. Items are 
+identified and added in real time using barcode/QR scanning or manual P-Code entry.
+The process must be fast and intuitive, allowing the salesperson to build the cart dynamically as the 
+customer confirms items. The system should also display item details, stock availability, and pricing 
+information instantly.
+Functional Requirements
+
+
+=== PAGE 14 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 14
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+The system shall allow cart creation on handheld devices 
+	•
+The system shall support item addition via: 
+	• Barcode/QR code scanning 
+	• Manual P-Code entry 
+	•
+The system shall display: 
+	• Item name and details 
+	• Available quantity 
+	• Selling price and MRP 
+	• Past transactions item wise and customer wise
+	•
+The system shall validate: 
+	• Stock availability 
+	• Duplicate item entries (merge quantities if needed) 
+1.6.2  Activity 2: Real-Time Pricing and Validation
+As items are added to the cart, the system must validate pricing rules and display relevant pricing 
+information. Salespersons should be able to apply discounts within permitted limits while ensuring 
+compliance with company pricing policies.
+Functional Requirements (SRS)
+	•
+The system shall display: 
+	• Last selling price 
+	• MRP 
+	• Applicable discounts 
+	•
+The system shall: 
+	• Restrict pricing below allowed limits 
+	• Trigger approval workflow if price override is attempted 
+	•
+The system shall validate: 
+	• Discount percentage limits 
+	• Customer-specific pricing rules 
+1.6.3  Activity 3: Cart Finalization and Billing
+Once all items are added and confirmed, the salesperson proceeds to billing. The system generates an 
+invoice or cash memo and captures payment details.
+Functional Requirements
+	•
+The system shall allow invoice generation from handheld devices 
+	•
+The system shall support: 
+	• Cash Memo (immediate payment) 
+	• Credit Invoice 
+	• Delivery Note
+
+
+=== PAGE 15 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 15
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+The system shall: 
+	• Generate unique invoice number 
+	• Update inventory in real time 
+	• Record transaction under the logged-in salesperson 
+1.6.4  Activity 4: Payment Processing
+The system must support multiple payment methods and allow quick payment collection directly from 
+handheld devices.
+Functional Requirements 
+The system shall support: 
+	• Cash 
+	• Card 
+	• Cheque 
+	• Benefit Pay 
+	• QR-based payment gateway 
+	•
+The system shall: 
+	• Generate QR code for digital payments 
+	• Confirm payment before invoice finalization 
+	• Record payment details against invoice 
+1.6.5  Exception Scenario 1: Sales On-Hold
+During peak hours or interruptions, the salesperson may need to temporarily pause a transaction. The 
+system must allow placing a cart on hold without losing data.
+Held transactions should be accessible by other authorized users within the branch to ensure continuity.
+Functional Requirements 
+The system shall allow placing a cart on hold 
+	•
+The system shall: 
+	• Generate a temporary transaction number 
+	• Save cart details in “On Hold” list 
+	•
+The system shall allow: 
+Retrieval of held transactions 
+Editing and continuation of billing 
+	•
+The system shall: 
+	• Require a reason for cancellation of held transactions 
+	• Maintain audit logs 
+1.6.6  Exception Scenario 2: Cart Transfer (QR-Based)
+
+
+=== PAGE 16 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 16
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+In high-traffic situations, multiple salespersons may serve a single customer. The system must allow 
+transferring a cart from one salesperson to another using QR code technology.
+This ensures seamless collaboration and faster service without requiring the customer to restart the 
+process.
+Functional Requirements 
+Cart Transfer Process
+	• The system shall allow generating a QR code for a cart 
+	• The QR code shall represent complete cart details 
+	• The system shall allow another salesperson to: 
+	• Scan the QR code 
+	• Retrieve the cart 
+Controls
+	•
+The system shall: 
+	• Mark the original cart as transferred 
+	• Prevent duplicate usage 
+	•
+The receiving salesperson shall: 
+	• Continue editing the cart 
+	• Proceed with billing 
+Sales Attribution
+	•
+The system shall assign the sale to the salesperson who completes billing 
+	•
+The system shall maintain: 
+	• Cart transfer logs 
+	• Audit trail 
+1.6.7  Exception Scenario 3: Device Failure / Scan Failure
+In case of barcode/QR scanning failure or device issues, the system must provide fallback mechanisms 
+to ensure uninterrupted sales.
+Functional Requirements 
+	•
+The system shall allow manual P-Code entry 
+	•
+The system shall allow item search via keyword 
+	•
+The system shall allow continuation of cart on another device 
+1.6.8  Exception Scenario 4: Credit Limit Exceeded
+When dealing with credit customers, transactions may exceed the allowed credit limit. The system must 
+handle this through controlled approval workflows.
+Functional Requirements 
+
+
+=== PAGE 17 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 17
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+The system shall: 
+	• Validate customer credit limit 
+	• Display exceeded amount and allowed variance 
+	•
+The system shall allow: 
+	• Credit extension request 
+	•
+The system shall route request to: 
+	• Branch Manager / CPO / Accounts 
+	•
+The system shall: 
+	• Allow or block billing based on approval 
+1.6.9  Exception Scenario 5: Transaction Cancellation
+If a transaction is no longer required, it must be cancelled with proper tracking for audit purposes.
+Functional Requirements
+	•
+The system shall allow cancellation of: 
+	• On-hold transactions 
+	• Active carts (before billing) 
+	•
+The system shall: 
+	• Require mandatory reason 
+	• Maintain audit logs 
+1.6.10  End-to-End Handheld Sales Workflow
+Standard Flow
+Customer -> Item Identification -> Cart Creation -> Pricing Validation -> Billing -> Payment -> Invoice
+Exception Flows
+	•
+On Hold -> Pause -> Resume 
+	•
+Cart Transfer -> QR -> Continue -> Bill 
+	•
+Credit Exceed -> Request -> Approval -> Continue 
+	•
+Scan Failure -> Manual Entry -> Continue 
+1.6.11  Business Outcomes
+The handheld device-based sales process ensures:
+	•
+Faster customer service 
+	•
+Reduced queue time 
+	•
+Real-time billing anywhere in the branch 
+	•
+Efficient collaboration among sales staff 
+
+
+=== PAGE 18 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 18
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Accurate and controlled sales transactions 
+	•
+Improved customer experience during peak hours
+1.7.	Sales Attribution & Performance Accountability (Cart-to-Billing Ownership)
+In a dynamic branch environment, especially during peak hours, multiple salespersons may collaborate 
+in serving a single customer by identifying items and adding them to the cart. However, for the purposes of 
+accountability, performance tracking, and incentive calculation, it is essential to clearly define ownership 
+of each completed sale.
+The system shall adopt a “Cart-to-Billing Ownership” concept, where the final responsibility and 
+credit for a sale are assigned to the salesperson who completes the billing process.
+This means that regardless of how many salespersons contributed to building the cart (through item 
+identification, scanning, or cart transfer), the sale will be officially recorded under the salesperson who 
+pushes the cart to invoice generation.
+This approach ensures:
+	•
+Clear ownership of sales transactions 
+	•
+Accurate performance measurement of sales personnel 
+	•
+Simplified commission calculation 
+	•
+Elimination of ambiguity in shared sales scenarios 
+Additionally, for internal analysis and operational transparency, the system may optionally track 
+contributing salespersons without affecting final sales ownership.
+1.7.1  Functional Requirements 
+	•
+The system shall assign the sale to: 
+	• The salesperson who generates the final invoice 
+	•
+The system shall: 
+	• Capture the user ID of the billing salesperson 
+	• Link the invoice to that salesperson 
+1.7.2  Cart Handling and Attribution Logic
+	•
+The system shall allow: 
+	• Multiple salespersons to create or modify carts 
+	• Cart transfer between devices (QR-based) 
+	•
+The system shall ensure: 
+	• Ownership is not assigned during cart creation 
+	• Ownership is assigned only at billing stage 
+1.7.3  Integration with Performance Analysis
+Sales performance analysis is a key objective of the system. The organization requires accurate tracking 
+
+
+=== PAGE 19 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 19
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+of sales achieved by each salesperson to evaluate productivity, efficiency, and contribution to revenue.
+The system must ensure that all sales reports and analytics are based on the final billing ownership, 
+not intermediate cart activities.
+Functional Requirements 
+	•
+The system shall generate reports based on: 
+	• Invoice-level salesperson assignment 
+	•
+The system shall support: 
+	• Salesperson-wise sales reports 
+	• Branch-wise performance analysis 
+	• Commission calculations 
+	•
+The system shall: 
+	• Exclude cart-level activities from primary performance metrics 
+	• Include only finalized transactions (invoices and valid returns adjustments) 
+Handling Returns and Adjustments
+To ensure accurate performance evaluation, any returns or cancellations must be properly reflected 
+against the original salesperson’s sales.
+The system shall: 
+	• Link returns to the original invoice 
+	• Adjust sales value of the assigned salesperson 
+	•
+The system shall: 
+	• Reflect net sales (Sales – Returns) in performance reports 
+1.7.4   Exceptions
+In cases where an employee brings a sales lead to the store, but the lead is processed through another 
+sales person’s wallet, the sales credit will be assigned to the sales person who created and handled the 
+wallet, not the original lead creator.
+Scenario 1
+In a branch with 10 employees, only 8 may be equipped with handheld devices, as the remaining 2 
+employees are not directly involved in the sales process. However, these employees may still generate 
+leads through their own reliable sources.
+In such cases, the Branch Manager is authorized to act on behalf of employees who do not have 
+handheld devices. The Branch Manager can:
+Create a wallet in the name of the employee who generated the lead
+Add items to the wallet based on the customer’s requirements
+Complete the sales transaction
+
+
+=== PAGE 20 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 20
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+This ensures that the sales credit is properly attributed to the employee who generated the lead, even 
+if they do not have access to a handheld device.
+Note: The Branch Manager is permitted to create wallets only for employees who do not have 
+handheld devices.
+1.8.	Sales Return Management Module
+The Sales Return module manages the return of goods from customers after either:
+	• A Sales Invoice has been generated, or
+	• A Delivery Note (DN) has been issued (with or without subsequent invoicing).
+Given the operational nature of the business, where delivery may occur before invoicing, the system 
+supports a unified return mechanism capable of handling both document types seamlessly.
+In addition, the system incorporates a Global Return Policy configured and controlled by the CPO / 
+Purchase Department. This policy enables authorized users to define a standard return window (such as 
+7 days or 10 days) applicable across all items and transactions.
+Under this global policy:
+Returns are permitted only within the defined time period from the date of invoice or delivery.
+The system automatically validates return eligibility based on the configured duration.
+Any return request exceeding the allowed period will be restricted and blocked by the system.
+Furthermore, the system provides the flexibility to define Item-Level Return Policies. The CPO / Purchase 
+Department can configure specific return rules for individual items, overriding the global policy where 
+required. This allows better control for sensitive, non-returnable, or special-category items.
+Additionally, an Override Mechanism with Manager Approval is available:
+Authorized managers can approve return requests even after the allowed return period has expired.
+The duration within which such overrides are permitted (e.g., additional grace days) can be predefined 
+and controlled by the CPO / Purchase Department.
+All override actions are subject to proper authorization and system tracking to ensure accountability 
+and audit compliance.
+This multi-level return policy framework ensures strong governance while maintaining operational 
+flexibility, enabling the organization to handle returns efficiently without compromising control.
+1.8.1  Business Requirement
+The system must support multiple return scenarios:
+	•
+Return against Invoice (financial impact) 
+	•
+Return against Delivery Note (stock impact, possible financial impact later) 
+	•
+Unified return handling where: 
+
+
+=== PAGE 21 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 21
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	• Invoice may or may not exist 
+	• Delivery and billing cycles differ 
+The system must:
+	•
+Link returns to original transactions 
+	•
+Support full and partial returns 
+	•
+Maintain audit trails 
+	•
+Adjust inventory and financial records appropriately 
+1.8.2  Invoice-Based Return
+Occurs when goods are returned after invoicing has been completed.
+Process Flow
+	•
+User retrieves invoice using: 
+	• Invoice number 
+	• Customer details 
+	• Barcode/QR Code Scanning/P-Code 
+	•
+System allows: 
+	• Full invoice return 
+	• Partial (line-item) return 
+	•
+Returned items are verified and processed 
+Inventory Impact
+	•
+Returned items are: 
+	• Re-entered into stock 
+	• Assigned original batch/location 
+Financial Impact
+When a return is processed against a confirmed sales invoice, the transaction directly affects both 
+inventory and financial records.
+From an inventory perspective, the returned items are re-entered into stock with their original batch 
+and location details. From a financial perspective, the system performs a reversal of the original sale.
+The system shall:
+	•
+Reverse the sales revenue corresponding to the returned items 
+	•
+Reverse applicable VAT components proportionately 
+	•
+Adjust the customer’s outstanding balance or receivable 
+	•
+Generate a credit note or refund voucher, depending on the settlement method 
+If the original invoice was already settled (fully or partially), the system shall handle:
+
+
+=== PAGE 22 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 22
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Cash refunds, or 
+	•
+Adjustment against future invoices 
+This ensures that both inventory and financial books remain synchronized and accurate.
+Commission Impact
+	•
+Sales commission is: 
+	• Reversed or adjusted 
+	• Updated in next payout cycle 
+Functional Requirements 
+	•
+The system shall link returns to original invoice 
+	•
+The system shall prevent excess return beyond sold quantity 
+	•
+The system shall generate return documents 
+	•
+The system shall maintain audit logs 
+1.8.3  Delivery Note-Based Return
+Occurs when goods are delivered but:
+	•
+Invoice is not yet generated, OR 
+	•
+Delivery is partially/fully reversed before billing 
+Process Flow
+	•
+User retrieves Delivery Note using: 
+	• DN number 
+	• Customer 
+	• Scanning/P-Code 
+	•
+System allows: 
+	• Full DN return 
+	• Partial return 
+Inventory Impact
+	•
+Returned items are: 
+	• Added back to inventory 
+	• Restored to original location 
+Financial Impact
+In cases where goods are returned against a delivery note and no invoice has yet been generated; the 
+impact is limited to inventory only.
+The system shall:
+	•
+Re-enter returned items into stock 
+
+
+=== PAGE 23 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 23
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+Adjust the delivered quantity records 
+	•
+Reduce or eliminate pending quantities for future invoicing 
+Since no financial transaction has been recorded at this stage, there is:
+	•
+No impact on revenue 
+	•
+No impact on VAT 
+	•
+No impact on customer receivables 
+This ensures that future billing reflects only the actual delivered and retained quantities.
+Scenario 1: No Invoice Generated
+	•
+No financial entry required 
+	•
+Only stock reversal 
+Scenario 2: Invoice Generated Later
+	•
+System adjusts: 
+	• Pending invoice quantity 
+	• Billing eligibility 
+Functional Requirements 
+	•
+The system shall allow return against DN 
+	•
+The system shall adjust pending invoice quantities 
+	•
+The system shall prevent billing for returned items 
+	•
+The system shall maintain linkage between DN and return 
+1.8.4  Unified Return Mechanism
+Due to mixed workflows (DN-first, Invoice-later), the system must provide a single unified return 
+interface.
+The system shall:
+	• Accept input: 
+	• Invoice Number OR 
+	• Delivery Note Number OR 
+	• Item Scan 
+	•
+Automatically identify: 
+	• Source document type 
+	• Transaction status 
+Financial Impact
+In scenarios where an invoice has already been generated based on a delivery note, the return must be 
+treated similarly to an invoice return, affecting both inventory and financial records.
+
+
+=== PAGE 24 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 24
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system shall:
+	• Reverse inventory for returned items 
+	• Adjust invoice values proportionately 
+	• Reverse revenue and VAT for the returned portion 
+	• Adjust customer receivables accordingly 
+The system must ensure synchronization between:
+	• Delivery records 
+	• Invoice records 
+	• Return transactions 
+This prevents discrepancies between what was delivered, billed, and ultimately retained by the customer.
+Across all scenarios, the system ensures:
+	•
+Proper linkage between return documents and source documents 
+	•
+Prevention of duplicate or excess financial reversals 
+	•
+Real-time update of financial and inventory records
+1.8.5  Return Identification Methods
+The system shall support:
+	• Invoice number search 
+	• Delivery Note search 
+	• Customer-based search (Name,Mobile Number ,VAT Etc)
+	• QR code scanning 
+	• Manual item lookup (fallback) 
+1.8.6  Validation & Controls
+The system shall enforce:
+	• Return quantity ≤ sold/delivered quantity 
+	• Mandatory reason for return 
+	• Authorization (if required) (For items where returns are not permitted, users will be restricted 
+from processing returns, and the system will automatically block such return entries.)
+	• Duplicate return prevention 
+1.8.7  Document Generation in Sales Return Process
+Document generation is a critical component of the sales return process, ensuring that every return 
+transaction is formally recorded, traceable, and compliant with financial and audit requirements.
+The system must automatically generate appropriate documents based on the type and stage of the 
+return transaction. These documents serve as:
+	• Proof of transaction 
+	• Basis for inventory updates 
+	•
+Source for financial adjustments 
+	•
+Audit references for tracking and compliance 
+
+
+=== PAGE 25 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 25
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+Each return-related document must be system-generated, uniquely identifiable, and directly linked to 
+the original sales transaction (invoice or delivery note).
+Types of Documents Generated
+1.	 Return Document / Cancellation Note
+Every return transaction, regardless of whether it impacts financials, must generate a Return Document 
+(also referred to as a Cancellation Note). This acts as the primary operational record of the return.
+Functional Behaviour 
+The system shall:
+	•
+Generate a Return Document upon confirmation of return 
+	•
+Capture: 
+	• Reference to original document (Invoice / Delivery Note) 
+	• Customer details 
+	• Item details (including quantities returned) 
+	• Return reason (mandatory) 
+	• Date and time of return 
+	• User (salesperson) who processed the return 
+	•
+Support: 
+	• Full return 
+	• Partial (line-item) return 
+Purpose
+	•
+Acts as the base document for: 
+	• Inventory updates 
+	• Further financial processing 
+	•
+Provides audit trail for all return activities 
+2.	 Credit Note (For Invoice Returns)
+When a return is processed against an invoice, the system must generate a Credit Note to reflect the 
+financial reversal of the sale.
+Functional Behaviour 
+The system shall:
+	•
+Automatically generate a Credit Note for: 
+	• Full invoice return 
+	• Partial return of invoiced items 
+	•
+Capture: 
+	• Original invoice reference 
+
+
+=== PAGE 26 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 26
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	• Customer account details 
+	• Value of returned items 
+	• VAT adjustments (if applicable) 
+	•
+Adjust: 
+	• Customer receivable balance 
+	• Revenue and tax records 
+Usage
+The Credit Note can be used for:
+	•
+Adjusting against future invoices 
+	•
+Reducing outstanding balances 
+	•
+Supporting refund processing (After confirmation of the branch manager the return refund can be 
+initiative)
+	•
+Credit Notes must be: 
+	• Linked to the original invoice 
+	• Restricted from exceeding invoice value 
+	• Subject to approval (if configured) 
+3.	 Refund Voucher (If Applicable)
+In cases where the customer is eligible for a direct refund (e.g., cash sales or immediate settlement), 
+the system must generate a Refund Voucher.
+Functional Behaviour 
+The system shall:
+	•
+Generate a Refund Voucher when: 
+	• Payment has already been received 
+	• Customer opts for refund instead of credit 
+	•
+Capture: 
+	• Payment mode (Cash / Card / Bank / Benefit Pay, etc.) 
+	• Refund amount 
+◦Reference to: 
+	• Credit Note 
+	• Original Invoice 
+	•
+Support: 
+	• Full refund 
+	• Partial refund 
+Integration
+The Refund Voucher shall integrate with:
+
+
+=== PAGE 27 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 27
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+Cash/Bank module 
+	•
+Daily cash settlement 
+	•
+Accounting entries 
+1.8.8  Document Numbering Structure
+All documents must follow a standardized and unique numbering system to avoid duplication and 
+ensure traceability across branches.
+Functional Requirements 
+The system shall:
+	•
+Generate unique document numbers automatically 
+	•
+Follow a structured format such as: 
+Branch Code – Document Type – Year – Running Number
+Example:
+	•
+BR-RTN-2026-000123 
+	•
+BR-CN-2026-000045 
+The system shall prevent: 
+	• Duplicate document numbers 
+	• Conflicts during simultaneous transactions (multi-user handling) 
+1.8.9  Document Linking and Traceability
+Every generated document must be traceable to its source transaction to ensure auditability and 
+transparency.
+The system shall:
+	•
+Link: 
+	• Return Document -> Original Invoice / Delivery Note 
+	• Credit Note -> Invoice 
+	• Refund Voucher -> Credit Note / Invoice 
+	•
+Maintain: 
+	• Full transaction chain 
+	• Cross-referencing between documents 
+Work Flow: Invoice -> Return Document -> Credit Note -> Refund Voucher
+1.8.10  Audit and Compliance
+The system shall:
+	•
+Maintain audit logs for all generated documents 
+
+
+=== PAGE 28 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 28
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Capture: 
+	• Created by 
+	• Approved by (if applicable) 
+	• Date and time 
+	•
+Prevent: 
+	•  Deletion of finalized documents 
+	• Unauthorized modification 
+This structured document generation process ensures:
+	•
+Complete traceability of return transactions 
+	•
+Accurate financial adjustments 
+	•
+Strong audit compliance 
+	•
+Transparency across branches and departments 
+	•
+Seamless integration with accounting and inventory 
+1.9.	Inventory Impact and Item Handling in Sales Return
+All return transactions, whether initiated against an invoice or delivery note, result in corresponding 
+updates to inventory. The system ensures that returned items are accurately re-integrated into stock 
+while maintaining traceability and location integrity within the branch.
+Returned items are systematically processed as follows:
+	•
+Items are re-entered into stock upon confirmation of return 
+	•
+Original batch details, where applicable, are retained to ensure accurate stock tracking 
+	•
+Items are restored to their designated storage locations within the branch based on the predefined 
+location structure 
+To enhance accuracy and operational efficiency, the system supports barcode/QR-based item tracking 
+during the return process. Salespersons can use handheld devices to scan items, enabling the system to 
+automatically identify:
+	•
+Item details 
+	•
+Original transaction reference (invoice or delivery note) 
+	•
+Batch information 
+Storage location 
+1.9.1   Handling Items Without Barcode
+In situations where returned items do not have an existing barcode or QR code, the system provides a 
+controlled mechanism to maintain traceability.
+	•
+The system shall allow the generation of the barcode/QR code label from the store 
+	•
+The generated barcode will be linked to: 
+
+
+=== PAGE 29 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 29
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	• The original transaction (invoice or delivery note) 
+	• Specific line-item details 
+	•
+The barcode label is then printed and physically attached to the returned item 
+This ensures that even items without prior identification can be seamlessly tracked within the inventory 
+system going forward.
+1.9.2  Handheld Device Integration in Return Process
+The system is designed to support return processing through handheld devices, enabling real-time and 
+efficient operations at the branch level.
+During the return process:
+	•
+The salesperson can use a handheld device to: 
+	• Scan the item barcode/QR code 
+	• Retrieve the original transaction details instantly 
+	• Identify whether the return is linked to an invoice or delivery note 
+	•
+Upon scanning, the system shall: 
+	• Display item details, quantity, and transaction history 
+	• Allow the user to select full or partial return 
+	• Capture return quantity and reason 
+	•
+The handheld device shall also: 
+	• Show item location within the branch 
+	• Guide the user to return the item to the correct storage position 
+	•
+Once confirmed, the return transaction is processed in real time, and: 
+	• Inventory is updated immediately 
+	• Relevant financial adjustments (if applicable) are triggered
+1.10.	Commission Adjustment on Sales Return
+Sales and referral commissions are typically calculated based on completed sales transactions. When 
+returns occur, especially after commissions have been calculated or paid, the system must ensure that 
+these commissions are accurately adjusted to reflect the revised sales value.
+The system shall automatically handle commission adjustments in response to return transactions.
+Commission Reversal Logic
+For any returned items:
+	•
+The system shall identify: 
+	• The original salesperson 
+	• Any referral agent associated with the transaction 
+	•
+The system shall: 
+
+
+=== PAGE 30 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 30
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	• Reverse or proportionately adjust the sales commission 
+	• Reverse or adjust the referral commission 
+This applies to both:
+	•
+Full returns (complete reversal) 
+	•
+Partial returns (proportionate adjustment) 
+1.11.	Settlement Adjustment on Sales Return
+If commissions have already been processed or paid, the system shall:
+	•
+Record the reversal as a negative commission entry 
+	•
+Adjust the amount in the next settlement cycle 
+If commissions are not yet settled:
+	•
+The system shall directly adjust the payable commission amount before payout 
+The system shall ensure:
+	•
+Commission adjustments are always linked to the original transaction 
+	•
+No duplicate or incorrect reversal occurs 
+	•
+Full audit trail is maintained for all commission changes
+1.12.	Less Item Handling Module (DOC-002 Reference)
+The Less Item Handling Module is designed to identify and manage stock shortages at the branch level 
+based on daily operational activities. It plays a critical role in ensuring timely replenishment of fast-
+moving and critical items, thereby minimizing stock-outs and improving sales continuity.
+At the end of each business day, the system automatically generates a Less Item List, highlighting items 
+that fall below predefined stock thresholds. This process considers both completed sales transactions 
+(invoices/cash memos) and delivery note dispatches, including those not yet invoiced, ensuring a more 
+accurate reflection of actual stock consumption.
+The functional workflow of this module is aligned with the process defined in DOC-002, Page Number 
+2, Point 4, while also allowing operational flexibility for manual adjustments.
+This module ensures proactive inventory management by enabling branches to request replenishment 
+efficiently while maintaining visibility across other branches. It also supports manual adjustments, 
+historical tracking, and inter-branch stock availability checks to facilitate informed decision-making.
+1.12.1  Manual Adjustment of Less Item List
+While the system generates the list automatically, operational flexibility is provided.
+Functional Behaviour 
+The system shall allow users to:
+
+
+=== PAGE 31 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 31
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+Manually add items to the Less Item List 
+	•
+Remove items from the list 
+Controls
+	•
+Mandatory entry of remarks for: 
+	• Manual additions 
+	• Manual deletions 
+This ensures accountability and auditability for manual interventions.
+1.12.2  Branch Manager Review and Submission
+At the end of the day, the Branch Manager reviews the Less Item List.
+Process
+	•
+Verify system-generated items 
+	•
+Review manual additions/deletions 
+	•
+Confirm final list 
+Upon confirmation:
+	•
+The Less Item List is submitted to the store (main warehouse) for further processing 
+Functional Behaviour 
+The system shall:
+	•
+Allow only authorized users (e.g., Branch Manager) to finalize and submit 
+	•
+Lock the list after submission (editable only through controlled process) 
+1.12.3  Visibility and Status Tracking
+Once submitted, the Less Item requests must be fully traceable.
+Functional Behaviour 
+The system shall allow branch users to:
+	•
+View submitted Less Item Lists 
+	•
+Track item-wise status such as: 
+	• Pending 
+	• Approved 
+	• In Process 
+	• Fulfilled 
+1.12.4   Duplication Prevention
+The system shall:
+
+
+=== PAGE 32 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 32
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Prevent re-submission of the same request 
+	•
+Provide visibility of previously submitted items and their status 
+This ensures:
+	•
+No duplicate requests from the same branch
+	•
+Better coordination between branch and store 
+1.13.	Branch-to-Branch Transfer (DOC-003 Reference)
+Branch-to-branch stock movement is allowed only through a controlled transfer procedure defined in 
+DOC-003. This ensures inventory accuracy, accountability, and traceability across branches.
+Transfers are not treated as sales; they are internal stock reallocations.
+1.14.	Branch-to-Garage Sales
+Branches may sell items directly to garages. Garages are treated as standard customers but may have 
+special pricing, credit terms, or contractual relationships.
+Unlike transfers, this is a full commercial sale.
+Functional Requirements 
+	•
+The system shall: 
+	• Allow creation of sales invoices for garage customers 
+	•
+The system shall: 
+	• Maintain garage as a customer master entity 
+	•
+The system shall: 
+	•
+Support: 
+	• Cash sales 
+	• Credit sales 
+	•
+The system shall: 
+◦Generate: 
+	• Sales Invoice 
+	• Cash Memo (for immediate payment) 
+	• Delivery Note 
+	•
+The system shall: 
+◦Deduct stock from branch inventory upon billing 
+	•
+Cart -> Billing -> Invoice/Cash Memo -> Stock deduction -> Payment (cash/credit) -> Accounting 
+entries
+1.15.	Sales Document Modules
+
+
+=== PAGE 33 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 33
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+The Sales Document Modules form the backbone of the sales lifecycle, enabling the organization to 
+manage customer enquiries, confirm orders, execute deliveries, and complete billing transactions.
+The system must support flexible document flows to accommodate real-world scenarios, such as:
+	•
+Quotation before sale 
+	•
+Direct billing without quotation 
+	•
+Delivery before invoicing 
+	•
+Consolidation of multiple documents 
+All documents must be interlinked, traceable, and controlled through standardized numbering and 
+validation rules.
+1.15.1  Quotation Module
+The Quotation Module is designed to manage customer price enquiries and generate formal sales 
+quotations prior to order confirmation. It enables salespersons to prepare structured quotations with 
+multiple line items, apply pricing rules, and share them with customers through various communication 
+channels.
+Quotations act as a pre-sales document and a reference for future transactions. They can be converted 
+into Delivery Notes or Invoices, ensuring a seamless transition from enquiry to sale.
+The system supports saving quotations in draft mode, allowing users to progressively build and refine 
+quotations before final submission. It also ensures strict pricing control, prevents unauthorized discounts, 
+and maintains a complete audit trail of all quotation activities.
+The system must:
+	•
+Support creation and management of quotations with multiple items 
+	•
+Enable flexible customer selection or creation during quotation 
+	•
+Allow draft handling with revision capability 
+	•
+Enforce pricing rules and approval workflows (Branch Manager has to Approve)
+	•
+Locking and Unloacking fecility to the Branch Manager
+	•
+Provide seamless conversion to Delivery Note or Invoice 
+	•
+Enable sharing of quotations with customers email and WhatsApp 
+	•
+Maintain structured document numbering and version control 
+	•
+Support user-friendly features such as line-item reordering 
+Quotation Creation
+The system shall allow users to create quotations with multiple line items. Items can be added through:
+	•
+Search using item name, P-Code, OEM number, or keywords 
+	•
+Barcode/QR code scanning using handheld devices 
+	•
+Manual entry (where applicable) 
+
+
+=== PAGE 34 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 34
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system shall allow:
+	• Selection of an existing customer from the master 
+	• Manual entry of new customer details with option to save 
+Users shall be able to:
+	•
+Modify item quantities and pricing (within allowed limits) 
+	•
+View item-related information such as last selling price and alternatives 
+	•
+Rearrange or shuffle line items dynamically based on customer preference or presentation needs
+Draft and Final Quotation Handling
+The system shall support two stages of quotation:
+1.	Draft Quotation
+	•
+Users can save quotations as draft without finalizing 
+	•
+Drafts remain editable at any time 
+	•
+Drafts can be revisited, modified, and converted into final quotations 
+	•
+Draft documents shall have a separate numbering sequence to distinguish them from finalized 
+quotations 
+2.	Final Quotation
+	•
+Once confirmed, the draft is converted into a final quotation 
+	•
+A new unique quotation number is generated at the time of finalization 
+This ensures clear separation between working documents and official customer-facing quotations.
+Pricing Validation and Control
+The system enforces strict pricing governance to ensure consistency and profitability.
+The system shall:
+	•
+Apply predefined pricing rules and discount limits 
+	•
+Restrict pricing below minimum allowed thresholds 
+	•
+Display relevant pricing information such as: 
+	• Last selling price 
+	• MRP 
+	• Customer-specific pricing (if applicable) 
+If a user attempts to apply pricing below the allowed level:
+	•
+The system shall trigger an approval workflow 
+	•
+Approval requests shall be routed to: 
+	• Branch Manager 
+	• CPO (if required) 
+
+
+=== PAGE 35 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 35
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+The system may allow limited overrides within predefined thresholds, beyond which mandatory approval 
+is required.
+Document Numbering Structure
+The system shall generate unique quotation numbers using a standardized format:
+Branch Code – QT / Year / AutoNumber
+Example:
+BR-QT/2026/000123
+For draft quotations:
+	•
+A separate numbering sequence shall be maintained (e.g., DRF) 
+	•
+Example: BR-DRF/2026/000045 
+The system shall ensure:
+	•
+No duplication of document numbers 
+	•
+Proper handling of concurrent users generating quotations simultaneously 
+ Conversion of Quotations
+The system shall support seamless conversion of quotations into downstream documents:
+	•
+Quotation -> Delivery Note 
+	•
+Quotation -> Invoice 
+During conversion:
+	•
+All line items, quantities, and pricing are carried forward 
+	•
+Users may adjust quantities if required (based on rules) 
+	•
+The system maintains full linkage between documents 
+This ensures traceability from quotation to final sale.
+Export and Customer Communication
+To enhance customer interaction, the system shall support multiple sharing options.
+The system shall allow users to:
+	•
+Export quotations in formats such as: 
+	• PDF 
+	• Print-ready format 
+	•
+Send quotations directly to customers via: 
+	• Email (with attachment) 
+	• WhatsApp (integrated sharing or link-based) 
+
+
+=== PAGE 36 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 36
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system shall:
+	•
+Use predefined templates for consistent formatting 
+	•
+Capture communication logs (optional) 
+1.15.2  Delivery Note (DN) Module
+The Delivery Note (DN) Module is designed to manage and record the physical movement of goods 
+from a branch to the customer prior to invoicing. This is particularly important in operational scenarios 
+where delivery is completed before final billing, which is common in spare parts trading environments.
+The Delivery Note serves as a non-financial operational document that confirms dispatch of goods 
+and plays a critical role in inventory tracking, customer servicing, and subsequent billing processes.
+The system must support flexible delivery operations, including:
+	•
+Direct deliveries without prior quotation 
+	•
+Deliveries against quotations 
+	•
+Partial deliveries 
+	•
+Consolidation of multiple delivery notes into a single invoice 
+The module must ensure accurate stock movement tracking, seamless integration with the invoicing 
+process, and complete auditability.
+Business Requirements
+The system must:
+	•
+Enable creation of delivery notes from multiple sources 
+	•
+Support both planned (quotation-based) and unplanned deliveries 
+	•
+Handle partial and multiple deliveries efficiently 
+	•
+Ensure real-time or configurable stock deduction 
+	•
+Maintain traceability between quotation, DN, and invoice 
+	•
+Support handheld device-based operations for faster execution 
+	•
+Provide export and sharing capabilities for customer communication 
+	•
+Integrate DN data into reporting and replenishment mechanisms 
+Delivery Note Creation
+The system shall allow creation of Delivery Notes through:
+1.	 From Quotation
+	•
+Users can convert approved quotations into delivery notes 
+	•
+All item details, quantities, and pricing references are carried forward 
+	•
+The system allows partial or full delivery against the quotation 
+
+
+=== PAGE 37 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 37
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+2.	 Direct Delivery (Without Quotation)
+	•
+Users can create a DN directly for walk-in or immediate delivery scenarios 
+	•
+Customer can be: 
+	• Selected from master 
+	• Entered manually 
+Functional Behaviour 
+The system shall:
+	•
+Allow addition of multiple line items 
+	•
+Support item selection via: 
+	• Search (P-Code, OEM, item name) 
+	• Barcode/QR scanning 
+	•
+Allow editing of quantities before confirmation 
+	•
+Validate stock availability before processing 
+Stock Handling and Inventory Impact
+Delivery Notes directly impact inventory movement.
+1.	 Stock Deduction
+The system shall:
+	•
+Deduct stock at the time of DN creation: 
+	• Immediate deduction (real-time mode)  
+2.	 Batch and Location Tracking
+	•
+Each item movement shall: 
+	• Capture batch details 
+	• Maintain location tracking within the branch 
+	•
+The system shall ensure: 
+	• Accurate stock visibility 
+	• Prevention of negative stock 
+Handheld Device Integration
+To improve operational speed and efficiency, the system shall support Delivery Note processing via 
+handheld devices.
+	•
+Salesperson scans items using barcode/QR code 
+	•
+System automatically: 
+	• Fetches item details 
+	• Identifies batch and available stock 
+
+
+=== PAGE 38 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 38
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+User selects quantity and adds items to the delivery cart 
+The handheld device shall allow:
+	•
+Creation of DN directly from device 
+	•
+Retrieval of quotation for conversion 
+	•
+Real-time stock validation 
+	•
+Display of item location within the branch 
+	•
+On-the-spot confirmation of delivery 
+This helps:
+	•
+Faster processing during peak hours 
+	•
+Reduced manual entry errors 
+	•
+Improved coordination between store and sales teams 
+Document Numbering Structure
+The system shall generate unique Delivery Note numbers using the format:
+Branch Code – DN / Year / AutoNumber
+Example:
+BR-DN/2026/000234
+	•
+The system shall ensure: 
+	• Unique numbering across the branch 
+	• No duplication during concurrent usage 
+Conversion to Invoice
+The Delivery Note acts as a precursor to invoicing.
+The system shall allow:
+	•
+Single Delivery Note -> Single Invoice 
+	•
+Multiple Delivery Notes -> Single Consolidated Invoice 
+Partial Delivery Handling
+The system shall support partial deliveries in scenarios where:
+	•
+Full stock is not available 
+	•
+Customer requests staggered delivery 
+	•
+The system shall: 
+	• Track delivered quantity 
+	• Maintain balance quantity against quotation 
+	• Allow multiple DNs against a single quotation 
+
+
+=== PAGE 39 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 39
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+This ensures accurate tracking of pending deliveries.
+Cancellation of Delivery Note
+The system shall allow cancellation of Delivery Notes under controlled conditions.
+	•
+User selects DN to cancel 
+	•
+Mandatory entry of cancellation reason 
+	•
+Approved by Branch Manager.  
+The system shall:
+	•
+Reverse inventory movement 
+	•
+Restore stock to original location and batch 
+	•
+Update delivery status 
+Export and Customer Communication
+To facilitate communication and documentation, the system shall support export and sharing of Delivery 
+Notes.
+The system shall allow:
+	•
+Export to PDF 
+	•
+Print-ready format 
+Customer Communication
+The system shall support:
+	•
+Sending DN via Email 
+	•
+Sharing via WhatsApp (PDF or link-based) 
+Integration with Other Modules
+The Delivery Note module integrates with:
+Sales Module: Forms the basis for invoice generation 
+Inventory Module: Updates stock movement and availability 
+Less Item (Replenishment) Module: DN data contributes to: Consumption tracking & Low stock 
+identification 
+Reporting Module: Included in: Sales analysis, Delivery tracking reports 
+1.15.3  Invoice / Billing Module 
+The Invoice Module is the core component of the sales process responsible for generating the final 
+financial document for goods sold to customers. It represents the completion of a sales transaction and 
+directly impacts revenue recognition, customer receivables, inventory, and accounting records.
+
+
+=== PAGE 40 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 40
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+Invoices can be generated through multiple pathways depending on the business scenario, including:
+	•
+Conversion from Quotation 
+	•
+Conversion from Delivery Note 
+	•
+Direct billing (without prior documents) 
+The module must support both cash and credit transactions, enforce pricing controls, integrate with 
+inventory and accounting, and provide flexibility for real-time billing using handheld devices.
+The system must ensure accuracy, speed, and compliance while enabling salespersons to handle high-
+volume transactions efficiently.
+The system must:
+	•
+Support invoice generation from multiple sources 
+	•
+Handle both cash and credit customers 
+	•
+Integrate with inventory, customer, and accounting modules 
+	•
+Support handheld device-based billing 
+	•
+Provide flexible payment options 
+	•
+Enable holding and resuming transactions 
+	•
+Maintain audit trails and document traceability 
+	•
+Support export and digital sharing of invoices 
+Invoice Creation
+The system shall allow invoice generation through:
+	•
+Conversion-Based Billing
+	•
+Quotation -> Invoice 
+	•
+Delivery Note -> Invoice 
+	•
+Multiple Delivery Notes -> Single Invoice 
+	•
+Direct Billing
+Invoice can be created without quotation or DN for immediate sales 
+The system shall:
+	•
+Allow selection or creation of customer 
+	•
+Allow addition of multiple line items 
+	•
+Support item entry via: 
+	•
+Search (P-Code, OEM, item name) 
+	•
+Barcode/QR scanning 
+	•
+Allow quantity modification before finalization 
+	•
+Validate stock availability (if not already deducted at DN stage) 
+
+
+=== PAGE 41 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 41
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+Customer and Credit Handling
+	•
+Pricing Control and Discount Handling
+	•
+Handheld Device Billing
+Document Generation
+The system shall generate a final Invoice document upon confirmation.
+Document Features
+	•
+Unique invoice number 
+	•
+Customer details 
+	•
+Item details 
+	•
+Pricing and tax breakdown 
+	•
+Payment details 
+Numbering Format
+BranchCode – INV / Year / AutoNumber
+Example:
+BR-INV/2026/000567
+The system shall ensure:
+	•
+No duplication 
+	•
+Proper handling of concurrent users 
+Export and Customer Communication
+The system shall allow:
+	•
+Export Options
+	•
+PDF generation 
+	•
+Print format 
+	•
+Customer Sharing
+	•
+Email invoice directly 
+	•
+Share via WhatsApp 
+Inventory Impact
+Inventory impact depends on configuration:
+	•
+If stock deducted at DN stage
+	•
+No additional deduction during invoicing 
+Accounting Integration
+
+
+=== PAGE 42 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 42
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+The system shall automatically generate accounting entries:
+	•
+Debit: Customer (Receivable) / Cash/Bank 
+	•
+Credit: Sales Account 
+	•
+Credit: VAT Payable 
+	•
+Credit: Referal Commission 
+The system shall:
+	•
+Update customer ledger 
+	•
+Reflect in branch and consolidated accounts 
+Commission Calculation
+The system shall calculate sales commission based on: 
+	•
+Invoice value (excluding VAT) 
+	•
+Capture: 
+	•
+Salesperson 
+	•
+Referral (if applicable) 
+	•
+Post commissions for settlement processing 
+1.15.4  Cash Memo Module
+The Cash Memo Module is designed to handle fast, high-volume retail transactions, primarily for 
+walk-in customers where immediate payment is made at the time of sale. Unlike standard invoices, 
+cash memos are typically used for quick billing scenarios with minimal customer data and no credit 
+involvement.
+This module enables salespersons to perform rapid billing using handheld devices or desktop systems, 
+ensuring speed, accuracy, and efficiency during peak business hours.
+Cash Memo transactions are instant financial transactions, meaning:
+	•
+Payment is collected immediately 
+	•
+Inventory is updated in real time 
+	•
+Accounting entries are posted instantly 
+The module plays a critical role in daily cash collection, branch-level accounting, and sales 
+performance tracking.
+The system must:
+	•
+Support quick billing for walk-in customers 
+	•
+Minimize data entry while maintaining transaction accuracy 
+	•
+Enable barcode/QR-based item scanning 
+	•
+Support multiple payment methods including digital payments 
+
+
+=== PAGE 43 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 43
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+Integrate with inventory and accounting in real time 
+	•
+Allow handheld device-based billing 
+	•
+Support transaction hold and resume 
+	•
+Ensure proper cash tracking and settlement 
+	•
+Provide export and customer sharing options 
+Cash Memo Creation
+The system shall allow creation of Cash Memo transactions through:
+	•
+Direct billing (no quotation or delivery note required) 
+	•
+Optional conversion from: 
+	•
+Quotation (if applicable) 
+	•
+Delivery Note (if applicable) 
+Functional Behaviour 
+The system shall:
+	•
+Allow quick selection of customer: 
+	• Default “Cash Customer” 
+	• Option to select or create customer if needed 
+	•
+Allow addition of items via: 
+	• Barcode/QR scanning (primary method) 
+	• Item search (P-Code, OEM, name) 
+	•
+Allow: 
+	• Quantity modification 
+	• Line-item level discount (within limits) 
+	•
+Handheld Device-Based Billing
+	•
+Multi-Salesperson Handling
+	•
+Sales Hold and Retrieval
+	•
+Multi payment Processing methods
+	•
+Pricing and Discount Control
+	•
+Export and Customer Communication
+Document Generation
+Upon confirmation, the system shall generate a Cash Memo document.
+Document Features
+	•
+Unique Cash Memo number 
+	•
+Item details 
+
+
+=== PAGE 44 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 44
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Payment details 
+	•
+Tax breakdown 
+Numbering Format
+BranchCode – CM / Year / AutoNumber
+Example:
+BR-CM/2026/000789
+The system shall ensure:
+	•
+Unique numbering 
+	•
+No duplication in concurrent usage 
+Inventory Impact
+Cash Memo transactions immediately impact inventory.
+The system shall:
+	•
+Deduct stock in real time upon bill generation 
+	•
+Update: 
+	• Batch details 
+	• Item location 
+	•
+Prevent negative stock (based on configuration) 
+Accounting Integration
+Cash Memo transactions directly affect financial records.
+1.	Accounting Entries
+The system shall automatically generate:
+	•
+Debit: Cash/Bank Account 
+	•
+Credit: Sales Account 
+	•
+Credit: VAT Payable 
+	•
+Credit: Referal Commission (if applicable)
+2.	Branch-Level Impact
+	•
+All transactions are recorded under branch accounts 
+	•
+Included in_+: 
+	• Daily cash collection 
+	• Shop collection report 
+
+
+=== PAGE 45 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 45
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	• Cash settlement process 
+Cash Settlement Process Integration
+Cash Memo transactions are a key input to daily settlement.
+The system shall:
+	•
+Track: 
+	• Total cash collected 
+	• Payment mode-wise breakdown 
+	•
+Support: 
+	• Daily closing 
+	• Cash handover to main accounts 
+	•
+Integrate with: 
+	• Cash settlement module 
+	• Branch-to-head office reconciliation 
+1.16.	Other Accounting Documents Handling in Branches 
+In a multi-branch organization, day-to-day financial operations extend beyond sales invoices and cash 
+memos. Branches handle various accounting-related transactions such as expenses, cash movements, 
+adjustments, vendor-related entries, and internal transfers.
+The system must provide controlled mechanisms to record, approve, and track these financial documents 
+while ensuring consistency with centralized accounting principles. Each branch operates with financial 
+autonomy but within a standardized framework governed by head office policies.
+All accounting documents must be traceable, auditable, and properly reflected in branch-level and 
+consolidated financial reports.
+The system must support the creation and management of multiple accounting documents at the 
+branch level, ensuring proper classification, approval workflows, and accounting entries.
+Branches must be able to:
+	•
+Record operational expenses 
+	•
+Handle cash movements (inflow/outflow) 
+	•
+Manage internal transfers between branches or accounts 
+	•
+Record miscellaneous income and adjustments 
+	•
+Maintain petty cash operations 
+	•
+Generate vouchers for all non-sales transactions 
+Each transaction must follow a structured voucher system with proper approval controls to prevent 
+unauthorized financial activities.
+The system must also ensure synchronization with the central accounting system, enabling consolidated 
+
+
+=== PAGE 46 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 46
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+financial reporting across all branches and countries.
+1.16.1  Cash Memo / Cash Receipt Voucher
+Used to record cash inflows such as daily sales collections, customer payments, or miscellaneous 
+receipts at the branch level.
+Functional Requirements 
+	•
+The system shall allow recording of cash receipts 
+	•
+The system shall: 
+	• Capture payer details (customer/vendor/other) 
+	• Record payment mode (cash, bank, etc.) 
+	•
+The system shall: 
+	• Generate a Cash Receipt Voucher (CRV) 
+	•
+The system shall: 
+	• Update branch cash ledger in real time 
+1.16.2  Cash Payment Voucher
+Used to record cash outflows such as expenses, payments, or reimbursements.
+Functional Requirements 
+The system shall allow recording of payments made from branch funds 
+	•
+The system shall: 
+	• Capture payee details 
+	• Record expense category 
+	•
+The system shall: 
+	• Generate a Cash Payment Voucher (CPV) 
+	•
+The system shall: 
+	• Deduct from branch cash/bank balance 
+1.16.3  Journal Voucher
+Journal vouchers are used for internal accounting adjustments that do not involve direct cash movement, 
+such as corrections, accruals, or reclassifications.
+Functional Requirements 
+	•
+The system shall allow creation of journal entries with: 
+	• Debit and credit accounts 
+
+
+=== PAGE 47 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 47
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+The system shall: 
+	• Ensure double-entry accounting validation 
+	•
+The system shall: 
+	• Generate Journal Voucher (JV) 
+	•
+The system shall: 
+	• Allow adjustments between accounts without cash impact 
+1.16.4  Contra Voucher
+Contra vouchers are used for transactions between cash and bank accounts, such as cash deposits into 
+bank or withdrawals from bank to cash.
+Functional Requirements 
+The system shall allow: 
+	• Cash -> Bank transfers 
+	• Bank -> Cash transfers 
+	•
+The system shall: 
+	• Generate Contra Voucher 
+	•
+The system shall: 
+	• Update both cash and bank ledgers simultaneously 
+1.16.5  Expense Voucher
+Expense vouchers are used to record branch-level operational expenses such as utilities, rent, transport, 
+or miscellaneous costs.
+Functional Requirements 
+	•
+The system shall allow recording of expenses with: 
+	• Expense category 
+	• Amount 
+	• Supporting documents (attachments) 
+	•
+The system shall: 
+	• Generate Expense Voucher 
+	•
+The system shall: 
+	• Route transactions for approval if required 
+1.16.6  Petty Cash Management
+Branches maintain petty cash for small day-to-day expenses. The system must track petty cash 
+allocation, utilization, and replenishment.
+
+
+=== PAGE 48 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 48
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+Functional Requirements 
+The system shall allow: 
+	• Petty cash allocation 
+	• Expense recording against petty cash 
+	•
+The system shall: 
+◦Maintain petty cash balance 
+	•
+The system shall: 
+	• Support replenishment requests 
+1.16.7  Branch-to-Branch / Internal Transfer Documents
+Branches may transfer funds or adjust balances between branches or internal accounts.
+Functional Requirements 
+	•
+The system shall allow: 
+	• Internal fund transfers between branches 
+	•
+The system shall: 
+	• Generate transfer vouchers 
+	•
+The system shall: 
+	• Maintain sender and receiver branch records 
+	•
+The system shall: 
+	• Update balances in both branches 
+Approval Workflow
+To ensure financial control, certain accounting documents must be subject to approval before posting.
+Functional Requirements 
+The system shall support multi-level approvals based on: 
+	• Transaction type 
+	• Amount thresholds 
+	•
+The system shall: 
+	• Allow approve / reject actions with remarks 
+	•
+The system shall: 
+	• Prevent posting of unapproved documents 
+Approval Thumb Rule:
+The Branch Manager shall initiate a request through the system to receive an amount. Upon submission, 
+
+
+=== PAGE 49 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 49
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+both the requested Branch Manager and the Accounts Department will review and verify the requirement.
+After verification, the Accounts Manager will provide approval. Once the approval is granted, the 
+requesting Branch Manager can record the transaction in the system, either by cash or cheque.
+Finally, the receiving Branch Manager must confirm acceptance of the amount. Only after this acceptance, 
+the transaction will be considered valid and accounted for in the system.
+1.16.8  Accounting Integration
+All accounting documents must be reflected in the general ledger and integrated with the central 
+accounting system.
+Functional Requirements 
+	•
+The system shall: 
+	• Post double-entry accounting for all vouchers 
+	•
+The system shall: 
+	• Maintain chart of accounts mapping 
+	•
+The system shall: 
+	• Update ledgers in real time or batch mode 
+	•
+The system shall: 
+	• Support consolidation across branches and countries 
+1.16.9  Document Numbering
+Functional Requirements
+	•
+The system shall generate unique voucher numbers per document type: 
+	• CRV / CPV / JV / CN / DN / EXP 
+	•
+Format example: 
+	• Branch Code-DOC/Year/AutoNumber 
+	•
+The system shall: 
+	• Prevent duplication 
+	• Maintain sequential numbering per branch and document type 
+1.16.10  Reporting
+Branches and head office require detailed visibility into financial activities for monitoring and decision-
+making.
+Functional Requirements 
+The system shall generate:
+	•
+Cash flow reports 
+
+
+=== PAGE 50 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 50
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Expense reports 
+	•
+Branch-wise financial summaries 
+	•
+Voucher-wise transaction reports 
+	•
+Ledger reports 
+	•
+Trial balance (branch and consolidated)
+1.17.	Accounting & Branch Financial Control Module 
+In a multi-branch organization, financial operations are distributed across branches while centralized 
+financial control is maintained at the main branch (head office). Each branch records its own transactions, 
+manages cash flow, and performs daily operations independently.
+However, all financial activities must ultimately be:
+	•
+Controlled centrally 
+	•
+Consolidated into unified financial statements 
+	•
+Audited and approved under a standardized accounting structure 
+This module ensures seamless coordination between branch-level accounting and head office financial 
+oversight, including cash settlement, account head management, approvals, and reporting.
+1.17.1  Chart of Accounts (Account Head Creation)
+The organization must maintain a standardized Chart of Accounts (COA) across all branches. Account 
+heads define how financial transactions are categorized and reported.
+The main branch (head office) is responsible for creating and maintaining the master Chart of Accounts, 
+which is shared across all branches to ensure consistency in accounting treatment.
+Branches must not create independent account structures; instead, they must use centrally defined 
+account heads.
+Functional Requirements 
+The system shall allow creation of account heads at the main branch only 
+	•
+The system shall support hierarchical account structure: 
+	• Assets 
+	• Liabilities 
+	• Equity 
+	• Income 
+	• Expenses 
+	•
+The system shall: 
+	• Assign unique account codes 
+	• Support parent-child account relationships 
+	• Allow mapping of accounts to branches 
+	•
+The system shall: 
+
+
+=== PAGE 51 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 51
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	• Restrict account creation/editing to authorized users at head office 
+	•
+The system shall: 
+	• Synchronize account heads across all branches in real time 
+1.17.2  Branch Accounting Entries
+Each branch must record all its financial transactions using standardized accounting entries (double-
+entry system). These entries must be linked to the centrally defined Chart of Accounts.
+Branches will generate accounting entries for:
+	•
+Sales transactions 
+	•
+Expenses 
+	•
+Cash receipts and payments 
+	•
+Journal adjustments 
+	•
+Inventory movements 
+	•
+Returns and discounts 
+All entries must be recorded at the branch level but visible at the main branch for consolidation.
+Functional Requirements 
+	•
+The system shall: 
+◦Record debit and credit entries for every transaction 
+	•
+The system shall: 
+     Automatically post accounting entries for: 
+	• Invoices 
+	• Cash memos 
+	• Returns 
+	• Expenses 
+	• Vouchers 
+	•
+The system shall: 
+	• Map each transaction to relevant account heads 
+	•
+The system shall: 
+	• Maintain branch-wise ledger balances 
+	•
+The system shall: 
+	• Support multi-branch tagging for each entry 
+1.17.3  Cash Settlement to Main Branch
+Branches accumulate cash from daily operations. At regular intervals, branch cash must be settled 
+and transferred to the main branch (head office accounts department) to maintain centralized financial 
+
+
+=== PAGE 52 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 52
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+control and liquidity management.
+Cash settlement ensures that:
+	•
+Branch cash balances are controlled 
+	•
+Excess cash is transferred to head office 
+	•
+Financial reporting reflects true cash position 
+Functional Requirements 
+1.	Cash Settlement Process
+	•
+The system shall allow branches to initiate cash settlement to the main branch 
+	•
+The system shall: 
+	• Capture settlement amount 
+	• Record settlement date and reference 
+2.	Accounting Entries for Cash Settlement
+When a branch transfers cash to the main branch, the system shall generate the following entries:
+At Branch Level:
+	•
+Debit: Inter-Branch Clearing / Head Office Account 
+	•
+Credit: Cash Account 
+At Main Branch Level:
+	•
+Debit: Cash / Bank Account 
+	•
+Credit: Inter-Branch Payable (Branch Account) 
+Reconciliation
+	•
+The system shall: 
+	• Maintain inter-branch balances 
+	• Allow reconciliation between branch and main accounts 
+1.17.4  Approval Workflow
+	•
+Cash settlement shall require approval from: 
+	• Branch Manager 
+	• Main Accounts Team 
+	•
+The system shall: 
+	• Block settlement posting without approval  
+1.17.5  Main Branch Visibility & Control
+The main branch (head office) must have complete visibility over all branch financial activities in real 
+time. This includes transactions, balances, approvals, and settlements.
+
+
+=== PAGE 53 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 53
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+Main accounts should be able to monitor, audit, and intervene when necessary.
+Functional Requirements 
+The system shall provide main branch users with: 
+	• Real-time access to all branch transactions 
+	• Branch-wise dashboards 
+	•
+The system shall allow: 
+	• Drill-down into branch-level entries 
+	• Viewing of vouchers and journals 
+	•
+The system shall: 
+	• Display inter-branch balances 
+	• Track unsettled settlements 
+	•
+The system shall: 
+	• Provide centralized approval authority for critical transactions 
+1.17.6  Financial Reporting (Branch & Consolidated)
+The system must generate financial statements at both branch level and consolidated level for the 
+organization.
+Each branch must be able to view its own financial position, while the main branch consolidates all 
+branches into unified reports.
+Functional Requirements 
+1.	Branch-Level Reports
+	•
+Trial Balance (Branch-wise) 
+	•
+Profit & Loss Statement 
+	•
+Balance Sheet 
+	•
+Cash Flow Statement 
+2.	Main Branch (Consolidated Reports)
+	•
+Consolidated Trial Balance 
+	•
+Consolidated Profit & Loss 
+	•
+Consolidated Balance Sheet 
+	•
+Inter-branch elimination reports 
+3.	Balance Sheet Generation
+The system shall:
+	•
+Aggregate assets, liabilities, and equity from all branches 
+	•
+Apply inter-branch eliminations where necessary 
+
+
+=== PAGE 54 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 54
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+	•
+Provide both: 
+	• Individual branch Balance Sheet 
+	• Consolidated Balance Sheet 
+1.17.7  Inter-Branch Accounting
+Transactions between branches must be properly recorded and balanced using inter-branch accounts to 
+ensure accurate consolidation.
+Functional Requirements 
+	•
+The system shall: 
+	• Record inter-branch receivables and payables 
+	•
+The system shall: 
+	• Maintain branch-wise clearing accounts 
+	•
+The system shall: 
+	• Automatically reconcile inter-branch transactions 
+1.18.	Daily Closing Process
+At the end of each business day, the Branch Manager is responsible for closing all accounts to ensure a 
+smooth continuation of operations for the next day.
+This closing process includes:
+	•
+Verification of all sales invoices
+	•
+Reconciliation of cash collections
+	•
+Validation of cheque transactions
+	•
+Confirmation of bank transactions
+	•
+Generation of a daily closing report to be submitted to the Accounts Department
+	•
+Reopening on the Same Day
+The Branch Manager is permitted to reopen the day’s closing within the same day if required. 
+This allows for:
+	•
+Correction of missing entries
+	•
+Adjustment of incorrectly recorded sales
+	•
+Inclusion of any transactions that were not properly entered
+After making the necessary corrections, the Branch Manager must re-close the accounts for that day.
+Post-Day Closure Control
+Once the day has ended and the closing is completed:
+	•
+The closed accounts cannot be reopened on the next day by the Branch Manager
+
+
+=== PAGE 55 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 55
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+	•
+The closing is considered final unless reviewed by the Accounts Department
+	•
+Adjustments After Final Closure
+If any discrepancies or adjustments are identified after the day has been officially closed:
+	•
+Only the Accounts Department has the authority to reopen the closed accounts
+	•
+Reopening must be done with a valid reason and proper documentation
+	•
+All adjustments must be recorded and audited before final re-closure
+This process ensures:
+	•
+Financial accuracy
+	•
+Proper accountability
+	•
+Controlled access to financial data
+	•
+Audit compliance
+1.19.	Audit & Control
+The Sales Module incorporates a comprehensive audit and control framework to ensure full transparency, 
+accountability, and compliance across all branches, transactions, and device-based operations. Every 
+activity—covering quotations, delivery notes, invoices, cash memos, returns, less item requests, and 
+accounting entries—is systematically logged with user identity, timestamps, branch details, and status 
+changes, enabling complete traceability throughout the transaction lifecycle. The system enforces 
+strict data integrity by preventing deletion of posted or finalized documents and instead supports 
+controlled cancellations and reversal entries with mandatory reasons and appropriate authorization. 
+Sensitive operations such as pricing overrides, credit limit exceptions, discounts, and return processing 
+are governed through structured approval workflows involving authorized personnel such as Branch 
+Managers, Chief Purchase Officer (CPO), and Accounts Department, with full tracking of approvals, 
+rejections, and remarks.
+In addition, the system extends audit and control mechanisms to handheld devices used by sales 
+personnel. All actions performed via handheld devices—such as item scanning, cart creation, cart 
+transfers/share, item additions/removals, and final billing—are tracked with device identifiers, user login 
+details, time stamps, and location/branch association. The system ensures that transactions initiated 
+on handheld devices are securely synchronized with the central system in real time or near real time, 
+maintaining consistency across inventory, sales, and accounting records. Any discrepancies, overrides, 
+or offline activities (if supported) are logged and reconciled upon synchronization. The concept of cart 
+ownership ensures that the salesperson who finalizes the transaction is accountable for the sale, enabling 
+accurate sales performance tracking and commission calculation.
+Overall, the audit framework ensures end-to-end traceability of all transactions across both system and 
+handheld interfaces, maintains strong controls over financial and operational activities, and provides 
+complete visibility to management and accounts teams in a multi-branch environment. This ensures 
+data integrity, prevents unauthorized manipulation, supports compliance with accounting standards, and 
+enables reliable monitoring, reporting, and decision-making across the organization.
+
+
+=== PAGE 56 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 56
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+1.20.	 Pricing Update Notification
+The Pricing Update Notification mechanism in the Sales Module ensures that any changes to item pricing 
+are effectively communicated and consistently applied across all branches, users, and devices, including 
+handheld devices. When pricing updates are made—whether due to cost changes, supplier revisions, 
+promotional adjustments, or management decisions—the system shall capture these updates centrally 
+and propagate them in real time or near real time to all connected branches and devices. The system 
+shall generate notifications to relevant users, such as branch sales teams, managers, and handheld 
+device users, highlighting the updated prices, effective dates, and impacted items. These notifications 
+ensure that users are always working with the latest approved pricing, thereby avoiding discrepancies 
+during quotation creation, delivery processing, and billing.
+In addition, handheld devices shall automatically sync the latest pricing data, and any transaction 
+created using outdated pricing (due to offline mode or delayed sync) shall be flagged for review upon 
+synchronization. This ensures consistency, prevents unauthorized pricing deviations, and maintains 
+financial integrity across the organization while supporting operational efficiency and timely communication 
+of pricing changes.
+1.21.	 Conclusion
+The Sales Module provides a comprehensive, integrated, and scalable solution for managing the complete 
+sales lifecycle across a multi-branch, multi-location organization. It is designed to handle the operational 
+complexities of a spare parts trading business, where speed, accuracy, and flexibility are critical to daily 
+operations.
+The module seamlessly connects all key stages of the sales process, including customer enquiry, 
+quotation, delivery, billing, returns, and accounting, ensuring a smooth and controlled flow of 
+transactions. By supporting multiple document flows such as Quotation, Delivery Note, Invoice, and 
+Cash Memo, the system accommodates diverse business scenarios, including delivery-before-invoice 
+workflows and high-volume retail sales.
+A key strength of the system lies in its real-time integration across inventory, customer 
+management, and accounting, ensuring that all transactions are accurately reflected across operational 
+and financial records. The inclusion of unified return handling, covering both invoice-based and delivery 
+note-based returns, further enhances flexibility while maintaining strict control and traceability.
+The system emphasizes strong governance and control mechanisms, including pricing restrictions, 
+credit limit validations, approval workflows, and audit trails. These controls ensure that business risks 
+are minimized while still allowing operational flexibility within defined boundaries.
+The adoption of handheld device integration significantly improves efficiency at the branch level by 
+enabling real-time item scanning, faster billing, and seamless transaction handling during peak business 
+hours. Features such as cart transfer, sales hold, and multi-user collaboration further enhance usability 
+in high-demand environments.
+Additionally, the module supports digital transformation of customer interactions through export 
+and sharing capabilities, including email and WhatsApp integration, improving customer experience and 
+communication.
+
+
+=== PAGE 57 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 57
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+27-Mar-2026
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+END OF SESSION
+From a financial perspective, the module ensures accurate handling of:
+	•
+Revenue recognition 
+	•
+Customer receivables 
+	•
+Cash transactions 
+	•
+Commission calculations 
+	•
+Branch-level and consolidated accounting 
+The integration of supporting processes such as less item management, stock tracking, credit 
+control, and daily cash settlement ensures that the system not only supports sales execution but also 
+contributes to effective inventory planning and financial management.
+Overall, the Sales Module delivers:
+	•
+End-to-end visibility of sales operations 
+	•
+Improved speed and efficiency in transaction processing 
+	•
+Enhanced control over pricing and credit risks 
+	•
+Accurate and real-time inventory and financial updates 
+	•
+Transparent performance tracking of sales personnel and branches 
+By combining operational flexibility with strong control mechanisms, the system enables the 
+organization to achieve higher efficiency, better decision-making, and improved customer satisfaction, 
+while maintaining full accountability and audit compliance across all branches.
+
+
+=== PAGE 58 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 58
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 4.0 DRAFT - CONFIDENTIAL
+27-Mar-2026
+
+

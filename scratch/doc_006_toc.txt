@@ -1,0 +1,432 @@
+--- PAGE 1 ---
+1 ===
+BUSINESS
+ANALYSIS
+REPORT
+client
+Popular Auto Spare and A/C Parts Co. W.L.L
+04-07-2026
+DOC - 006
+Ver 1..0
+Prepared By
+SaNDS Lab Middle East W.L.L
+Consultant
+ADMINISTRATION MODULES
+DATE: 04-JUL-2026
+
+--- PAGE 2 ---
+2 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 2
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+04-July-2026
+PREFACE
+Efficient administration and resource management are essential for maintaining
+smooth business operations, ensuring compliance, and maximizing organizational
+productivity. This document provides a comprehensive overview of the ERP
+Administration Modules designed to centralize and automate the management of
+facilities, assets, vehicles, lockers, and organizational documents within a unified
+platform.
+The modules described in this document enable organizations to streamline facility
+operations, optimize asset utilization, improve fleet management, strengthen
+document control, and enhance operational visibility through real-time tracking
+and reporting. By integrating administrative processes into a single system,
+organizations can reduce manual effort, improve accountability, ensure regulatory
+compliance, and support informed decision-making.
+This document serves as a reference guide for management, administrators,
+facility teams, asset custodians, fleet managers, and implementation stakeholders
+involved in configuring, operating, and maintaining the ERP system. The workflows,
+procedures, and best practices outlined herein are intended to support efficient
+administration, effective resource utilization, and sustainable organizational
+growth.
+
+--- PAGE 3 ---
+3 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 3
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+TABLE OF CONTENT
+1.-ADMINISTRATION MODULES ������������������������������������������������������������������������������5
+1.1.-Facility & Office Management --------------------------------------------------------------------------- 5
+1.2.-Facility Master Management----------------------------------------------------------------------------- 5
+1.3.-Facility Maintenance Management----------------------------------------------------------------------- 5
+1.4.-Facility Complaint & Service Request Management----------------------------------------------------- 6
+1.5.-Utility Management--------------------------------------------------------------------------------------- 6
+1.6.-Visitor Management System----------------------------------------------------------------------------- 7
+1.7.-Lease & Property Management-------------------------------------------------------------------------- 7
+1.8.-Legal & Contract Management -------------------------------------------------------------------------- 7
+1.9.-Business Benefits----------------------------------------------------------------------------------------- 8
+2.-Asset Management �����������������������������������������������������������������������������������������8
+2.1.-Asset Registration & Master Data Management--------------------------------------------------------- 8
+2.2.-QR Code & Barcode Asset Tracking---------------------------------------------------------------------- 9
+2.3.-Asset Location & Position Tracking----------------------------------------------------------------------- 9
+2.4.-Vendor & Supplier Management------------------------------------------------------------------------ 10
+2.5.-Asset Maintenance Management- ---------------------------------------------------------------------- 10
+2.6.-Service History Management- -------------------------------------------------------------------------- 11
+2.7.-Complaint & Issue Management------------------------------------------------------------------------ 11
+2.8.-Asset Movement & Transfer Management-------------------------------------------------------------- 12
+2.9.-Warranty & AMC Management-------------------------------------------------------------------------- 12
+2.10.Asset Inspection & Audit Management---------------------------------------------------------------- 12
+2.11.Asset Depreciation Management---------------------------------------------------------------------- 13
+2.12.Asset Disposal & Retirement Management- ---------------------------------------------------------- 13
+2.13.Business Benefits- ------------------------------------------------------------------------------------- 13
+3.-Vehicle Management �������������������������������������������������������������������������������������14
+3.1.-Vehicle Master Registration----------------------------------------------------------------------------- 14
+3.2.-Vehicle Allocation & Booking Management------------------------------------------------------------- 15
+3.3.-GPS Tracking & Fleet Monitoring------------------------------------------------------------------------ 15
+3.4.-Vehicle Maintenance Management---------------------------------------------------------------------- 15
+3.5.-Vehicle Service History---------------------------------------------------------------------------------- 16
+3.6.-Fuel Management---------------------------------------------------------------------------------------- 16
+3.7.-Insurance Management--------------------------------------------------------------------------------- 17
+3.8.-Registration & Compliance Management--------------------------------------------------------------- 17
+
+--- PAGE 4 ---
+4 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 4
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+04-July-2026
+3.9.-Accident & Incident Management----------------------------------------------------------------------- 17
+3.10. Tire & Spare Parts Management---------------------------------------------------------------------- 18
+3.11.Vehicle Cost Management----------------------------------------------------------------------------- 18
+3.12. Vehicle Disposal & Replacement Management------------------------------------------------------- 19
+3.13. Business Benefits-------------------------------------------------------------------------------------- 19
+4.-Locker & Document Management ������������������������������������������������������������������������20
+4.1.-Locker Management------------------------------------------------------------------------------------- 20
+4.2.-Document Registration & Cataloging------------------------------------------------------------------- 21
+4.3.-Digital Document Repository---------------------------------------------------------------------------- 21
+4.4.-Document Movement & Tracking----------------------------------------------------------------------- 22
+4.5.-Expiry & Renewal Management------------------------------------------------------------------------- 22
+4.6.-Audit & Compliance Management----------------------------------------------------------------------- 23
+4.7.-Business Benefits---------------------------------------------------------------------------------------- 23
+
+--- PAGE 5 ---
+5 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 5
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+18-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+04-July-2026
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 006
+v1.0
+0
+04-Jul-2026
+Initial Draft
+
+--- PAGE 6 ---
+6 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 6
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+04-July-2026
+1.	 ADMINISTRATION MODULES
+1.1.	Facility & Office Management
+The Facility & Office Management System is a comprehensive solution designed to manage and optimize
+all workplace facilities, office infrastructure, administrative services, maintenance activities, utility
+consumption, and employee support services across multiple branches and locations.
+The system provides centralized control over office operations, ensuring efficient utilization of facilities,
+timely maintenance, improved workplace safety, cost control, and enhanced employee productivity. It
+enables management to monitor and manage all facility-related resources through a single integrated
+platform.
+1.2.	Facility Master Management
+The system maintains a centralized repository of all company facilities and office locations.
+Facility Information
+•
+Facility Code
+•
+Facility Name
+•
+Branch Location
+•
+Building Details
+•
+Floor Details
+•
+Office Areas
+•
+Warehouse Areas
+•
+Meeting Rooms
+•
+Common Areas
+•
+Parking Facilities
+•
+Facility Status
+1.3.	Facility Maintenance Management
+The system supports preventive and corrective maintenance of office infrastructure and facilities.
+Preventive Maintenance
+•
+Scheduled Maintenance Planning
+•
+Maintenance Calendars
+•
+Inspection Schedules
+•
+Service Reminders
+•
+AMC Monitoring
+•
+Vendor Coordination
+•
+Facility Categories
+•
+Corporate Offices
+•
+Branch Offices
+•
+Warehouses
+•
+Workshops
+•
+Retail Outlets
+•
+Staff Accommodation
+•
+Storage Facilities
+Corrective Maintenance
+•
+Maintenance Requests
+•
+Breakdown Reporting
+•
+Work Order Generation
+•
+Technician Assignment
+•
+Repair Tracking
+•
+Completion Verification
+
+--- PAGE 7 ---
+7 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 7
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+1.4.	Facility Complaint & Service Request Management
+Employees can submit facility-related requests and complaints through a centralized portal.
+Request Categories
+•
+Electrical Issues
+•
+Air Conditioning Problems
+•
+Plumbing Complaints
+•
+Furniture Repairs
+•
+Cleaning Requests
+•
+IT Infrastructure Issues
+•
+Safety Concerns
+•
+General Maintenance Requests
+Workflow
+Request Submission -> Approval -> Assignment -> Resolution -> Verification -> Closure
+Management can monitor response times and service quality.
+1.5.	Utility Management
+Tracks and monitors utility consumption and costs across all facilities.
+Utility Categories
+•
+Electricity
+•
+Water
+•
+Internet
+•
+Telephone
+•
+Gas
+•
+Waste Management
+•
+Generator Fuel
+Monitoring Features
+•
+Monthly Consumption Tracking
+•
+Cost Analysis
+•
+Usage Trends
+•
+Budget Monitoring
+•
+Variance Analysis
+This helps management identify opportunities for cost optimization and sustainability improvements.
+
+--- PAGE 8 ---
+8 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 8
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+04-July-2026
+1.6.	Visitor Management System
+The system manages visitor registration, access control, and security monitoring.
+Visitor Registration
+•
+Visitor Information
+•
+Purpose of Visit
+•
+Host Employee
+•
+Check-In / Check-Out
+•
+Visitor Badge Generation
+•
+Visitor History
+1.7.	Lease & Property Management
+For rented facilities and office spaces, the system manages:
+Lease Information
+•
+Property Details
+•
+Lease Agreements
+•
+Landlord Information
+•
+Lease Expiry Dates
+•
+Rental Payments
+•
+Renewal Alerts
+Monitoring
+•
+Lease Cost Analysis
+•
+Expiry Notifications
+•
+Renewal Planning
+1.8.	Legal & Contract Management
+Handles all legal agreements and contracts.
+Features
+•
+Employment contracts
+•
+Vendor contracts
+•
+Renewal tracking
+•
+Legal document repository
+•
+Contract alerts
+
+--- PAGE 9 ---
+9 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 9
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULAR
+ERP DOCUMENT 6.0 DRAFT - CONFIDENTIAL
+Why Important
+•
+Prevents legal risks
+•
+Ensures compliance readiness
+1.9.	Business Benefits
+•
+Centralized management of all facilities and office operations.
+•
+Improved workplace utilization and resource allocation.
+•
+Faster resolution of facility-related issues.
+•
+Reduced maintenance and operational costs.
+•
+Enhanced employee productivity and workplace experience.
+•
+Better monitoring of utility consumption and expenses.
+•
+Improved workplace safety and compliance.
+•
+Increased visibility into facility performance and operating costs.
+•
+Data-driven planning for facility expansion and optimization.
+The Facility & Office Management System provides complete visibility and control over organizational
+facilities, workplace resources, administrative services, and infrastructure operations, ensuring efficient
+facility utilization, cost optimization, regulatory compliance, and a productive work environment across
+all business locations.
+2.	 Asset Management
+The Asset Management module is a centralized platform designed to manage the complete lifecycle
+of organizational assets, from acquisition and registration to maintenance, tracking, utilization, and
+disposal. The system provides real-time visibility into asset ownership, location, condition, maintenance
+history, vendor information, and operational performance, enabling organizations to maximize asset
+utilization, reduce maintenance costs, and improve accountability.
+The module supports all categories of assets, including machinery, vehicles, IT equipment, office
+equipment, tools, furniture, infrastructure assets, and operational equipment across multiple branches
+and locations.
+2.1.	Asset Registration & Master Data Management
+The system maintains a comprehensive asset registry containing detailed information for every asset
+owned by the organization.
+Asset Information
+•
+Asset Code / Asset Number
+•
+Asset Name
+•
+Asset Category
+

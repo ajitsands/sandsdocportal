@@ -1,0 +1,3177 @@
+--- PAGE 1 ---
+BUSINESSANALYSIS
+REPORT
+client
+Popular Auto Spare and A/C Parts Co. W.L.L
+04-07-2026
+DOC - 007
+Ver 1..0
+Prepared By
+SaNDS Lab Middle East W.L.L
+Consultant
+HUMAN RESOURCE MANAGEMENT
+DATE: 04-JUL-2026
+--- PAGE 2 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 2
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+PREFACE
+Human Resources are among the most valuable assets of any organization, and 
+effective workforce management is essential for achieving operational excellence 
+and sustainable growth. The HR Management Module is designed to provide a 
+centralized and integrated platform for managing the complete employee lifecycle, 
+from employee onboarding and record management to payroll processing, benefits 
+administration, leave management, and employee self-service functions.
+This module enables organizations to maintain accurate employee information, 
+automate salary processing, generate salary slips, manage employee benefits and 
+entitlements, monitor attendance and leave records, and ensure compliance with 
+organizational policies and statutory requirements. The Employee Self-Service 
+(ESS) Portal further empowers employees by providing secure access to personal 
+information, leave applications, salary slips, attendance records, requests, and 
+other HR-related services, reducing administrative workload and improving 
+employee engagement.
+By integrating HR operations into a unified ERP environment, organizations can 
+streamline workforce management, enhance transparency, improve productivity, 
+and support informed decision-making through real-time reporting and analytics. 
+This document serves as a guide for HR professionals, administrators, managers, 
+employees, and implementation teams involved in configuring, managing, and 
+utilizing the HR Management Module effectively across the organization.
+--- PAGE 3 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 3
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+TABLE OF CONTENT
+1. 1.HUMAN RESOURCE MANAGEMENT  ----------------------------------------------------------------------8
+1.1. Objective ------------------------------------------------------------------------------------------------- 8
+1.2. Strategic Objectives ------------------------------------------------------------------------------------- 8
+2. Organization Structure Management -------------------------------------------------------------------- 12
+2.1. Organizational Model ----------------------------------------------------------------------------------- 12
+2.2. Workflow (End-to-End Organizational Setup Process) ------------------------------------------------ 16
+3. Employee Master Management ---------------------------------------------------------------------------19
+3.1. Employee Information Management ------------------------------------------------------------------- 19
+4. Recruitment Management -------------------------------------------------------------------------------- 24
+4.1. Recruitment Planning and Manpower Requisition ----------------------------------------------------- 24
+4.2. Vacancy Management ---------------------------------------------------------------------------------- 25
+4.3. Candidate Management -------------------------------------------------------------------------------- 26
+4.4. Resume and Application Management ----------------------------------------------------------------- 26
+4.5. Candidate Screening and Evaluation ------------------------------------------------------------------ 27
+4.6. Interview Management --------------------------------------------------------------------------------- 27
+4.7. Offer Management -------------------------------------------------------------------------------------- 29
+4.8. Employee Onboarding Integration --------------------------------------------------------------------- 29
+4.9. Business Benefits --------------------------------------------------------------------------------------- 29
+5. Employee Onboarding Management --------------------------------------------------------------------- 30
+5.1. Objectives of the Onboarding Process ----------------------------------------------------------------- 31
+5.2. Employee Registration and Profile Creation ----------------------------------------------------------- 31
+5.3. User Account and System Access Management ------------------------------------------------------- 33
+5.4. Asset Allocation and Resource Assignment ------------------------------------------------------------ 33
+5.5. Employee Documentation and Compliance ------------------------------------------------------------ 34
+5.6. Employee Identification and Credential Generation --------------------------------------------------- 34
+5.7. Policy Acknowledgement and Compliance Acceptance ------------------------------------------------ 35
+5.8. Orientation and Induction Program -------------------------------------------------------------------- 35
+5.9. Business Benefits --------------------------------------------------------------------------------------- 35
+6. Attendance Management --------------------------------------------------------------------------------- 36
+6.1. Objectives of Attendance Management ---------------------------------------------------------------- 37
+6.2. Attendance Capture Methods -------------------------------------------------------------------------- 37
+6.3. Attendance Monitoring ---------------------------------------------------------------------------------- 38
+6.4. Exception Management --------------------------------------------------------------------------------- 39
+--- PAGE 4 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 4
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+6.5. Overtime Management --------------------------------------------------------------------------------- 40
+6.6. Integration with Payroll Management ------------------------------------------------------------------ 40
+6.7. Employee Self-Service Integration --------------------------------------------------------------------- 41
+6.8. Business Benefits --------------------------------------------------------------------------------------- 41
+7. Leave Management  ---------------------------------------------------------------------------------------42
+7.1. Objectives of Leave Management ---------------------------------------------------------------------- 42
+7.2. Leave Policy Management ------------------------------------------------------------------------------ 42
+7.3. Leave Types Management ------------------------------------------------------------------------------ 43
+7.4. Leave Request Management --------------------------------------------------------------------------- 44
+7.5. Leave Approval Workflow ------------------------------------------------------------------------------- 45
+7.6. Leave Balance Management ---------------------------------------------------------------------------- 45
+7.7. Holiday and Calendar Management -------------------------------------------------------------------- 45
+7.8. Leave Encashment Management ----------------------------------------------------------------------- 46
+7.9. Attendance and Payroll Integration -------------------------------------------------------------------- 46
+7.10. Leave Planning and Workforce Availability ---------------------------------------------------------- 47
+7.11. Employee Self-Service (ESS) Integration ----------------------------------------------------------- 47
+7.12. Business Benefits ------------------------------------------------------------------------------------- 47
+8. Payroll Management ---------------------------------------------------------------------------------------48
+8.1. Objectives of Payroll Management --------------------------------------------------------------------- 49
+8.2. Payroll Structure Management ------------------------------------------------------------------------- 49
+8.3. Employee Compensation Management ---------------------------------------------------------------- 49
+8.4. Attendance and Payroll Integration -------------------------------------------------------------------- 51
+8.5. Leave and Payroll Integration -------------------------------------------------------------------------- 51
+8.6. Payroll Processing Workflow ---------------------------------------------------------------------------- 52
+8.7.  Payroll Verification and Approval ---------------------------------------------------------------------- 52
+8.8. Payslip Generation -------------------------------------------------------------------------------------- 52
+8.9. Bank Transfer Management ---------------------------------------------------------------------------- 53
+8.10. Payroll Accounting Integration ----------------------------------------------------------------------- 53
+8.11. Employee Self-Service Integration ------------------------------------------------------------------ 54
+8.12. Compliance and Audit Controls ---------------------------------------------------------------------- 54
+8.13. Business Benefits ------------------------------------------------------------------------------------- 54
+9. Employee Loan Management ------------------------------------------------------------------------------55
+9.1. Objectives of Employee Loan Management ----------------------------------------------------------- 55
+9.2. Loan Types Managed ----------------------------------------------------------------------------------- 56
+--- PAGE 5 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 5
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+9.3. Loan Request and Application Process ----------------------------------------------------------------- 56
+9.4. Loan Approval Workflow -------------------------------------------------------------------------------- 57
+9.5. Loan Disbursement Management ---------------------------------------------------------------------- 57
+9.6. Repayment Schedule Management -------------------------------------------------------------------- 57
+9.7. Payroll Integration -------------------------------------------------------------------------------------- 58
+9.8. Loan Balance and Tracking ----------------------------------------------------------------------------- 58
+9.9. Loan Settlement and Closure -------------------------------------------------------------------------- 58
+9.10. Loan Policy Management ----------------------------------------------------------------------------- 59
+9.11. Exception and Control Management ----------------------------------------------------------------- 59
+9.12. Integration with Accounting System ----------------------------------------------------------------- 59
+9.13. Employee Self-Service Integration ------------------------------------------------------------------ 60
+9.14. Business Benefits ------------------------------------------------------------------------------------- 60
+10. Performance Management -------------------------------------------------------------------------------61
+10.1. Objectives of the Module ----------------------------------------------------------------------------- 61
+10.2. KPI Framework Design  ------------------------------------------------------------------------------ 61
+10.3. Workflow  --------------------------------------------------------------------------------------------- 62
+10.4. System Integration Points ---------------------------------------------------------------------------- 64
+10.5. Reporting & Analytics --------------------------------------------------------------------------------- 64
+10.6. Key Business Benefits -------------------------------------------------------------------------------- 65
+11. Training Management ------------------------------------------------------------------------------------66
+11.1. Objectives of the Module ----------------------------------------------------------------------------- 66
+11.2. Training Lifecycle Workflow -------------------------------------------------------------------------- 66
+11.3. Key Business Benefits -------------------------------------------------------------------------------- 68
+12. Employee Self-Service (ESS) Portal ---------------------------------------------------------------------68
+12.1. Objectives of the Module ----------------------------------------------------------------------------- 69
+12.2.  Request Flow Standardization: ---------------------------------------------------------------------- 69
+12.3. Key Business Benefits -------------------------------------------------------------------------------- 69
+13. Employee Transfer Management -------------------------------------------------------------------------70
+13.1. Detailed Workflow ------------------------------------------------------------------------------------ 70
+13.2. Business Impact -------------------------------------------------------------------------------------- 71
+13.3. Promotion & Increment Management --------------------------------------------------------------- 71
+13.4. Detailed Workflow ------------------------------------------------------------------------------------ 71
+13.5. Business Benefit -------------------------------------------------------------------------------------- 72
+14. Travel & Business Trip Management ---------------------------------------------------------------------72
+--- PAGE 6 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 6
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+14.1. Workflow ---------------------------------------------------------------------------------------------- 72
+14.2. Business Impact -------------------------------------------------------------------------------------- 73
+15. Expense Reimbursement Management ------------------------------------------------------------------73
+15.1. Workflow ---------------------------------------------------------------------------------------------- 73
+15.2. Business Impact -------------------------------------------------------------------------------------- 74
+16. Employee Asset Management ----------------------------------------------------------------------------74
+16.1. Workflow ---------------------------------------------------------------------------------------------- 74
+16.2.Business Impact --------------------------------------------------------------------------------------- 74
+17. Document Management ----------------------------------------------------------------------------------74
+17.1.Workflow ----------------------------------------------------------------------------------------------- 74
+17.2. Business Impact -------------------------------------------------------------------------------------- 75
+17.3.Discipline Management -------------------------------------------------------------------------------- 75
+17.4. Reward & Recognition -------------------------------------------------------------------------------- 75
+17.5. Employee Exit Management  ------------------------------------------------------------------------- 75
+17.6. Exit Request Management --------------------------------------------------------------------------- 75
+17.7. Exit Approval Workflow ------------------------------------------------------------------------------- 76
+17.8. Notice Period Management --------------------------------------------------------------------------- 76
+17.9. Employee Clearance Management ------------------------------------------------------------------- 76
+17.10 Asset Return and Recovery Management ----------------------------------------------------------- 77
+17.11. Leave Encashment Processing ---------------------------------------------------------------------- 77
+17.12. Loan and Advance Settlement ---------------------------------------------------------------------- 77
+17.13. Final Settlement Processing ------------------------------------------------------------------------ 77
+17.14. Gratuity and End-of-Service Benefit Management ------------------------------------------------ 78
+17.15. Exit Interview Management ------------------------------------------------------------------------ 78
+17.16. Automated Document Generation ------------------------------------------------------------------ 79
+17.17. Payroll Integration ---------------------------------------------------------------------------------- 79
+17.18. Employee Status Lifecycle Management ----------------------------------------------------------- 79
+17.19. Business Benefits ------------------------------------------------------------------------------------ 79
+17.20. Top Management Dashboard – HR Analytics & Workforce Intelligence --------------------------- 80
+--- PAGE 7 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 7
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+CLIENT CONSULTANT DEVELOPER
+Stages Name Date Status Signature
+Prepared By  
+SaNDS Lab
+Ancy Varghese Thekkan 
+(Software Architect) 18-June-2026 Completed YES
+Verified By 
+SaNDS Lab Ajit Kumar KV (CEO) 04-July-2026 Checked & 
+Verified YES
+Consultant Review 
+UniGlobal
+Client Approval 
+Popular
+Doc ID Version Revision Date Status
+DOC - 007 v1.0 0 04-Jul-2026 Initial Draft
+--- PAGE 8 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 8
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+1. 1.HUMAN RESOURCE MANAGEMENT 
+1.1. Objective
+The Human Resource Management System (HRMS) is designed to establish a centralized, efficient, 
+and standardized platform for managing the Popular Auto Spare Parts company’s workforce across all 
+branches and operational locations. As a spare parts trading company operates through multiple sales 
+outlets, warehouses, distribution centers, logistics units, and administrative offices, effective workforce 
+management becomes a critical factor in ensuring operational efficiency, customer service excellence, 
+and sustainable business growth.
+The proposed HRMS aims to automate and streamline all employee-related processes, eliminate manual 
+administrative activities, ensure regulatory compliance, improve workforce productivity, and provide 
+management with real-time access to human capital information for informed decision-making.
+1.2. Strategic Objectives
+1.2.1  Centralized Employee Information Management
+To establish a single source of truth for all employee-related information across the organization 
+by maintaining comprehensive employee records, employment history, qualifications, certifications, 
+contracts, payroll information, and statutory documents in a centralized database accessible according 
+to authorized roles and responsibilities.
+This ensures consistency, accuracy, and availability of employee information across all branches while 
+reducing dependency on manual records and spreadsheets.
+1.2.2  Workforce Planning and Resource Optimization
+To support management in planning, allocating, and monitoring human resources effectively across 
+branches, warehouses, outlets, and support departments.
+The system enables management to identify staffing requirements, analyze workforce utilization, 
+forecast future manpower needs, and ensure that each business unit is adequately resourced to support 
+operational objectives.
+1.2.3  Streamlined Recruitment and Talent Acquisition
+To facilitate a structured and transparent recruitment process that enables the organization to attract, 
+evaluate, and onboard qualified candidates efficiently.
+The system supports manpower requisition approvals, vacancy management, candidate tracking, 
+evaluation processes, and onboarding activities, thereby reducing recruitment cycle times and improving 
+hiring quality.
+1.2.4  Efficient Employee Onboarding and Integration
+To provide a standardized onboarding process that ensures newly recruited employees are properly 
+integrated into the organization through automated employee setup, department assignment, asset 
+allocation, user account creation, policy acknowledgement, and training assignments.
+--- PAGE 9 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 9
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+This helps new employees become productive in a shorter period while maintaining consistency across 
+all locations.
+1.2.5  Attendance and Workforce Productivity Management
+To accurately monitor employee attendance, working hours, overtime, shift schedules, and workforce 
+availability through integration with biometric devices, mobile attendance systems, and GPS-enabled 
+attendance solutions.
+The system enables management to identify absenteeism trends, monitor punctuality, optimize 
+workforce deployment, and improve overall operational productivity.
+1.2.6  Leave and Absence Management
+To automate the administration of employee leave entitlements and absence tracking while ensuring 
+business continuity through controlled approval workflows and visibility into workforce availability.
+The system provides transparency in leave balances, approval status, leave utilization, and future 
+workforce planning requirements.
+1.2.7  Payroll Accuracy and Financial Control
+To automate payroll processing by integrating attendance, leave records, overtime calculations, 
+employee benefits, deductions, loans, commissions, and allowances into a unified payroll system.
+The HRMS ensures timely salary processing, minimizes payroll errors, supports multi-branch payroll 
+operations, and integrates payroll transactions directly with the financial accounting system.
+1.2.8  Regulatory and Legal Compliance
+To ensure compliance with labor regulations, immigration requirements, social insurance obligations, 
+employment contracts, and statutory reporting requirements applicable within the countries of operation.
+The system maintains expiry alerts for passports, visas, CPR/ID cards, labor permits, licenses, and 
+employment contracts, reducing compliance risks and preventing operational disruptions.
+1.2.9  Employee Performance and Talent Development
+To establish a performance-driven culture by providing structured performance evaluation mechanisms 
+based on predefined Key Performance Indicators (KPIs), departmental goals, attendance records, 
+productivity measures, and managerial assessments.
+The system supports appraisal processes, promotion recommendations, succession planning, and 
+employee development initiatives. In addition, department-specific performance metrics will be 
+incorporated to ensure fair and objective evaluation of employees based on their roles and responsibilities.
+For the Sales Department, performance evaluation will include sales targets achieved, revenue 
+generated, customer acquisition, customer retention, collection efficiency, product promotion activities, 
+territory coverage, lead conversion rates, and overall contribution to business growth.
+For Drivers and Delivery Personnel, performance assessment will include delivery completion rates, 
+adherence to delivery schedules, route efficiency, fuel consumption management, vehicle maintenance 
+--- PAGE 10 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 10
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+compliance, attendance, safety records, customer feedback, incident-free operations, and adherence to 
+company policies and procedures.
+The system will provide comprehensive performance dashboards, periodic appraisal reports, training 
+recommendations, skill gap analysis, and career development plans to enhance employee productivity, 
+recognize high performers, and support long-term organizational growth. Department heads and 
+management will have access to performance analytics to facilitate informed decisions regarding rewards, 
+promotions, training requirements, and workforce planning.
+1.2.10  Employee Self-Service and Digital Transformation
+To empower employees through self-service capabilities that allow them to access personal information, 
+submit leave requests, view payslips, track attendance, update profile information, and monitor request 
+statuses without direct HR intervention.
+This reduces administrative workload, improves service delivery, and enhances employee satisfaction.
+1.2.11  Asset and Accountability Management
+To monitor and control company assets assigned to employees, including laptops, mobile devices, 
+vehicles, uniforms, access cards, warehouse equipment, tools, machinery, and other organizational 
+resources. The system maintains asset allocation records, transfer histories, return tracking, and 
+accountability controls throughout the employee lifecycle.
+The system will generate a unique QR Code and/or Barcode for every registered asset. These codes 
+will be physically affixed to the respective assets to enable quick identification, tracking, and verification 
+through mobile devices or barcode scanners.
+Each asset will be assigned a designated physical location, department, branch, warehouse, vehicle, 
+or worksite, allowing the organization to accurately identify where the asset is currently located. The 
+system will also maintain records of the authorized employee, custodian, department head, or team 
+responsible for handling and managing each asset.
+By scanning the QR Code or Barcode, authorized users can instantly access detailed asset information, 
+including:
+ • Asset identification details and specifications
+ • Current location and movement history
+ • Assigned employee or department
+ • Purchase date and vendor information
+ • Warranty and guarantee details
+ • Annual Maintenance Contract (AMC) information
+ • Maintenance schedules and service history
+ • Insurance information (if applicable)
+ • Asset status (Active, Under Maintenance, Lost, Damaged, Retired, etc.)
+Asset photographs and supporting documents
+--- PAGE 11 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 11
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+The system will provide automated alerts and notifications for:
+ • Warranty and guarantee expiry dates
+ • Scheduled preventive maintenance activities
+ • AMC renewal reminders
+ • Insurance renewal reminders
+ • Calibration and certification due dates (where applicable)
+ • Asset return deadlines during employee exit processes
+During asset registration, users can capture and maintain comprehensive asset information, including 
+asset category, serial number, manufacturer details, model number, purchase value, depreciation details, 
+vendor information, warranty period, maintenance requirements, storage location, responsible personnel, 
+and any organization-specific attributes as required.
+The system will also support asset audits and physical verification processes through QR/Barcode 
+scanning, enabling management to quickly verify asset availability, location accuracy, and ownership 
+accountability. Detailed audit trails will be maintained for all asset movements, assignments, transfers, 
+maintenance activities, and status changes to ensure transparency and accountability throughout the 
+asset lifecycle.
+Advanced reporting and dashboard capabilities will provide real-time visibility into asset utilization, 
+maintenance costs, asset aging, warranty status, depreciation, and overall asset performance, enabling 
+informed decision-making and effective resource management across the organization.
+1.2.12  Employee Retention and Engagement
+To improve employee satisfaction and retention by providing transparent HR processes, performance 
+recognition mechanisms, career progression opportunities, training programs, and employee 
+communication channels.
+The system supports management in understanding workforce trends and implementing initiatives that 
+improve employee engagement and organizational commitment.
+1.2.13  Management Reporting and Strategic Decision Support
+To provide senior management with comprehensive workforce analytics, dashboards, and key 
+performance indicators covering employee headcount, turnover rates, recruitment status, attendance 
+trends, payroll costs, overtime expenses, training effectiveness, and workforce productivity.
+These insights support strategic planning, cost optimization, succession planning, and organizational 
+growth initiatives.
+1.2.14  Multi-Branch Workforce Governance
+To establish uniform HR policies, procedures, and controls across all company branches while allowing 
+branch-specific operational flexibility where required.
+The system ensures consistent application of company policies, centralized oversight, standardized 
+approvals, and consolidated workforce reporting across all locations based on the country’s labour laws 
+--- PAGE 12 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 12
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+and regulation.
+1.2.15  Expected Business Outcomes
+The implementation of the HRMS will enable the organization to reduce manual administrative effort, 
+improve workforce productivity, strengthen regulatory compliance, enhance payroll accuracy, optimize 
+staffing levels, improve employee satisfaction, and provide management with real-time visibility into 
+human capital performance across all branches.
+Ultimately, the HRMS will serve as a strategic platform that supports the organization’s operational 
+excellence, business expansion plans, and long-term growth objectives while ensuring effective 
+management of one of its most valuable assets—its workforce.
+2. Organization Structure Management
+Organization Structure Management module forms the core foundation of the entire HRMS and ERP 
+system, because every operational process—HR, payroll, sales approvals, procurement limits, warehouse 
+operations, and financial authorizations—depends on it.
+The company is distributed across:
+ • Multiple countries 
+ • Multiple branches per country 
+ • Multiple warehouses and outlets 
+ • Functional departments 
+This module ensures that the entire organization operates under a single standardized digital hierarchy, 
+while still supporting local flexibility per branch or country.
+2.1. Organizational Model
+1. Multi-Company Layer (Corporate Level)
+The ERP system is designed to manage multiple legally separate companies inside one system, instead 
+of treating everything as one business.
+Each company behaves like a separate business entity, even if they belong to the same group.
+Each entity has:
+ • Separate financial books 
+ Each company maintains its own accounting system inside ERP:
+Example: Bahrain HQ
+ • Own balance sheet 
+ • Own profit & loss 
+--- PAGE 13 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 13
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Own bank accounts 
+ • Own tax structure 
+UAE Company
+ • Completely separate accounting records 
+ • Cannot directly mix Bahrain transactions 
+ • Even though system is shared, financial data is fully separated.
+ • Separate HR policies 
+Each country/company can have different HR rules:
+Example differences:
+ERP allows:
+ • Different leave policies per company 
+ • Different salary structures 
+ • Different overtime rules 
+ • Different working hours 
+         HR is NOT globally fixed — it is company-specific.
+ • Separate compliance rules 
+Each company follows its own legal system:
+Example: Bahrain Entity:
+ • LMRA compliance 
+ • SIO social insurance 
+Saudi Entity:
+ • GOSI compliance 
+ • Qiwa system integration 
+ERP ensures each entity follows its own country law automatically.
+ • Group-Level Consolidation (Head Office View)
+Even though companies are separate, ERP can still show group reports.
+ • Total revenue across all countries 
+ • Combined profit/loss 
+ • Global employee count 
+ • Branch comparison dashboard 
+2. Branch Structure Layer
+--- PAGE 14 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 14
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Each country may have multiple branches and each branch acts as a semi-independent operational 
+unit.
+Example (UAE):
+ • Dubai Branch 
+ • Abu Dhabi Branch 
+ • Sharjah Branch 
+Each branch is further divided into functional operational zones:
+ • Head office 
+ • Warehouse 
+ • Sales Outlets
+Each branch is not just a location — it is a full operational container with: operational data, HR data, 
+financial data & administrative data
+A branch operates independently, but reports centrally to the company.
+This means:
+ • Each branch has its own operations 
+ • But all data rolls up to HQ / Group HQ
+3. Department Structure Layer
+Operations are highly dependent on coordination between the departments:
+ • Sales (customer demand) 
+ • Procurement (supplier sourcing) 
+ • Warehouse (stock availability) 
+ • Logistics (delivery execution) 
+ • Finance (cost control) 
+ • HR/Admin (workforce control) 
+ • IT & ERP Support 
+Each department has:
+Operational Control
+ • Own workflows 
+ • Own approval levels 
+ • Own KPIs 
+Financial Control
+ • Department cost center 
+--- PAGE 15 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 15
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Budget allocation 
+ • Expense tracking 
+HR Control
+ • Employees assigned per department 
+ • Performance evaluation per department
+Departments do not work independently — they work as interconnected operational units inside each 
+branch.
+4. Designation Structure
+The Designation Structure Layer defines the job roles, responsibilities, authority levels, and career 
+hierarchy within each department. It defines WHO does WHAT inside a department and HOW authority 
+flows in the organization.
+It ensures every employee has:
+ • A clear job role 
+ • Defined reporting authority 
+ • Controlled salary grade 
+ • Standardized responsibilities across all branches
+Each department has a vertical hierarchy of roles:
+Entry Level -> Mid-Level -> Senior Level -> Managerial Level
+This ensures:
+ • Career progression 
+ • Salary scaling 
+ • Authority control 
+ • Performance accountability
+Each designation is linked to system permissions & approval authority
+ • What modules can be accessed 
+ • What data can be edited 
+ • What approvals can be made 
+5. Employee Grade Structure
+Defines salary hierarchy:
+ • Grade A (Top Management) 
+ • Grade B (Managers) 
+ • Grade C (Supervisors) 
+--- PAGE 16 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 16
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Grade D (Executives) 
+ • Grade E (Support Staff) 
+Each grade includes:
+ • Salary range 
+ • Allowance structure 
+ • Increment rules 
+6. Reporting Hierarchy 
+Defines the organizational reporting structure, clearly establishing who reports to whom across all 
+branches and departments.
+The Employee Designation Structure helps employees understand their position within the organization, 
+while the Reporting Hierarchy defines their immediate reporting manager and escalation path.
+This ensures:
+ • Clear line of authority 
+ • Proper workflow approvals 
+ • Transparent escalation structure 
+ • Better coordination across branches
+This hierarchy controls:
+ • Approval routing 
+ • Performance evaluation 
+ • Leave approvals 
+ • Expense approvals 
+ • Promotion flow 
+2.2. Workflow (End-to-End Organizational Setup Process)
+STEP 1: Corporate Setup (Head Office Configuration)
+System administrator defines:
+ • Group structure 
+ • Legal entities per country 
+ • Base currency per entity 
+ • Compliance rules per country 
+Output:
+Global ERP foundation is created.
+STEP 2: Branch Creation
+--- PAGE 17 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 17
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+Each country is configured:
+Example:
+UAE -> Dubai Branch + Abu Dhabi Branch
+Each branch includes:
+ • Address 
+ • Operational type (outlet / warehouse / mixed) 
+ • Cost center mapping 
+STEP 3: Department Setup
+Each branch assigns departments:
+Example (Dubai Branch):
+ • Sales Department 
+ • Warehouse Department 
+ • Finance Department 
+STEP 4: Designation & Grade Mapping
+HR defines:
+ • Job titles 
+ • Salary bands 
+ • Reporting eligibility rules 
+Example:
+ • Sales Executive -> Grade D -> Reports to Sales Manager 
+STEP 5: Employee Assignment
+When hiring:
+Employee is assigned:
+ • Company 
+ • Branch 
+ • Department 
+ • Designation 
+ • Grade 
+ • Reporting Manager 
+This becomes the core identity mapping of the employee in ERP
+STEP 6: Reporting Hierarchy Activation
+--- PAGE 18 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 18
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+System builds:
+ • Direct reporting chain 
+ • Multi-level escalation chain 
+Example:
+Employee Leave Request Flow:
+Employee -> Sales Manager -> Branch Manager -> HR Approval
+STEP 7: Approval Routing Engine Activation
+ • Leave Approvals 
+ • Purchase Approvals 
+ • Expense Approvals 
+ • Salary Increment Approvals 
+ • Asset Approvals 
+ • Travel & Reimbursement Approvals 
+ • Vendor Registration & Approval 
+ • Budget Approval Requests 
+Automatic Hierarchical Approval Workflow
+All ERP approval workflows follow a predefined organizational hierarchy. Approval requests are routed 
+automatically based on the approval limits configured by the system administrator.
+ • Each approver can be assigned a specific approval limit. 
+ • Requests within the assigned limit can be approved by the designated authority. 
+ • If the request value exceeds the approver’s authorized limit, the system automatically escalates it to 
+the next level of management. 
+ • The escalation process continues until the request reaches an approver with sufficient authorization 
+or the top management level. 
+ • Complete approval history, comments, and timestamps are maintained for audit and compliance 
+purposes. 
+ • Notifications and reminders are automatically sent to the respective approvers at each stage of the 
+workflow. 
+This ensures faster decision-making, better governance, and compliance with organizational approval 
+policies.
+The organization structure becomes the approval engine backbone
+2.2.1  Dynamic Organization Chart (Visualization Layer)
+The system generates a live org chart:
+--- PAGE 19 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 19
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Group level view 
+ • Country level view 
+ • Branch level view 
+ • Department level view 
+Features:
+ • Real-time updates when employees change roles 
+ • Drill-down capability per branch 
+2.2.2  Multi-Branch Workforce Mobility
+Supports:
+ • Internal transfers 
+ • Cross-country assignments 
+ • Temporary deputation 
+2.2.3  Key Business Benefits
+The Organization Structure Management module acts as the central control layer of the entire ERP 
+system.
+It ensures:
+ • Every employee knows exactly who they report to 
+ • Every transaction follows a controlled approval chain 
+ • Every branch operates under a standardized structure 
+ • Every expansion can be configured without redesigning the system 
+It is not just HR configuration—it is the governance engine of the entire ERP platform.
+3. Employee Master Management
+The Employee Master Management module serves as the foundation of the Human Resource Management 
+System (HRMS) and acts as the central repository for maintaining comprehensive employee information 
+across the organization. The module is designed to establish a unified employee database that stores and 
+manages all personal, employment, payroll, compliance, and document-related information throughout 
+the employee lifecycle.
+In a multi-branch organization, employees are distributed across various locations including corporate 
+offices, warehouses, retail outlets, sales departments, procurement teams, logistics units, and service 
+operations. Managing employee information through spreadsheets and manual records often leads to 
+duplication, inconsistencies, compliance risks, and difficulties in accessing accurate information. The 
+Employee Master Management module addresses these challenges by providing a centralized, secure, 
+and standardized platform for employee data management.
+3.1. Employee Information Management
+--- PAGE 20 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 20
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+The system maintains a complete digital profile for each employee, capturing all relevant information 
+required for operational, administrative, payroll, and regulatory purposes.
+Personal Information
+The employee profile maintains essential personal details including:
+ • Employee Identification Number
+ • Full Employee Name
+ • Gender
+ • Nationality
+ • CPR / National Identification Number
+ • Passport Details
+ • Date of Birth
+ • Marital Status
+ • Residential Address
+ • Mobile Numbers
+ • Email Addresses
+ • Emergency Contact Information
+ • Blood Group Information
+ • Family and Dependent Information
+These records ensure accurate employee identification and facilitate effective communication and 
+emergency response procedures.
+Employment Information
+The system maintains detailed employment records including:
+ • Date of Joining
+ • Employment Status
+ • Designation
+ • Department
+ • Branch Assignment
+ • Reporting Manager
+ • Employee Grade
+ • Employment Type
+ • Probation Period Details
+ • Confirmation Status
+ • Salary Structure
+ • Contract Details
+--- PAGE 21 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 21
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Promotion History
+ • Transfer History
+ • Previous Employment Information
+This information provides management with complete visibility into workforce allocation, organizational 
+structure, and employee career progression.
+Payroll Information
+The module stores payroll-related information including:
+ • Salary Components
+ • Allowances
+ • Overtime Eligibility
+ • Commission Structures
+ • Bank Account Details
+ • Payment Methods
+ • Cost Center Allocation
+ • Payroll Group Assignment
+The payroll information seamlessly integrates with the Payroll Management module, reducing manual 
+data entry and ensuring accurate salary processing.
+3.1.1  Employee Document Repository
+The Employee Master Management module includes a centralized document management facility for 
+storing and maintaining employee-related documents electronically.
+The repository may include:
+ • Passport Copies
+ • Visa Documents
+ • CPR and National ID Copies
+ • Driving Licenses
+ • Employment Contracts
+ • Educational Certificates
+ • Professional Certifications
+ • Experience Certificates
+ • Medical Insurance Documents
+ • Training Certificates
+ • Performance Appraisal Documents
+ • Warning Letters and Disciplinary Records
+All documents are securely stored and can be accessed based on user authorization levels, reducing 
+--- PAGE 22 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 22
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+dependency on physical files and improving document retrieval efficiency.
+3.1.2  Compliance and Expiry Monitoring
+The system continuously monitors employee-related statutory and legal documents and automatically 
+generates alerts before expiry dates.
+Automated notifications can be configured for:
+ • Passport Expiry
+ • Visa Expiry
+ • CPR or National ID Expiry
+ • Driving License Expiry
+ • Employment Contract Expiry
+ • Medical Insurance Expiry
+ • Work Permit Expiry
+The notification mechanism enables HR personnel to proactively manage renewals and maintain 
+compliance with labour regulations and immigration requirements.
+3.1.3  Employee Lifecycle Tracking
+The Employee Master Management module tracks the complete lifecycle of each employee from 
+recruitment through separation.
+Key stages include:
+ • Recruitment
+ • Employee Onboarding
+ • Probation Management
+ • Confirmation
+ • Transfer
+ • Promotion
+ • Salary Revision
+ • Training and Development
+ • Performance Evaluation
+ • Resignation
+ • Retirement
+ • Final Settlement
+The system maintains historical records of all employee movements, ensuring complete auditability and 
+transparency.
+3.1.4  Security and Access Control
+--- PAGE 23 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 23
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+The module provides role-based security to ensure employee information remains confidential and 
+accessible only to authorized personnel.
+Security controls include:
+ • Role-Based Access Rights
+ • Department-Level Restrictions
+ • Branch-Level Access Control
+ • Document Access Permissions
+ • Audit Trail Monitoring
+ • Data Change History Tracking
+ • User Activity Logging
+These controls help protect sensitive employee information while maintaining accountability and 
+compliance.
+3.1.5  Integration with Other ERP Modules
+The Employee Master Management module integrates seamlessly with various ERP components 
+including:
+ • Recruitment Management
+ • Attendance Management
+ • Leave Management
+ • Payroll Processing
+ • Employee Self-Service Portal
+ • Performance Management
+ • Training Management
+ • Administration Module
+ • Asset Management
+ • Finance and Accounting
+This integration eliminates duplicate data entry and ensures consistent employee information throughout 
+the organization.
+3.1.6  Business Benefits
+The implementation of the Employee Master Management module provides significant operational and 
+strategic benefits to the organization.
+Operational Benefits
+ • Centralized employee information management
+ • Elimination of manual employee files
+ • Faster employee data retrieval
+--- PAGE 24 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 24
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Reduced administrative workload
+ • Improved HR process efficiency
+Compliance Benefits
+ • Better monitoring of legal documents
+ • Reduced compliance risks
+ • Automated expiry notifications
+ • Improved audit readiness
+Management Benefits
+ • Real-time workforce visibility
+ • Improved organizational planning
+ • Accurate employee reporting
+ • Enhanced decision-making capabilities
+Security Benefits
+ • Secure employee data storage
+ • Controlled information access
+ • Complete audit trails
+ • Improved data confidentiality
+The Employee Master Management module establishes a strong foundation for all HR operations and 
+provides management with a comprehensive view of the organization’s human resources, enabling better 
+workforce planning, operational control, and strategic growth.
+4. Recruitment Management
+The Recruitment Management module is designed to automate and streamline the entire hiring process, 
+from identifying workforce requirements to successfully onboarding new employees. In a multi-branch 
+organization, recruitment plays a critical role in ensuring that branches, warehouses, logistics operations, 
+sales teams, procurement departments, and administrative units are adequately staffed with qualified 
+personnel to support business growth and operational efficiency.
+Traditionally, recruitment activities are often managed through emails, spreadsheets, and manual 
+documentation, resulting in delays, poor visibility, and difficulty in tracking candidates throughout the 
+hiring process. The Recruitment Management module provides a centralized platform that standardizes 
+recruitment procedures, improves coordination between departments and HR, reduces hiring time, and 
+ensures recruitment decisions are aligned with approved budgets and organizational workforce plans.
+The system enables management to monitor recruitment activities across all branches while maintaining 
+transparency, accountability, and consistency throughout the hiring lifecycle.
+4.1. Recruitment Planning and Manpower Requisition
+--- PAGE 25 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 25
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+The recruitment process begins with the identification of manpower requirements within departments 
+and branches.
+Department managers can initiate manpower requests when:
+ • New positions are required
+ • Existing employees resign
+ • Business expansion requires additional staff
+ • Seasonal workforce demand increases
+ • New branches or warehouses are established
+ • Specialized skills are required for business operations
+The system ensures that all manpower requests follow an approval workflow before recruitment activities 
+commence, preventing unauthorized hiring and maintaining budgetary control.
+Information Captured in Manpower Requests
+ • Requesting Department
+ • Branch Location
+ • Position Required
+ • Number of Vacancies
+ • Job Description
+ • Required Qualifications
+ • Experience Requirements
+ • Expected Salary Range
+ • Business Justification
+ • Urgency Level
+ • Budget Allocation
+4.2. Vacancy Management
+Once a manpower request is approved, the system automatically generates a vacancy record and 
+initiates the recruitment process.
+The Vacancy Management component enables HR departments to:
+ • Create job vacancies
+ • Define job descriptions
+ • Specify qualification requirements
+ • Set experience criteria
+ • Determine salary ranges
+ • Assign hiring managers
+ • Publish vacancies internally or externally
+--- PAGE 26 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 26
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+The system can maintain a complete history of all vacancies and recruitment campaigns for future 
+reference and reporting purposes.
+Vacancy Features
+ • Job Requisition Management
+ • Vacancy Approval Workflow
+ • Budget Validation
+ • Vacancy Tracking
+ • Position Availability Monitoring
+ • Internal and External Vacancy Posting
+ • Vacancy Status Monitoring
+4.3. Candidate Management
+The Candidate Management module maintains a centralized database of all applicants and prospective 
+employees.
+The system captures and stores candidate information throughout the recruitment process, allowing HR 
+personnel to efficiently manage applications and maintain a talent pool for future hiring requirements.
+Candidate Information
+ • Candidate Profile
+ • Personal Information
+ • Educational Qualifications
+ • Professional Experience
+ • Skills and Certifications
+ • Resume/CV Documents
+ • Interview Records
+ • Assessment Results
+ • Recruitment Status
+Candidate Database Benefits
+ • Centralized applicant repository
+ • Future candidate reference
+ • Reduced duplicate applications
+ • Faster candidate searches
+ • Talent pool development
+4.4. Resume and Application Management
+The system enables electronic storage and management of candidate resumes and supporting 
+--- PAGE 27 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 27
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+documents.
+Documents may include:
+ • Curriculum Vitae (CV)
+ • Educational Certificates
+ • Professional Certifications
+ • Experience Certificates
+ • Passport Copies
+ • Identity Documents
+ • Recommendation Letters
+All documents are securely stored and linked to candidate profiles for easy retrieval throughout the 
+recruitment process.
+4.5. Candidate Screening and Evaluation
+The Recruitment Management module facilitates the systematic screening and evaluation of candidates 
+based on predefined criteria.
+HR personnel can assess candidates according to:
+ • Educational Qualifications
+ • Relevant Experience
+ • Technical Skills
+ • Industry Knowledge
+ • Language Proficiency
+ • Salary Expectations
+ • Availability
+ • Branch Location Requirements
+The system helps HR identify suitable candidates efficiently and eliminate unsuitable applications at an 
+early stage.
+4.6. Interview Management
+The Interview Management component provides a structured process for scheduling, conducting, and 
+evaluating interviews.
+The system supports multiple interview stages including:
+ • HR Screening Interviews
+ • Technical Interviews
+ • Departmental Interviews
+ • Management Interviews
+--- PAGE 28 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 28
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Final Selection Interviews
+Interview Scheduling
+The system facilitates:
+ • Interview Calendar Management
+ • Interview Invitations
+ • Interview Reminders
+ • Panel Coordination
+ • Meeting Room Scheduling
+ • Online Interview Scheduling
+Interview Evaluation
+Interviewers can record:
+ • Technical Assessment Scores
+ • Communication Skills Evaluation
+ • Behavioural Assessment
+ • Job Suitability Ratings
+ • Strengths and Weaknesses
+ • Hiring Recommendations
+Interview Features
+ • Interview Panel Assignment
+ • Evaluation Templates
+ • Scoring Systems
+ • Candidate Ranking
+ • Interview Feedback Collection
+ • Selection Recommendations
+Candidate Selection and Approval
+Following interview evaluations, the system supports the candidate selection and approval process.
+Authorized personnel can review:
+ • Interview Scores
+ • Candidate Rankings
+ • Hiring Recommendations
+ • Salary Proposals
+ • Budget Availability
+--- PAGE 29 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 29
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+Once approvals are completed, the selected candidate can proceed to the offer stage.
+4.7. Offer Management
+The Offer Management process enables HR to generate and manage employment offers electronically.
+Offer Letter Contents
+ • Position Offered
+ • Branch Assignment
+ • Salary Package
+ • Benefits
+ • Probation Period
+ • Joining Date
+ • Employment Terms
+ • Contract Conditions
+The system tracks:
+ • Offer Status
+ • Candidate Acceptance
+ • Offer Expiry
+ • Negotiation History
+4.8. Employee Onboarding Integration
+Upon candidate acceptance, the Recruitment Management module seamlessly transfers candidate 
+information to the Employee Master Management module.
+This eliminates duplicate data entry and ensures a smooth transition from recruitment to employment.
+Automated Onboarding Activities
+ • Employee Record Creation
+ • Employee Number Generation
+ • Department Assignment
+ • Branch Assignment
+ • Payroll Setup
+ • User Account Creation
+ • System Access Assignment
+ • Asset Allocation Requests
+ • Orientation Scheduling
+4.9. Business Benefits
+--- PAGE 30 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 30
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+The implementation of the Recruitment Management module delivers significant operational and 
+strategic advantages.
+Operational Benefits
+ • Faster recruitment cycle
+ • Automated hiring workflows
+ • Improved recruitment visibility
+ • Centralized candidate management
+ • Reduced administrative workload
+Financial Benefits
+ • Reduced recruitment costs
+ • Better workforce planning
+ • Budget-controlled hiring
+ • Improved resource utilization
+Management Benefits
+ • Real-time recruitment tracking
+ • Improved decision making
+ • Better workforce forecasting
+ • Branch-wise recruitment visibility
+Strategic Benefits
+ • Improved quality of hires
+ • Stronger talent pipeline
+ • Faster business expansion support
+ • Enhanced employee retention through better candidate selection
+The Recruitment Management module ensures that the organization consistently attracts, evaluates, 
+and hires qualified personnel while maintaining control, transparency, and alignment with business 
+objectives across all branches and operational locations.
+5. Employee Onboarding Management
+The Employee Onboarding Management module is designed to automate and standardize the process 
+of integrating newly recruited employees into the organization. It ensures that all administrative, 
+operational, IT, HR, payroll, and compliance-related activities are completed before the employee’s first 
+working day, enabling a smooth transition from candidate to productive employee.
+For a multi-branch company, employees may be recruited for various operational areas such as 
+sales counters, retail outlets, warehouses, logistics operations, procurement departments, finance, 
+administration, and management functions. Coordinating onboarding activities across multiple branches 
+--- PAGE 31 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 31
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+often involves several departments, making manual processes time-consuming and prone to delays.
+The Employee Onboarding module provides a structured workflow that coordinates activities between 
+HR, Administration, IT, Finance, and Department Managers to ensure every new employee receives 
+the required resources, access permissions, documentation, and orientation necessary to perform their 
+duties effectively from day one.
+The module also serves as a critical link between Recruitment Management and Employee Master 
+Management, ensuring that employee information captured during recruitment is automatically 
+transferred into the organization’s HR and ERP systems without duplication of effort.
+5.1. Objectives of the Onboarding Process
+The primary objective of the onboarding process is to ensure that every newly hired employee:
+ • Is formally registered within the organization.
+ • Receives all necessary company resources and tools.
+ • Is assigned to the appropriate department and branch.
+ • Gains access to relevant systems and applications.
+ • Understands company policies and procedures.
+ • Completes all mandatory documentation and compliance requirements.
+ • Becomes productive within the shortest possible time.
+5.2. Employee Registration and Profile Creation
+Following the acceptance of an employment offer, the system automatically initiates the onboarding 
+process.
+The employee’s recruitment information is transferred to the Employee Master Management module, 
+where a complete employee profile is created.
+Employee Profile Information
+The system generates and maintains:
+ • Employee Number
+ • Employee Profile
+ • Employment Details
+ • Department Assignment
+ • Branch Assignment
+ • Reporting Manager
+ • Salary Structure
+ • Job Position
+ • Grade Level
+ • Employment Contract Information
+--- PAGE 32 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 32
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+This process eliminates duplicate data entry and ensures data consistency across all HR and ERP 
+modules.
+Employee Code Generation
+The system automatically generates a unique employee identification number based on predefined 
+company rules.
+The numbering structure may include:
+ • Branch Code
+ • Department Code
+ • Employee Category
+ • Sequential Employee Number
+This ensures consistent employee identification across all company locations and departments.
+Department and Branch Assignment
+The onboarding process assigns employees to their designated operational units.
+Assignments include:
+ • Branch Location
+ • Department
+ • Division
+ • Warehouse
+ • Showroom
+ • Cost Center
+ • Reporting Structure
+This enables accurate workforce allocation and facilitates payroll, attendance, and performance tracking.
+Payroll and Compensation Setup
+Prior to activation, employee payroll information is configured within the payroll system.
+The setup includes:
+ • Salary Structure
+ • Allowances
+ • Overtime Eligibility
+ • Commission Structures
+ • Payroll Group Assignment
+ • Payment Method
+ • Bank Account Information
+--- PAGE 33 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 33
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Cost Center Allocation
+This ensures employees are included in payroll processing from their first salary cycle.
+5.3. User Account and System Access Management
+The onboarding module coordinates with the IT and ERP administration teams to establish system 
+access for new employees.
+User Access Creation
+The system facilitates:
+ • ERP User Creation
+ • Corporate Email Creation
+ • Network Access Setup
+ • Attendance System Registration
+ • Mobile Application Access
+ • Employee Self-Service Portal Access
+Access Rights Assignment
+Access permissions are granted based on:
+ • Job Position
+ • Department
+ • Branch
+ • Functional Responsibilities
+ • Approval Authority Levels
+Role-based access controls ensure employees only have access to information and systems relevant to 
+their responsibilities.
+5.4. Asset Allocation and Resource Assignment
+The onboarding process manages the issuance of company assets and resources required for employee 
+operations.
+Assets May Include
+ • Desktop Computers
+ • Laptops
+ • Mobile Devices
+ • SIM Cards
+ • Company Vehicles
+ • Access Cards
+--- PAGE 34 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 34
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Uniforms
+ • Safety Equipment
+ • Warehouse Devices
+ • Barcode Scanners
+The system records asset allocation details and maintains accountability throughout the employee 
+lifecycle.
+Asset Allocation Workflow
+Asset Request -> Department Approval -> Asset Assignment -> Employee Acknowledgement -> Asset 
+Register Update
+5.5. Employee Documentation and Compliance
+The onboarding process ensures that all required employee documents are collected, verified, and 
+stored.
+Documents Collected
+ • Passport Copy
+ • Visa Copy
+ • CPR / National ID
+ • Educational Certificates
+ • Professional Certifications
+ • Employment Contract
+ • Bank Account Information
+ • Medical Insurance Documents
+ • Driving License (where applicable)
+The system validates document completeness before employee activation and generates future renewal 
+reminders where applicable.
+5.6. Employee Identification and Credential Generation
+The module supports the generation of employee credentials and identification materials.
+Generated Documents
+ • Employee ID Card
+ • Employee Information Sheet
+ • Employment Confirmation Documents
+ • Department Assignment Letter
+ • Access Authorization Forms
+This ensures employees can immediately identify themselves and access company facilities.
+--- PAGE 35 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 35
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+5.7. Policy Acknowledgement and Compliance Acceptance
+The onboarding process includes the distribution and acknowledgement of company policies and 
+procedures.
+Employees can review and electronically acknowledge:
+ • Employee Handbook
+ • HR Policies
+ • Attendance Policies
+ • Information Security Policies
+ • Health and Safety Policies
+ • Code of Conduct
+ • Data Privacy Policies
+The system records acknowledgement history for compliance and audit purposes.
+5.8. Orientation and Induction Program
+The system supports the management of employee orientation programs designed to familiarize 
+employees with the organization.
+Orientation Topics
+ • Company Overview
+ • Organizational Structure
+ • Business Operations
+ • Product Knowledge
+ • Spare Parts Industry Overview
+ • Company Policies
+ • Health and Safety Procedures
+ • Customer Service Standards
+ • ERP System Introduction
+Induction Activities
+ • Welcome Sessions
+ • Department Introductions
+ • Facility Tours
+ • Product Training
+ • Process Training
+This helps employees adapt quickly to their new roles and work environment.
+5.9. Business Benefits
+--- PAGE 36 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 36
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Operational Benefits
+ • Standardized onboarding procedures across all branches.
+ • Faster employee activation and deployment.
+ • Reduced onboarding delays.
+ • Improved interdepartmental coordination.
+Administrative Benefits
+ • Reduced paperwork and manual processing.
+ • Automated task assignments and notifications.
+ • Improved document management and compliance tracking.
+Employee Benefits
+ • Better onboarding experience.
+ • Faster access to required resources.
+ • Clear understanding of responsibilities and company policies.
+ • Increased employee engagement from day one.
+Management Benefits
+ • Improved visibility into onboarding progress.
+ • Faster workforce deployment.
+ • Better compliance management.
+ • Consistent onboarding standards across all branches.
+The Employee Onboarding Management module ensures that every newly hired employee is properly 
+integrated into the organization through a controlled, efficient, and standardized process, enabling faster 
+productivity, improved compliance, and enhanced employee satisfaction across all company locations.
+6. Attendance Management
+The Attendance Management module is designed to automate the recording, monitoring, validation, 
+and analysis of employee attendance across all branches, warehouses, retail outlets, logistics operations, 
+and administrative offices of the organization. The module serves as a critical component of the Human 
+Resource Management System (HRMS) by providing accurate attendance data that directly impacts 
+payroll processing, workforce planning, productivity measurement, overtime management, and labor 
+compliance.
+The Attendance Management module centralizes attendance tracking and provides management with 
+real-time visibility into employee presence, absenteeism, punctuality, overtime, and workforce utilization. 
+The system automatically integrates attendance information with payroll, leave management, employee 
+self-service, and performance management modules, ensuring accuracy and eliminating manual 
+calculations.
+--- PAGE 37 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 37
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+6.1. Objectives of Attendance Management
+The primary objectives of the Attendance Management module are to:
+ • Accurately record employee attendance across all locations.
+ • Automate attendance calculations and payroll integration.
+ • Monitor employee punctuality and absenteeism.
+ • Control overtime and labour costs.
+ • Improve employee discipline and accountability.
+ • Ensure compliance with company attendance policies.
+ • Provide management with workforce attendance analytics and reports.
+6.2. Attendance Capture Methods
+The system supports multiple attendance capture methods to accommodate different operational 
+requirements and employee categories.
+Biometric Attendance Integration
+The module integrates with biometric attendance devices installed at company branches, warehouses, 
+and offices.
+Supported biometric methods include:
+ • Fingerprint Recognition
+ • Facial Recognition
+ • Palm Recognition
+ • Card-Based Attendance Systems
+Attendance transactions are automatically synchronized with the ERP system in real time, eliminating 
+manual attendance entry and reducing the risk of fraudulent attendance records.
+Mobile Attendance
+Employees working remotely or outside office locations can record attendance using mobile applications.
+Mobile attendance supports:
+ • Clock-In
+ • Clock-Out
+ • Break Recording
+ • Shift Confirmation
+ • Attendance Requests
+This functionality is particularly useful for sales representatives, field staff, delivery personnel, and 
+branch supervisors.
+--- PAGE 38 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 38
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+GPS-Based Attendance
+The system can capture employee attendance along with GPS location coordinates to verify attendance 
+from approved work locations.
+GPS attendance provides:
+ • Location Verification
+ • Route Tracking
+ • Branch Visit Confirmation
+ • Customer Site Attendance Confirmation
+ • Remote Workforce Monitoring
+This feature improves accountability and visibility for field employees and traveling staff.
+Manual Attendance Entry
+Authorized HR personnel and supervisors can record or update attendance manually in exceptional 
+situations.
+Examples include:
+ • Device Failures
+ • System Downtime
+ • Remote Site Operations
+ • Exceptional Attendance Adjustments
+All manual entries are recorded with audit trails and approval history to ensure accountability.
+6.3. Attendance Monitoring
+The system continuously monitors employee attendance activities and automatically identifies exceptions 
+and policy violations.
+Late Arrival Monitoring
+The system tracks:
+ • Scheduled Start Time
+ • Actual Check-In Time
+ • Late Minutes
+ • Repeated Lateness Patterns
+Automated alerts may be generated for employees exceeding acceptable lateness thresholds.
+Early Departure Monitoring
+The system monitors:
+--- PAGE 39 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 39
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Scheduled End Time
+ • Actual Check-Out Time
+ • Early Departure Duration
+Managers can review and approve valid early departure requests where necessary.
+Absence Tracking
+The module identifies:
+ • Authorized Absences
+ • Unauthorized Absences
+ • Leave-Based Absences
+ • Missing Attendance Records
+This information supports workforce planning and payroll processing.
+Overtime Tracking
+The system automatically calculates overtime based on:
+ • Actual Working Hours
+ • Company Overtime Policies
+ • Employee Eligibility Rules
+Overtime records are transferred directly to payroll processing.
+Attendance Validation and Processing
+Once attendance records are captured, the system validates and processes the data according to 
+company policies.
+Validation Checks
+The system verifies:
+ • Duplicate Attendance Records
+ • Missing Punches
+ • Attendance Policy Violations
+ • Unauthorized Overtime
+ • Attendance Conflicts
+ • Validated attendance data becomes available for payroll and management reporting.
+6.4. Exception Management
+The Attendance Management module provides mechanisms for managing attendance exceptions and 
+corrections.
+--- PAGE 40 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 40
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Missed Punch Management
+Employees can submit requests for:
+ • Missing Check-In
+ • Missing Check-Out
+ • Incorrect Attendance Records
+ • Device Malfunctions
+Attendance Correction Workflow
+Employee Request -> Supervisor Review -> HR Verification -> Approval or Rejection -> Attendance 
+Record Update -> Audit Trail Recording
+All modifications are tracked for audit and compliance purposes.
+6.5. Overtime Management
+The system manages overtime requests, approvals, and calculations.
+Overtime Workflow
+Employee Works Beyond Scheduled Hours -> Overtime Detection -> Supervisor Verification -> Approval 
+Process -> Overtime Calculation -> Payroll Integration -> Management Reporting
+Overtime Controls
+ • Maximum Overtime Limits
+ • Branch-Specific Policies
+ • Departmental Approval Rules
+ • Cost Monitoring
+This helps control labour expenses while ensuring compliance with company policies.
+6.6. Integration with Payroll Management
+The Attendance Management module is tightly integrated with the Payroll Management system.
+Attendance information automatically updates:
+ • Working Days
+ • Payable Days
+ • Overtime Payments
+ • Absence Deductions
+ • Late Attendance Deductions
+ • Holiday Work Payments
+This integration eliminates manual calculations and improves payroll accuracy.
+--- PAGE 41 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 41
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+6.7. Employee Self-Service Integration
+Employees can access attendance information through the Employee Self-Service Portal.
+Available functions include:
+ • Daily Attendance View
+ • Monthly Attendance Summary
+ • Attendance Correction Requests
+ • Overtime Status Tracking
+ • Attendance History
+This improves transparency and reduces HR administrative workload.
+6.8. Business Benefits
+Operational Benefits
+ • Automated attendance recording.
+ • Real-time workforce visibility.
+ • Reduced administrative effort.
+ • Faster attendance processing.
+Financial Benefits
+ • Accurate payroll calculations.
+ • Reduced payroll discrepancies.
+ • Better overtime cost control.
+ • Improved labor cost management.
+Management Benefits
+ • Enhanced workforce monitoring.
+ • Improved workforce planning.
+ • Better attendance compliance.
+ • Increased operational control.
+Employee Benefits
+ • Transparent attendance records.
+ • Faster correction processing.
+ • Easy access to attendance history.
+ • Improved trust in payroll calculations.
+The Attendance Management module provides a comprehensive platform for monitoring workforce 
+attendance, ensuring payroll accuracy, improving operational efficiency, and supporting effective 
+--- PAGE 42 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 42
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+workforce management across all branches and operational locations of the organization.
+7. Leave Management 
+The Leave Management module is designed to automate and streamline the administration of employee 
+leave entitlements, leave requests, approvals, accruals, encashments, and attendance integration across 
+the organization. The module provides a centralized platform for managing employee absences while 
+ensuring business continuity, workforce availability, operational efficiency, and compliance with company 
+policies and labour regulations.
+In the company, employees are distributed across retail outlets, warehouses, logistics operations, 
+procurement departments, finance teams, and administrative offices. Managing leave manually can 
+often lead to inaccurate leave balances, approval delays, workforce shortages, payroll discrepancies, 
+and operational disruptions. The Leave Management module eliminates these challenges by providing a 
+transparent, automated, and policy-driven leave administration system.
+The module integrates seamlessly with Employee Master Management, Attendance Management, Payroll 
+Management, Employee Self-Service, and Workforce Planning modules, ensuring that all approved leave 
+transactions automatically update employee attendance records, payroll calculations, and workforce 
+availability schedules.
+7.1. Objectives of Leave Management
+The primary objectives of the Leave Management module are to:
+ • Automate employee leave administration processes.
+ • Ensure fair and consistent application of leave policies.
+ • Maintain accurate leave balances and entitlements.
+ • Improve workforce planning and resource availability.
+ • Minimize manual intervention and paperwork.
+ • Enhance transparency in leave approvals and tracking.
+ • Integrate leave transactions with attendance and payroll systems.
+ • Ensure compliance with labour laws and company regulations.
+7.2. Leave Policy Management
+The system allows the organization to define and maintain multiple leave policies based on employee 
+category, grade, department, location, employment type, or branch.
+Leave policies may include:
+ • Eligibility Criteria
+ • Leave Entitlement Rules
+ • Accrual Methods
+ • Carry Forward Policies
+--- PAGE 43 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 43
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Encashment Rules
+ • Approval Hierarchies
+ • Notice Period Requirements
+ • Maximum Leave Limits
+This flexibility enables the organization to implement different leave structures for management, office 
+staff, warehouse personnel, sales employees, and contractual workers.
+7.3. Leave Types Management
+The module supports multiple categories of leave as defined by company policy and statutory 
+requirements.
+Annual Leave
+Annual leave is allocated based on employment contracts, company policies, and labor regulations.
+The system manages:
+ • Leave Accrual
+ • Leave Balance Tracking
+ • Carry Forward Rules
+ • Annual Leave Planning
+ • Leave Encashment
+Sick Leave
+Employees may apply for sick leave with supporting medical documentation where required.
+The system manages:
+ • Paid Sick Leave
+ • Unpaid Sick Leave
+ • Medical Certificate Attachment
+ • Sick Leave History
+ • Extended Illness Monitoring
+Emergency Leave
+Emergency leave can be requested for unforeseen personal circumstances requiring immediate absence 
+from work.
+The system supports:
+ • Immediate Leave Requests
+ • Emergency Approval Processes
+ • Short-Term Absence Management
+--- PAGE 44 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 44
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Maternity Leave
+The module manages maternity leave entitlements according to labor laws and company policies.
+Features include:
+ • Eligibility Validation
+ • Maternity Leave Planning
+ • Return-to-Work Tracking
+ • Leave Balance Integration
+Paternity Leave
+Eligible employees can request paternity leave following company policy and statutory provisions.
+The system tracks:
+ • Leave Eligibility
+ • Approval Status
+ • Leave Utilization
+Unpaid Leave
+Employees may apply for unpaid leave where approved leave balances are insufficient or when special 
+circumstances arise.
+The system automatically updates payroll calculations based on approved unpaid leave periods.
+Additional Leave Categories
+The system can also support:
+ • Bereavement Leave
+ • Marriage Leave
+ • Hajj or Religious Leave
+ • Compensatory Leave
+ • Official Duty Leave
+ • Special Leave
+ • Business Travel Leave
+7.4. Leave Request Management
+Employees can submit leave requests electronically through the Employee Self-Service Portal or HR 
+system.
+Leave Request Information
+The request captures:
+--- PAGE 45 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 45
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Leave Type
+ • Leave Period
+ • Number of Days
+ • Reason for Leave
+ • Supporting Documents
+ • Contact Information During Leave
+ • Work Handover Details
+The system automatically validates leave eligibility before submission.
+7.5. Leave Approval Workflow
+The module follows a configurable approval workflow to ensure proper authorization and workforce 
+planning.
+Leave Approval Workflow
+Employee Leave Request -> System Leave Balance Validation -> Reporting Manager Review -> Workload 
+and Resource Availability Check ->HR Verification -> Policy Compliance Validation -> Leave Approval 
+/ Rejection -> Employee Notification -> Attendance Record Update -> Payroll Update -> Workforce 
+Availability Calendar Update
+The workflow ensures that operational requirements are considered before leave approval, reducing the 
+risk of staff shortages in critical departments and branches.
+7.6. Leave Balance Management
+The system automatically maintains employee leave balances in real time.
+Leave Balance Functions
+ • Leave Entitlement Tracking
+ • Accrued Leave Calculation
+ • Utilized Leave Monitoring
+ • Remaining Balance Calculation
+ • Carry Forward Management
+ • Expired Leave Tracking
+Employees and managers can view leave balances at any time through dashboards and self-service 
+portals.
+7.7. Holiday and Calendar Management
+The system maintains company-wide and branch-specific holiday calendars.
+Holiday Features
+ • National Holidays
+--- PAGE 46 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 46
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Public Holidays
+ • Religious Holidays
+ • Branch-Specific Holidays
+ • Weekend Definitions
+ • Special Company Holidays
+Holiday calendars are automatically considered during leave calculations, ensuring accurate leave 
+duration calculations.
+7.8. Leave Encashment Management
+The Leave Management module supports leave encashment processes were permitted by company 
+policy.
+Encashment Functions
+ • Encashment Eligibility Validation
+ • Available Balance Verification
+ • Encashment Calculation
+ • Approval Workflow
+ • Payroll Integration
+Approved leave encashments are automatically transferred to payroll for payment processing.
+7.9. Attendance and Payroll Integration
+The Leave Management module is fully integrated with Attendance and Payroll systems.
+Attendance Integration
+Approved leave transactions automatically:
+ • Update Attendance Records
+ • Mark Employees as On Leave
+ • Prevent Absence Classification
+ • Adjust Workforce Availability Reports
+Payroll Integration
+Approved leave transactions automatically affect:
+ • Payable Days
+ • Unpaid Leave Deductions
+ • Leave Salary Calculations
+ • Leave Encashment Payments
+ • Final Settlement Calculations
+--- PAGE 47 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 47
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+This integration eliminates manual processing and ensures payroll accuracy.
+7.10. Leave Planning and Workforce Availability
+The system provides management with visibility into future employee absences, enabling effective 
+workforce planning.
+Managers can review:
+ • Upcoming Leave Schedules
+ • Department Leave Calendars
+ • Branch Leave Availability
+ • Resource Allocation Conflicts
+ • Peak Leave Periods
+This assists management in maintaining operational continuity across sales outlets, warehouses, and 
+support departments.
+7.11. Employee Self-Service (ESS) Integration
+Employees can manage leave activities through the Employee Self-Service Portal.
+Employee Functions
+ • Apply for Leave
+ • View Leave Balances
+ • Check Leave History
+ • Track Approval Status
+ • Download Leave Records
+ • Submit Supporting Documents
+ • Cancel or Modify Leave Requests
+Managers can:
+ • Review Leave Requests
+ • Approve or Reject Applications
+ • View Team Leave Calendars
+ • Monitor Employee Leave Trends
+7.12. Business Benefits
+Operational Benefits
+ • Automated leave administration.
+ • Reduced paperwork and manual processing.
+ • Faster approval cycles.
+--- PAGE 48 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 48
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Improved workforce scheduling.
+Financial Benefits
+ • Accurate leave accounting.
+ • Reduced payroll discrepancies.
+ • Better management of leave liabilities.
+ • Improved labor cost control.
+Management Benefits
+ • Enhanced workforce visibility.
+ • Improved resource planning.
+ • Better compliance with leave policies.
+ • Transparent approval processes.
+Employee Benefits
+ • Easy leave application process.
+ • Real-time leave balance visibility.
+ • Faster approvals.
+ • Improved employee satisfaction.
+The Leave Management module provides a comprehensive, policy-driven platform for managing employee 
+leave entitlements and absences while ensuring operational continuity, payroll accuracy, compliance, and 
+employee satisfaction across all branches and departments of the organization.
+8. Payroll Management
+The Payroll Management module serves as the core financial component of the Human Resource 
+Management System (HRMS), designed to automate salary processing, compensation administration, 
+statutory deductions, employee benefits management, and payroll accounting across all branches of 
+the organization. The module ensures that employees are compensated accurately and on time while 
+maintaining compliance with labor laws, company policies, taxation requirements, social insurance 
+regulations, and financial reporting standards.
+For a multi-branch company, payroll administration can become highly complex due to varying employee 
+categories, branch locations, attendance patterns, overtime calculations, sales commissions, allowances, 
+employee loans, advances, and statutory obligations. Managing payroll manually often results in 
+calculation errors, compliance risks, delayed salary processing, and increased administrative workload.
+The Payroll Management module eliminates these challenges by integrating employee master records, 
+attendance data, leave transactions, overtime calculations, commission structures, employee benefits, 
+and deduction rules into a single automated payroll processing system. The module ensures payroll 
+accuracy, transparency, auditability, and seamless integration with the Finance and Accounting system.
+--- PAGE 49 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 49
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+8.1. Objectives of Payroll Management
+The primary objectives of the Payroll Management module are to:
+ • Automate payroll processing across all branches and departments.
+ • Ensure accurate and timely salary payments.
+ • Integrate attendance, leave, overtime, and payroll calculations.
+ • Maintain compliance with labor laws and company policies.
+ • Automate statutory deductions and employee benefits calculations.
+ • Reduce payroll processing time and administrative effort.
+ • Improve payroll accuracy and transparency.
+ • Integrate payroll transactions directly with the accounting system.
+ • Provide management with payroll analytics and workforce cost visibility.
+8.2. Payroll Structure Management
+The system supports configurable payroll structures for different employee categories, grades, 
+departments, and business units.
+Payroll structures can be defined based on:
+ • Employee Grade
+ • Job Designation
+ • Department
+ • Branch
+ • Employment Type
+ • Contract Type
+ • Nationality
+ • Employee Category
+This flexibility enables the organization to maintain different compensation structures while ensuring 
+consistency and policy compliance.
+8.3. Employee Compensation Management
+The Payroll Management module maintains detailed compensation structures for each employee.
+Earnings Components
+The system supports multiple earning categories that can be configured according to organizational 
+policies.
+1. Basic Salary
+2. The fixed salary component forming the foundation of employee compensation and statutory 
+calculations.
+--- PAGE 50 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 50
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+3. Housing Allowance
+4. Allowance provided to employees to support accommodation expenses.
+5. Transportation Allowance
+6. Allowance covering commuting and transportation-related expenses.
+7. Food Allowance
+8. Allowance provided for meal and subsistence support.
+9. Overtime Earnings
+10. Compensation for approved overtime hours worked beyond standard working schedules.
+11. Sales Commission
+Variable earnings linked to employee sales performance, targets, and incentive schemes.
+12. Performance Bonuses
+Rewards based on employee performance, departmental achievements, or company-wide   incentive 
+programs.
+13. Additional Earnings
+The system can also support:
+ • Shift Allowances
+ • Special Duty Allowances
+ • Risk Allowances
+ • Travel Allowances
+ • Attendance Incentives
+ • Productivity Incentives
+ • Project-Based Incentives
+ • Festival Bonuses
+ • Annual Bonuses
+Deduction Components
+The Payroll Management module supports various deduction categories that can be automatically 
+applied during payroll processing.
+1. Employee Loan Recovery
+2. Monthly loan installment deductions based on approved loan repayment schedules.
+3. Salary Advances
+4. Recovery of employee salary advances according to approved repayment plans.
+5. Absence Deductions
+6. Automatic deductions for unpaid leave, unauthorized absences, or attendance policy violations.
+7. Penalties and Disciplinary Deductions
+--- PAGE 51 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 51
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+8. Approved deductions arising from disciplinary actions or company policy violations.
+9. Other Recoveries
+Additional recoveries may include:
+ • Asset Damage Recovery
+ • Mobile Usage Recovery
+ • Insurance Contributions
+ • Uniform Recovery
+ • Employee Contributions
+ • Miscellaneous Adjustments
+All deductions are processed according to predefined rules and approval workflows.
+8.4. Attendance and Payroll Integration
+The Payroll Management module integrates directly with the Attendance Management system to ensure 
+accurate payroll calculations.
+Attendance Data Captured
+The system automatically processes:
+ • Working Days
+ • Payable Days
+ • Overtime Hours
+ • Late Attendance Deductions
+ • Absence Deductions
+ • Holiday Work Compensation
+ • Weekend Work Compensation
+This eliminates manual attendance calculations and reduces payroll discrepancies.
+8.5. Leave and Payroll Integration
+The Leave Management system automatically updates payroll calculations.
+The payroll engine considers:
+ • Paid Leave
+ • Unpaid Leave
+ • Sick Leave
+ • Annual Leave
+ • Leave Encashment
+ • Leave Salary
+--- PAGE 52 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 52
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Final Settlement Leave Balances
+This ensures that leave-related payroll calculations are performed accurately and consistently.
+8.6. Payroll Processing Workflow
+The payroll process follows a structured workflow designed to ensure accuracy, transparency, and 
+management control.
+Attendance Finalization -> Leave Processing -> Overtime Calculation -> Sales Commission Calculation 
+-> Loan Recovery Processing -> Salary Advance Recovery -> Payroll Generation -> Payroll Verification -> 
+Payroll Review and Validation -> Payroll Approval -> Payslip Generation -> Bank Transfer File Generation 
+-> Accounting Integration -> Salary Disbursement -> Payroll Closure
+8.7.  Payroll Verification and Approval
+Before payroll is finalized, authorized personnel can review payroll calculations through verification and 
+approval processes.
+Verification Activities
+ • Salary Review
+ • Attendance Validation
+ • Overtime Verification
+ • Commission Verification
+ • Deduction Review
+ • Exception Analysis
+Approval Levels
+ • HR Verification
+ • Finance Verification
+ • Payroll Approval
+ • Management Authorization
+Approval workflows can be configured according to company policies and organizational hierarchy.
+8.8. Payslip Generation
+The system automatically generates electronic payslips for employees following payroll approval.
+Payslip Information
+ • Employee Details
+ • Salary Components
+ • Allowances
+ • Overtime Earnings
+--- PAGE 53 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 53
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Commissions
+ • Deductions
+ • Net Salary
+ • Leave Information
+ • Loan Balances
+Employees can access payslips through the Employee Self-Service Portal or receive them electronically 
+via email.
+8.9. Bank Transfer Management
+The Payroll Management module supports automated salary disbursement through bank transfer 
+integration.
+Bank Processing Features
+ • Bank Account Management
+ • Salary Transfer File Generation
+ • Multi-Bank Support
+ • Salary Payment Tracking
+ • Payment Reconciliation
+This minimizes manual payment processing and reduces banking errors.
+8.10. Payroll Accounting Integration
+One of the most critical features of the Payroll Management module is its seamless integration with the 
+Finance and Accounting system.
+Following payroll approval, the system automatically generates accounting entries.
+Sample Payroll Accounting Entries
+Salary Expense Recognition
+  Dr Salary Expense Account
+   Cr Employee Salary Payable Account
+Loan Recovery
+  Dr Employee Salary Payable Account
+  Cr Employee Loan Receivable Account
+Advance Salary Recovery
+  Dr Employee Salary Payable Account
+  Cr Salary Advance Account
+--- PAGE 54 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 54
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Other Recoveries
+  Dr Employee Salary Payable Account
+  Cr Recovery Account
+Salary Payment
+  Dr Employee Salary Payable Account
+  Cr Bank Account
+This integration eliminates manual journal entries and ensures accurate financial reporting.
+8.11. Employee Self-Service Integration
+Employees can access payroll information through the Employee Self-Service Portal.
+Employee Functions
+ • View Payslips
+ • Download Salary Statements
+ • View Loan Balances
+ • View Payroll History
+ • View Earnings and Deductions
+ • Download Tax and Payroll Certificates
+This reduces HR workload and improves transparency.
+8.12. Compliance and Audit Controls
+The Payroll Management module supports compliance requirements through:
+ • Payroll Audit Trails
+ • Salary Revision History
+ • Approval Tracking
+ • Payroll Locking
+ • Change Logs
+ • User Activity Monitoring
+These controls enhance payroll security and facilitate internal and external audits.
+8.13. Business Benefits
+Operational Benefits
+ • Fully automated payroll processing.
+ • Reduced manual calculations.
+ • Faster payroll preparation.
+--- PAGE 55 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 55
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Improved payroll accuracy.
+Financial Benefits
+ • Reduced payroll errors.
+ • Better labor cost control.
+ • Accurate expense allocation.
+ • Automated accounting integration.
+Management Benefits
+ • Real-time payroll visibility.
+ • Better workforce cost analysis.
+ • Improved financial planning.
+ • Enhanced payroll governance.
+Employee Benefits
+ • Timely salary payments.
+ • Transparent payroll calculations.
+ • Easy access to payslips.
+ • Improved confidence in payroll accuracy.
+The Payroll Management module provides a comprehensive and integrated payroll platform that ensures 
+accurate salary processing, regulatory compliance, financial control, and workforce cost management 
+across all branches and operational units of the organization.
+9. Employee Loan Management
+The Employee Loan Management module is designed to manage all financial assistance provided to 
+employees in the form of loans, salary advances, and structured repayment plans. The module ensures 
+that employee financial support is handled in a controlled, transparent, and policy-driven manner 
+while maintaining accurate tracking of outstanding balances and automated recovery through payroll 
+integration.
+The employees may require financial assistance for personal or emergency needs. Without a structured 
+system, loan approvals, repayments, and outstanding tracking can become inconsistent, leading to 
+financial risk, payroll discrepancies, and administrative inefficiencies. The Employee Loan Management 
+module resolves these challenges by providing a centralized system that governs loan issuance, approval 
+workflows, repayment scheduling, and automatic payroll deductions.
+The module integrates seamlessly with Employee Master Management, Payroll Management, Finance 
+and Accounting, and Employee Self-Service systems to ensure complete visibility and control over 
+employee financial liabilities.
+9.1. Objectives of Employee Loan Management
+--- PAGE 56 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 56
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+The primary objectives of the Employee Loan Management module are to:
+ • Provide structured and controlled employee loan facilities.
+ • Ensure transparent approval and authorization processes.
+ • Maintain accurate records of all employee financial advances.
+ • Automate repayment scheduling and salary deductions.
+ • Prevent unauthorized or excessive loan issuance.
+ • Improve financial governance and risk control.
+ • Integrate loan management with payroll and accounting systems.
+ • Provide real-time visibility of outstanding loan balances.
+9.2. Loan Types Managed
+The system supports multiple categories of employee financial assistance.
+Employee Loans
+Long-term loans provided to employees for personal or emergency financial requirements. These loans 
+are typically repaid over a defined period through monthly salary deductions.
+Salary Advances
+Short-term advances provided against upcoming salary payments, usually recovered in the next payroll 
+cycle or within a short repayment period.
+Emergency Financial Assistance
+Special financial support provided in urgent situations such as medical emergencies, family needs, or 
+unforeseen expenses, subject to management approval.
+Special Purpose Loans
+Loans provided for specific purposes such as education, travel, or other approved organizational policies.
+9.3. Loan Request and Application Process
+Employees can apply for loans through the Employee Self-Service portal.
+Loan Request Information
+Each loan application includes:
+ • Employee Details
+ • Loan Type
+ • Requested Amount
+ • Reason for Loan
+ • Supporting Documents
+ • Proposed Repayment Period
+--- PAGE 57 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 57
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Instalment Preference
+The system validates eligibility based on:
+ • Employment status
+ • Salary level
+ • Existing outstanding loans
+ • Company loan policy
+ • Tenure of employment
+9.4. Loan Approval Workflow
+The Loan Management module follows a multi-level approval structure to ensure financial control and 
+policy compliance.
+Loan Approval Workflow
+Employee Loan Request -> System Eligibility Verification -> Reporting Manager Approval -> HR Review 
+and Policy Validation ->Finance Department Review -> Final Management Approval -> Loan Disbursement 
+Processing ->Repayment Schedule Creation -> Payroll Integration Activation
+This structured workflow ensures that loan approvals are aligned with company financial policies and 
+employee repayment capacity.
+9.5. Loan Disbursement Management
+Once approved, the system processes loan disbursement through financial controls.
+Disbursement Features
+ • Loan Amount Transfer Processing
+ • Bank Transfer Integration
+ • Cash Disbursement Tracking (if applicable)
+ • Loan Reference Number Generation
+ • Accounting Entry Generation
+All disbursement activities are recorded for audit and compliance purposes.
+9.6. Repayment Schedule Management
+The system automatically generates structured repayment schedules based on approved loan terms.
+Repayment Features
+ • Monthly Installment Calculation
+ • Salary Deduction Scheduling
+ • Flexible Repayment Plans
+ • Early Settlement Options
+--- PAGE 58 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 58
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Outstanding Balance Tracking
+Repayment schedules are dynamically updated based on payroll processing and employee status 
+changes.
+9.7. Payroll Integration
+A key feature of the module is its seamless integration with Payroll Management.
+Payroll Deduction Processing
+The system automatically deducts loan installments from monthly salaries based on the repayment 
+schedule.
+Payroll integration ensures:
+ • Automatic monthly recovery
+ • Accurate outstanding balance updates
+ • Prevention of over-deduction
+ • Salary slip integration
+ • Real-time loan balance updates
+This eliminates manual tracking and reduces payroll errors.
+9.8. Loan Balance and Tracking
+The system maintains real-time tracking of all employee loan obligations.
+Tracking Features
+ • Outstanding Loan Balance
+ • Repayment History
+ • Remaining Installments
+ • Interest (if applicable)
+ • Early Settlement Calculations
+ • Loan Closure Status
+Both employees and management can view updated loan statuses at any time through dashboards and 
+self-service portals.
+9.9. Loan Settlement and Closure
+The module supports full and partial loan settlements.
+Closure Process
+ • Final Installment Deduction
+ • Outstanding Balance Verification
+ • Clearance Confirmation
+--- PAGE 59 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 59
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Loan Account Closure
+ • Accounting Adjustment Entries
+Employees can also opt for early settlement, subject to company approval policies.
+9.10. Loan Policy Management
+The system allows configuration of company loan policies to ensure controlled financial exposure.
+Policy Controls
+ • Maximum Loan Eligibility
+ • Salary-Based Loan Limits
+ • Employment Tenure Requirements
+ • Repayment Period Restrictions
+ • Interest Rules (if applicable)
+ • Approval Hierarchy Rules
+These policies help ensure fairness and financial discipline across all branches.
+9.11. Exception and Control Management
+The module includes controls to manage exceptions and ensure financial discipline.
+Exception Handling
+ • Missed Loan Deductions
+ • Salary Insufficiency Adjustments
+ • Loan Rescheduling Requests
+ • Payment Holidays (if applicable)
+ • Loan Restructuring Requests
+All exceptions require approval and are logged for audit purposes.
+9.12. Integration with Accounting System
+The Loan Management module integrates directly with Finance and Accounting.
+Accounting Entries
+Upon loan disbursement and recovery, the system automatically generates:
+ • Loan Receivable Accounts
+ • Salary Payable Adjustments
+ • Cash/Bank Entries
+ • Recovery Adjustments
+This ensures accurate financial reporting and reconciliation.
+--- PAGE 60 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 60
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+9.13. Employee Self-Service Integration
+Employees can access loan-related services through the ESS portal.
+Employee Features
+ • Apply for Loan
+ • View Loan Status
+ • Track Repayment Schedule
+ • View Outstanding Balance
+ • Download Loan Statements
+ • Request Loan Closure or Settlement
+This improves transparency and reduces HR workload.
+9.14. Business Benefits
+Operational Benefits
+ • Controlled and structured loan issuance.
+ • Automated repayment tracking.
+ • Reduced administrative workload.
+ • Improved financial governance.
+Financial Benefits
+ • Reduced risk of loan defaults.
+ • Accurate payroll-based recovery.
+ • Improved cash flow management.
+ • Better financial forecasting.
+Management Benefits
+ • Real-time loan exposure visibility.
+ • Improved policy enforcement.
+ • Better workforce financial management.
+ • Enhanced decision-making capability.
+Employee Benefits
+ • Transparent loan application process.
+ • Easy access to financial assistance.
+ • Clear repayment visibility.
+ • Automated salary deductions without manual follow-up.
+The Employee Loan Management module provides a fully controlled, transparent, and automated 
+--- PAGE 61 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 61
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+framework for managing employee financial assistance, ensuring financial discipline, payroll accuracy, 
+and organizational control across all branches of the company.
+10. Performance Management
+The Performance Management module is a strategic HR component designed to systematically measure, 
+track, and improve employee performance across all branches, warehouses, sales offices, and regional 
+operations.
+The employees include sales executives, procurement officers, warehouse staff, logistics coordinators, 
+finance teams, and branch managers—this module ensures standardized, transparent, and data-driven 
+performance evaluation aligned with corporate objectives.
+It integrates directly with HR, Payroll, Sales, Inventory, and Attendance systems to provide a 360-degree 
+performance view.
+10.1. Objectives of the Module
+ • Establish a uniform global KPI framework across all branches 
+ • Link employee performance with organizational profitability and efficiency 
+ • Enable objective appraisal instead of manual/subjective evaluation 
+ • Identify high performers for promotion, incentives, and overseas assignments 
+ • Detect skill gaps for training and workforce optimization 
+ • Support succession planning for critical roles (branch managers, sales heads, logistics supervisors) 
+10.2. KPI Framework Design 
+For the company, KPIs are categorized into role-based performance dimensions:
+1.Sales & Revenue Performance (Sales Team)
+ • Monthly/Quarterly sales target achievement 
+ • Gross profit margin per product category 
+ • Customer acquisition rate 
+ • Repeat customer ratio 
+ • Credit recovery performance (linked to accounts receivable) 
+Example:
+A UAE sales executive is evaluated not only on sales volume but also on profit margin and collection 
+efficiency, ensuring healthy cash flow.
+2.Operational Efficiency (Warehouse & Logistics)
+ • Order processing time (order-to-dispatch cycle) 
+ • Inventory accuracy rate 
+ • Stock handling damage/loss rate 
+--- PAGE 62 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 62
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Delivery timeliness (on-time dispatch/receipt) 
+ • Return handling efficiency 
+This ensures warehouse staff performance is tied to cost control and service quality, not just speed.
+3. Attendance & Discipline
+ • Attendance percentage 
+ • Late arrival frequency 
+ • Overtime utilization efficiency 
+ • Leave management behaviour 
+ Automatically integrated with biometric/attendance system to avoid manual bias.
+4. Productivity Metrics (All Departments)
+ • Tasks completed vs assigned workload 
+ • System usage efficiency (ERP activity logs) 
+ • Process compliance rate 
+ • Turnaround time for assigned duties 
+5. Quality & Compliance
+ • Error rate in transactions (invoices, GRN, dispatch notes) 
+ • Audit compliance score 
+ • SOP adherence (standard operating procedures) 
+ • Customer complaint rate (linked to CRM/service module) 
+6. Managerial Evaluation
+ • Leadership effectiveness 
+ • Team performance improvement 
+ • Decision-making quality 
+ • Cross-branch coordination efficiency 
+10.3. Workflow 
+Step 1: KPI Definition (Corporate Setup)
+ • HR + Top Management define KPI templates per role: 
+ • Sales Executive KPI Template 
+ • Warehouse Supervisor KPI Template 
+ • Branch Manager KPI Template 
+ • KPIs can be global or branch-specific 
+Step 2: Goal Assignment
+--- PAGE 63 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 63
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Individual employee goals assigned monthly/quarterly 
+ • Targets are auto-linked from: 
+ • Sales budgets 
+ • Inventory targets 
+ • Operational benchmarks 
+Step 3: Continuous Performance Monitoring
+System continuously collects data from:
+ • Sales module (invoices, revenue) 
+ • Inventory module (dispatch, returns) 
+ • Attendance system 
+ • Accounting module (collections, credit aging) 
+This enables real-time performance dashboards
+Step 4: Employee Self-Assessment (Optional)
+Employees can:
+ • Review their KPI status 
+ • Add comments or justification 
+Request review if external factors affected performance (e.g., supply delays) 
+Step 5: Manager Evaluation
+ • Branch manager evaluates: 
+ • Quantitative KPI results (system-generated) 
+ • Qualitative performance (behavior, teamwork) 
+ • Adds final remarks 
+Step 6: HR Review & Calibration
+ • HR ensures consistency across countries 
+ • Normalizes scoring differences between regions 
+ • Prevents bias between branches (e.g., Bahrain vs Saudi vs UAE performance variations) 
+Step 7: Final Rating Generation
+A standardized rating is generated:
+ • A (Excellent) 
+ • B (Good) 
+ • C (Satisfactory) 
+ • D (Needs Improvement) 
+--- PAGE 64 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 64
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Each rating is backed by:
+ • KPI score percentage 
+ • Manager review score 
+ • Compliance score 
+Step 8: Promotion & Increment Recommendation
+Based on performance:
+ • Salary increment suggestion 
+ • Bonus eligibility 
+ • Promotion eligibility (e.g., Sales Executive → Senior Executive) 
+ • Overseas transfer eligibility (critical in multinational setups) 
+10.4. System Integration Points
+This module is not standalone—it integrates deeply with:
+HR Module
+ • Employee records 
+ • Job roles & hierarchy 
+Payroll Module
+ • Incentives, bonuses, increments 
+Sales Module
+ • Revenue, margin, targets 
+Inventory Module
+ • Dispatch efficiency, stock handling 
+Accounting Module
+ • Collections, outstanding analysis 
+Attendance System
+ • Work discipline scoring 
+10.5. Reporting & Analytics
+The system generates strategic reports for management:
+1. Performance Scorecards
+ • Individual employee dashboard 
+ • Department-wise comparison 
+--- PAGE 65 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 65
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Branch-wise performance ranking 
+2. Promotion Eligibility Matrix
+ • Employees ranked by: 
+ • Performance score 
+ • Experience 
+ • Skill rating 
+3. Increment & Bonus Recommendations
+ • Automated salary increments suggestions 
+ • Budget impact analysis for HR 
+4. Training Needs Analysis
+ • Identifies weak KPIs 
+ • Suggests training modules: 
+ • Sales negotiation training 
+ • Inventory control training 
+ • ERP usage training 
+10.6. Key Business Benefits
+Strategic Benefits
+ • Enables data-driven HR decisions 
+ • Aligns employee output with corporate profitability 
+ • Strengthens global workforce accountability 
+Operational Benefits
+ • Reduces manual appraisal workload by 80% 
+ • Eliminates bias and inconsistency 
+ • Improves KPI transparency across branches 
+Financial Benefits
+ • Better control over salary increments 
+ • Improves sales productivity 
+ • Reduces operational inefficiencies 
+HR Benefits
+ • Structured promotion pathways 
+ • Improved employee motivation 
+ • Better retention of top performers 
+--- PAGE 66 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 66
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+The Performance Management module acts as a central intelligence layer of HR and operations, 
+connecting employee activities directly to business objectives.
+It ensures that every employee—from warehouse operator to regional sales manager—is evaluated using 
+measurable, transparent, and business-aligned KPIs, enabling the organization to improve productivity, 
+enhance accountability, identify high performers, develop employee capabilities, and make data-
+driven decisions regarding promotions, rewards, training, succession planning, and overall workforce 
+optimization. 
+11. Training Management
+The Training Management module is a centralized HR subsystem designed to systematically manage 
+employee skill development, technical training, compliance certifications, and competency enhancement 
+across all branches of the organization.
+In such an environment—where employees handle sales, procurement, warehouse operations, logistics, 
+accounting, and technical product knowledge (spare parts catalogues, OEM standards, cross-brand 
+compatibility)—continuous training is critical for operational accuracy and business growth.
+This module ensures that workforce capability is continuously aligned with:
+ • Evolving product lines 
+ • ERP system usage 
+ • Regional compliance requirements 
+ • Customer service standards 
+ • Technical competency demands 
+11.1.  Objectives of the Module
+ • Build a structured learning ecosystem across all branches 
+ • Ensure employees are trained on product knowledge and ERP processes 
+ • Maintain mandatory certification compliance (safety, technical, regulatory) 
+ • Bridge skill gaps identified from Performance Management module 
+ • Improve operational accuracy in sales, warehouse, and finance functions 
+ • Support workforce scalability in multinational expansion 
+11.2. Training Lifecycle Workflow
+Step 1: Training Need Identification
+Training requirements are generated from multiple sources:
+ • Performance Management system (low KPI scores) 
+ • Manager feedback 
+ • Error analysis (invoice errors, inventory mismatch) 
+ • ERP system upgrades 
+--- PAGE 67 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 67
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Regulatory requirements (country-specific compliance) 
+Example:
+If warehouse staff shows high inventory mismatch rate → system triggers Inventory Handling Training 
+Need
+Step 2: Training Plan Creation
+HR Department defines structured training programs:
+ • Training title and category 
+ • Target departments (Sales / Warehouse / Finance / Admin) 
+ • Trainer assignment (internal expert or external vendor) 
+ • Training mode: 
+ • Classroom 
+ • Online LMS (Learning Management System)
+ • On-the-job training 
+ • Duration and learning outcomes 
+Step 3: Training Scheduling
+The system generates a global training calendar, considering:
+ • Branch availability (Bahrain, UAE, Saudi, etc.) 
+ • Operational workload 
+ • Trainer availability 
+Employees receive:
+Notifications 
+Calendar invites 
+Mandatory attendance flags (for compliance training) 
+Step 4: Employee Participation Tracking
+The system tracks:
+ • Attendance confirmation 
+ • Training completion status 
+ • Participation level (active/passive) 
+ • Engagement metrics (for digital training modules) 
+Integration:
+ • Attendance system (for physical training) 
+--- PAGE 68 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 68
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • LMS tracking (for online training modules) 
+Step 5: Assessment & Evaluation
+After training completion, employees undergo assessments if required.
+11.3. Key Business Benefits
+Operational Benefits
+ • Reduces operational errors in sales and inventory 
+ • Improves ERP system adoption across branches 
+ • Standardizes processes globally 
+Strategic Benefits
+ • Builds a skilled and scalable workforce 
+ • Supports expansion into new countries 
+ • Improves service quality and customer satisfaction 
+Compliance Benefits
+ • Ensures regulatory readiness across countries 
+ • Reduces audit risks 
+ • Maintains certification validity 
+HR Benefits
+ • Clear career development paths 
+ • Improved employee retention 
+ • Data-driven promotion decisions 
+The Training Management module acts as a continuous workforce development engine within the ERP 
+ecosystem. It ensures that employees remain technically competent, operationally efficient, and globally 
+aligned with company standards.
+By linking training directly with performance data, operational errors, and skill gaps, the system 
+transforms training from a reactive HR activity into a strategic business growth tool.
+12. Employee Self-Service (ESS) Portal
+The Employee Self-Service (ESS) Portal is a web and mobile-enabled HR interface that allows employees 
+across all branches in the organization to independently access HR services, submit requests, and retrieve 
+personal employment information without direct HR intervention.
+The ESS portal significantly reduces HR dependency while improving employee responsiveness and 
+transparency.
+It acts as the primary digital touchpoint between employees and HR systems.
+--- PAGE 69 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 69
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+12.1. Objectives of the Module
+ • Digitize and automate routine HR service requests 
+ • Reduce HR department workload across branches 
+ • Provide 24/7 access to employee HR information 
+ • Improve transparency in leave, payroll, and attendance management 
+ • Standardize HR service delivery across all countries 
+ • Enhance employee engagement and satisfaction 
+12.2.  Request Flow Standardization:
+ • 1. Employee submits request via ESS portal 
+ • 2. System validates rules (policy checks, eligibility) 
+ • 3. Manager approval (if required) 
+ • 4. HR approval (if applicable) 
+ • 5. System processing (Payroll / HR / Attendance update) 
+ • 6. Notification to employee 
+12.3. Key Business Benefits
+Operational Benefits
+ • Reduces HR workload by up to 60–80% 
+ • Eliminates manual paperwork 
+ • Speeds up HR service delivery 
+Employee Experience Benefits
+ • 24/7 access to HR services 
+ • Transparency in payroll and leave 
+ • Faster response to requests 
+Management Benefits
+ • Real-time HR operational visibility 
+ • Better workforce planning 
+ • Reduced administrative delays 
+Strategic Benefits
+ • Standardized HR operations across countries 
+ • Supports scalable workforce expansion 
+ • Improves organizational efficiency 
+The Employee Self-Service (ESS) Portal transforms HR operations into a fully digital, employee-driven 
+--- PAGE 70 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 70
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+service platform, significantly improving efficiency, transparency, and scalability in the company. By 
+decentralizing routine HR tasks and integrating directly with payroll, attendance, and HR systems, the 
+ESS portal enables HR teams to focus on strategic workforce management instead of administrative 
+processing.
+13. Employee Transfer Management
+Employee Transfer Management enables controlled movement of employees across branches, 
+departments, roles, and countries while ensuring full synchronization with payroll, hierarchy, and 
+compliance rules.
+In the organization the employee transfer management is critical for:
+ • Moving skilled staff between UAE -> Bahrain -> Saudi 
+ • Deploying experienced sales staff in high-demand regions 
+13.1. Detailed Workflow
+STEP 1: Transfer Request Initiation
+ • Manager initiates request 
+ • Reason selected: 
+ • Business requirement 
+ • Performance improvement 
+ • Employee request 
+ • Branch expansion support 
+STEP 2: Department Review
+ • Current manager reviews: 
+ • Work replacement plan 
+ • Pending tasks 
+ • Operational impact 
+STEP 3: HR Evaluation
+ • HR checks: 
+ • Eligibility 
+ • Skill match for new role 
+ • Salary structure impact 
+ • Policy compliance 
+STEP 4: Approval Routing
+ • Department Head Approval 
+ • Branch Manager Approval 
+--- PAGE 71 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 71
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • HR Final Approval 
+ • Country Manager Approval (if cross-country) 
+STEP 5: Payroll Adjustment
+System automatically recalculates:
+ • Salary revision 
+ • Allowances (housing, transport, location-based) 
+ • Cost center change 
+STEP 6: System Migration
+ • Employee moved to new: 
+ • Branch 
+ • Department 
+ • Reporting manager 
+ • Cost center 
+STEP 7: Activation
+ • Employee becomes active in new branch 
+ • Access rights updated 
+ • Attendance mapping updated 
+13.2. Business Impact
+ • Smooth internal mobility 
+ • Reduced hiring cost 
+ • Faster branch staffing 
+ • Better resource utilization 
+13.3. Promotion & Increment Management
+Automates career progression and salary revision based on:
+ • Performance 
+ • Business rules 
+ • Budget constraints 
+13.4. Detailed Workflow
+STEP 1: Performance Trigger
+Triggered from Performance Management:
+ • High rating (A/B) 
+--- PAGE 72 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 72
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • KPI achievement 
+STEP 2: Manager Recommendation
+ • Promotion or increment proposal created 
+ • Justification added 
+STEP 3: HR Validation
+ • Salary benchmark check 
+ • Grade structure validation 
+ • Budget availability check 
+STEP 4: Management Approval
+ • Final decision: 
+ • Approve promotion 
+ • Approve increment only 
+ • Reject or defer 
+STEP 5: Payroll Update
+System updates:
+ • Salary structure 
+ • Grade level 
+ • Position title 
+ • Benefits 
+13.5. Business Benefit
+Ensures:
+ • Transparent salary system 
+ • Performance-driven growth 
+ • Controlled payroll escalation 
+14. Travel & Business Trip Management
+Manages corporate travel for employees across countries.
+14.1. Workflow
+STEP 1: Travel Request
+ • Purpose of travel 
+ • Destination 
+ • Duration 
+--- PAGE 73 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 73
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Estimated cost 
+STEP 2: Manager Approval
+ • Business justification verified 
+STEP 3: HR Approval
+ • Policy compliance check 
+STEP 4: Admin Processing
+ • Visa arrangement 
+ • Ticket booking 
+ • Hotel booking 
+STEP 5: Expense Settlement
+ • Post-travel expense submission 
+ • Reimbursement processing 
+14.2. Business Impact
+ • Controlled travel cost 
+ • Transparent approvals 
+ • Efficient cross-border operations 
+15. Expense Reimbursement Management
+15.1. Workflow
+STEP 1: Claim Submission
+Employee submits:
+ • Receipt 
+ • Category (fuel, medical, travel) 
+STEP 2: Verification
+ • Document validation 
+ • Policy check 
+STEP 3: Approval Chain
+ • Manager approval 
+ • Finance approval 
+STEP 4: Payment
+--- PAGE 74 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 74
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Bank transfer or payroll addition 
+15.2. Business Impact
+ • Prevents fraudulent claims 
+ • Improves expense control 
+16. Employee Asset Management
+16.1. Workflow
+STEP 1: Asset Request
+ • Employee requests asset (laptop, vehicle, etc.) 
+STEP 2: Approval
+ • Manager approval 
+STEP 3: Issuance
+ • Asset assigned with serial tracking 
+STEP 4: Tracking
+ • Usage monitored 
+ • Maintenance recorded 
+STEP 5: Return/Recovery
+ • On exit or transfer 
+16.2. Business Impact
+ • Prevents asset loss 
+ • Full accountability tracking 
+17. Document Management
+17.1. Workflow
+STEP 1: Document Upload
+ • HR or employee uploads documents 
+STEP 2: Validation
+ • HR verifies authenticity 
+STEP 3: Expiry Tracking
+System triggers alerts:
+ • Visa expiry 
+ • Passport expiry 
+ • Contract renewal 
+--- PAGE 75 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 75
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+17.2.  Business Impact
+ • Avoids legal penalties 
+ • Ensures compliance readiness 
+17.3. Discipline Management
+17.3.1  Workflow
+Incident -> Investigation -> HR Review -> Decision -> Action -> Employee Acknowledgment
+17.3.2  Business Impact
+ • Structured disciplinary process 
+ • Legal protection for company 
+17.4. Reward & Recognition
+17.4.1  Workflow
+Performance Trigger -> Manager Nomination -> HR Approval -> Award Issuance
+1.21.2. Business Impact
+ • Employee motivation 
+ • Reduced attrition 
+17.5. Employee Exit Management 
+The Employee Exit Management Module is designed to streamline and automate the entire employee 
+separation process, ensuring that all exit-related activities are managed efficiently, transparently, and in 
+compliance with company policies and labor regulations.
+The module provides a centralized platform for managing employee resignations, terminations, 
+retirements, contract completions, and other separation events while coordinating activities across 
+Human Resources, Department Managers, Finance, Payroll, and Administration departments.
+By automating workflows, approvals, clearances, settlements, and document generation, the system 
+minimizes manual effort, reduces compliance risks, and ensures a smooth transition for both the employee 
+and the organization.
+17.6. Exit Request Management
+The system enables employees or HR personnel to initiate exit requests for various separation types, 
+including:
+ • Voluntary Resignation
+ • Termination
+ • Retirement
+ • End of Contract
+--- PAGE 76 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 76
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Probation Completion Failure
+ • Mutual Separation
+ • Absconding Cases
+The system captures resignation details, proposed last working date, reasons for separation, and 
+supporting documentation while maintaining a complete audit trail.
+17.7. Exit Approval Workflow
+A configurable multi-level approval workflow ensures that all exit requests are reviewed and approved 
+by the appropriate stakeholders before processing.
+Typical workflow:
+Employee Request -> Reporting Manager -> Department Head -> HR Department -> Management 
+Approval
+Each approval stage supports comments, recommendations, approvals, rejections, and escalation 
+controls.
+17.8. Notice Period Management
+The module automatically validates employee notice period requirements based on employment 
+contracts and company policies.
+Key capabilities include:
+ • Notice period calculation
+ • Last working day determination
+ • Notice shortfall identification
+ • Notice pay recovery calculations
+ • Early release approval management
+17.9. Employee Clearance Management
+The system manages interdepartmental clearance activities to ensure that all company assets, 
+responsibilities, and obligations are properly settled before employee separation.
+Clearance categories may include:
+ • Human Resources Clearance
+ • Department Clearance
+ • Finance Clearance
+ • IT Clearance
+ • Administration Clearance
+ • Facility Management Clearance
+Real-time clearance tracking allows management to monitor pending tasks and outstanding approvals.
+--- PAGE 77 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 77
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+17.10. Asset Return and Recovery Management
+The module maintains a record of all assets assigned to employees and facilitates their return during 
+the exit process.
+Supported assets include:
+ • Laptops and Computers
+ • Mobile Devices
+ • SIM Cards
+ • Company Vehicles
+ • Access Cards
+ • Fuel Cards
+ • Uniforms
+ • Tools and Equipment
+The system records asset return status and automatically calculates recovery amounts for damaged or 
+unreturned assets.
+17.11. Leave Encashment Processing
+Unused leave balances are automatically retrieved from the Leave Management Module and included in 
+the employee’s final settlement.
+The system supports:
+ • Leave balance verification
+ • Leave encashment calculations
+ • Leave adjustment processing
+ • Policy-based leave settlements
+17.12. Loan and Advance Settlement
+The module automatically retrieves all outstanding employee liabilities, including:
+ • Employee Loans
+ • Salary Advances
+ • Company Recoverables
+ • Other Financial Obligations
+Outstanding balances are incorporated into the final settlement calculation to ensure accurate recovery 
+and accounting.
+17.13. Final Settlement Processing
+The system automates the preparation of employee final settlements by calculating all payable earnings 
+and recoverable deductions.
+--- PAGE 78 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 78
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+Settlement calculations may include:
+Earnings
+ • Salary up to Last Working Day
+ • Allowances
+ • Overtime Payments
+ • Incentives and Commissions
+ • Leave Encashment
+ • Bonuses
+ • End-of-Service Benefits
+Deductions
+ • Loan Recoveries
+ • Salary Advance Recoveries
+ • Notice Pay Recoveries
+ • Asset Damage Charges
+ • Other Authorized Deductions
+The final settlement statement is generated automatically and routed for approval.
+17.14. Gratuity and End-of-Service Benefit Management
+The module supports country-specific labor law requirements for gratuity and end-of-service benefit 
+calculations.
+Calculations are performed based on:
+ • Employee Service Period
+ • Employment Contract Terms
+ • Basic Salary Structure
+ • Applicable Labor Regulations
+This ensures accurate and compliant benefit settlements for employees.
+17.15. Exit Interview Management
+The system facilitates structured exit interviews to gather employee feedback and organizational 
+insights.
+Key evaluation areas include:
+ • Work Environment
+ • Management Effectiveness
+ • Compensation and Benefits
+--- PAGE 79 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 79
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+04-July-2026
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+ • Career Development Opportunities
+ • Training Programs
+ • Reasons for Leaving
+Collected data can be analyzed to support employee retention strategies and workforce planning 
+initiatives.
+17.16. Automated Document Generation
+The module automatically generates and stores all required exit-related documents, including:
+ • Experience Certificates
+ • Relieving Letters
+ • Service Certificates
+ • No Objection Certificates (NOC)
+ • Final Settlement Statements
+ • Exit Clearance Forms
+Documents can be generated in PDF format and maintained within the employee record repository.
+17.17. Payroll Integration
+Seamless integration with the Payroll Management Module ensures:
+ • Final Salary Processing
+ • Settlement Payments
+ • Payroll Deactivation
+ • Final Payslip Generation
+ • Employee Status Updates
+This eliminates duplicate data entry and ensures accurate payroll closure.
+17.18. Employee Status Lifecycle Management
+The system tracks employee status throughout the exit process, including:
+Active -> Resigned -> Notice Period -> Clearance Pending -> Settlement Pending -> Exited
+This provides complete visibility into the employee separation lifecycle.
+17.19. Business Benefits
+ • Standardized employee separation procedures across all branches and locations.
+ • Faster and more efficient exit processing.
+ • Improved compliance with labor laws and company policies.
+ • Accurate final settlement and gratuity calculations.
+ • Enhanced control over company asset recovery.
+--- PAGE 80 ---
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 80
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc Version: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 7.0 DRAFT - CONFIDENTIAL
+04-July-2026
+ • Reduced administrative workload through workflow automation.
+ • Improved employee experience during separation.
+ • Comprehensive reporting and management visibility.
+ • Complete audit trail for all exit-related activities.
+The Employee Exit Management Module serves as a comprehensive solution for managing employee 
+separations while ensuring operational efficiency, regulatory compliance, and effective coordination 
+among HR, Finance, Payroll, IT, and Administration departments.
+17.20. Top Management Dashboard – HR Analytics & Workforce Intelligence
+The Top Management Dashboard serves as a centralized executive decision-support platform that 
+provides real-time visibility into the organization’s human capital, workforce performance, operational 
+efficiency, compliance status, and HR-related financial indicators. By consolidating information from 
+all HR modules into a single interactive dashboard, senior management can monitor workforce trends, 
+identify risks, evaluate organizational performance, and make informed strategic decisions.
+17.20.1  Business Benefits
+ • Single-point visibility of the entire workforce across all branches and locations.
+ • Real-time access to strategic HR and workforce information.
+ • Improved workforce planning and resource allocation.
+ • Better control over payroll, benefits, and employee-related costs.
+ • Early identification of operational and compliance risks.
+ • Enhanced employee performance and productivity monitoring.
+ • Data-driven recruitment, retention, and succession planning.
+ • Executive-level analytics to support organizational growth and business objectives.
+The Top Management Dashboard transforms HR data into actionable business intelligence, providing 
+leadership with a comprehensive view of workforce performance, employee engagement, compliance, 
+and organizational effectiveness through a single, integrated executive platform.
+END OF SESSION

@@ -1,0 +1,545 @@
+=== AP & AR ===
+1.4.-Accounts Payable (AP) – Supplier Financial Control--------------------------------------------------- 12
+1.5.-Accounts Receivable (AR) – Customer Credit & Collections Management---------------------------- 15
+2.-Inventory-Integrated Accounting������������������������������������������������������������������������21
+2.1.-Inventory Accounting Logic----------------------------------------------------------------------------- 21
+2.2.-Banking, Cash & Treasury Management---------------------------------------------------------------- 23
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, m
+
+==================================================
+
+1.5.-Accounts Receivable (AR) – Customer Credit & Collections Management---------------------------- 15
+2.-Inventory-Integrated Accounting������������������������������������������������������������������������21
+2.1.-Inventory Accounting Logic----------------------------------------------------------------------------- 21
+2.2.-Banking, Cash & Treasury Management---------------------------------------------------------------- 23
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, lo
+
+==================================================
+
+=== INVENTORY & BANKING ===
+2.1.-Inventory Accounting Logic----------------------------------------------------------------------------- 21
+2.2.-Banking, Cash & Treasury Management---------------------------------------------------------------- 23
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at p
+
+==================================================
+
+2.2.-Banking, Cash & Treasury Management---------------------------------------------------------------- 23
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at product, customer, warehouse, branch, and
+country levels.
+It ensures that every operational activity automaticall
+
+==================================================
+
+=== BUDGETING, TAX & FX ===
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at product, customer, warehouse, branch, and
+country levels.
+It ensures that every operational activity automatically translates into accurate financial impact,
+providing end-to-end financial governance across the entire sup
+
+==================================================
+
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at product, customer, warehouse, branch, and
+country levels.
+It ensures that every operational activity automatically translates into accurate financial impact,
+providing end-to-end financial governance across the entire supply chain.
+1.1.	System Design Philosophy
+The system is built on five core principles:
+1.1.1  Transaction-Dri
+
+==================================================
+
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at product, customer, warehouse, branch, and
+country levels.
+It ensures that every operational activity automatically translates into accurate financial impact,
+providing end-to-end financial governance across the entire supply chain.
+1.1.	System Design Philosophy
+The system is built on five core principles:
+1.1.1  Transaction-Driven Accounting
+Every operational action generates automatic accounting entries:
+Purchase -> Inventory + Pa
+
+==================================================
+
+=== FINANCIAL STATEMENTS & NEW BRANCH ===
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligence and control platform
+of a multinational organization. It is designed to manage high-volume, multi-currency, multi-country
+trading operations involving procurement, inventory movement, warehousing, sales distribution, logistics
+costs, and inter-company transactions.
+Unlike traditional accounting systems, this module is transaction-driven, inventory-integrated, and
+profitability-focused, enabling real-time financial visibility at product, customer, warehouse, branch, and
+country levels.
+It ensures that every operational activity automatically translates into accurate financial impact,
+providing end-to-end financial governance across the entire supply chain.
+1.1.	System Design Philosophy
+The system is built on five core principles:
+1.1.1  Transaction-Driven Accounting
+Every operational action generates automatic accounting entries:
+Purchase -> Inventory + Payable + Duty
+Sales > Revenue + Receivable + COGS (COGS represents the actual cost of the parts that are sold,
+
+==================================================
+
+3.-General Ledger (GL) ------------------------------------------------------------------------------------- 9
+1.4.-Accounts Payable (AP) – Supplier Financial Control--------------------------------------------------- 12
+1.5.-Accounts Receivable (AR) – Customer Credit & Collections Management---------------------------- 15
+2.-Inventory-Integrated Accounting������������������������������������������������������������������������21
+2.1.-Inventory Accounting Logic----------------------------------------------------------------------------- 21
+2.2.-Banking, Cash & Treasury Management---------------------------------------------------------------- 23
+2.3.-Financial Budgeting & Budget Management ----------------------------------------------------------- 29
+2.4.-Multi-Currency & Foreign Exchange (FX) Management------------------------------------------------ 34
+2.5.-Tax & Compliance Management------------------------------------------------------------------------- 36
+2.6.-Financial Statements, Consolidation & Management Reporting--------------------------------------- 37
+3.-NEW BRANCH SETUP GUIDELINE & CHECKLIST (ERP IMPLEMENTATION SOP)�����������������������41
+3.1.-Branch Setup Workflow- -------------------------------------------------------------------------------- 41
+
+--- PAGE 4 ---
+4 ===
+CLIENT
+CONSULTANT
+DEVELOPER
+Stages
+Name
+Date
+Status
+Signature
+Prepared By
+SaNDS Lab
+Ancy Varghese Thekkan
+(Software Architect)
+15-June-2026
+Completed
+YES
+Verified By
+SaNDS Lab
+Ajit Kumar KV (CEO)
+Checked &
+Verified
+YES
+Consultant Review
+UniGlobal
+Client Approval
+Popular
+Doc ID
+Version
+Revision
+Date
+Status
+DOC - 005
+v1.0
+0
+04-June-2026
+Initial Draft
+
+--- PAGE 5 ---
+5 ===
+1.	 ACCOUNTING & FINANCIAL MANAGEMENT
+The Accounting & Financial Management System is the core financial intelligenc
+
+==================================================
+

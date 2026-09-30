@@ -1,0 +1,797 @@
+<style>
+    :root {{
+      --primary: #0a2540;
+      --primary-light: #18446e;
+      --accent: #d97706;
+      --accent-dark: #b45309;
+      --secondary: #0284c7;
+      --dark: #0f172a;
+      --gray-900: #1e293b;
+      --gray-700: #334155;
+      --gray-600: #475569;
+      --gray-500: #64748b;
+      --gray-300: #cbd5e1;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --gray-50: #f8fafc;
+      --white: #ffffff;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --info: #0369a1;
+      --info-bg: #e0f2fe;
+    }}
+
+    * {{
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }}
+
+    body {{
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--gray-700);
+      line-height: 1.55;
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+    }}
+
+    .document-container {{
+      max-width: 1040px;
+      margin: 25px auto;
+      background: var(--white);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }}
+
+    /* Cover / Header Banner */
+    .doc-header {{
+      background: linear-gradient(135deg, #07192c 0%, #0a2540 50%, #153e67 100%);
+      color: var(--white);
+      padding: 30px 45px 25px;
+      position: relative;
+      border-bottom: 4px solid var(--accent);
+    }}
+
+    .header-top {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }}
+
+    .logo-group {{
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }}
+
+    .logo-sands {{
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }}
+
+    .logo-uniglobal {{
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+    }}
+
+    .logo-popular {{
+      height: 46px;
+      width: auto;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }}
+
+    .divider-line {{
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.2);
+    }}
+
+    .badge-confidential {{
+      display: inline-block;
+      background: #ef4444;
+      color: #fff;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }}
+
+    .doc-main-title {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }}
+
+    .doc-sub-title {{
+      font-size: 14px;
+      color: #cbd5e1;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }}
+
+    .meta-grid {{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      padding: 14px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }}
+
+    .meta-item {{
+      display: flex;
+      flex-direction: column;
+    }}
+
+    .meta-lbl {{
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      margin-bottom: 2px;
+      font-weight: 600;
+    }}
+
+    .meta-val {{
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+    }}
+
+    /* Document Body Content */
+    .doc-body {{
+      padding: 35px 45px 45px;
+    }}
+
+    .section-block {{
+      margin-bottom: 30px;
+    }}
+
+    .section-title-wrap {{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-200);
+    }}
+
+    .section-num {{
+      background: var(--primary);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 3px 9px;
+      border-radius: 4px;
+    }}
+
+    .section-title {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.3px;
+    }}
+
+    p {{
+      margin-bottom: 12px;
+      color: var(--gray-700);
+      font-size: 12.5px;
+      text-align: justify;
+    }}
+
+    /* Grids */
+    .grid-2 {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }}
+
+    .grid-3 {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 16px 0;
+    }}
+
+    .card {{
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }}
+
+    .card-primary {{
+      border-left: 4px solid var(--primary);
+    }}
+
+    .card-accent {{
+      border-left: 4px solid var(--accent);
+    }}
+
+    .card-success {{
+      border-left: 4px solid var(--success);
+      background: #f0fdf4;
+    }}
+
+    .card-info {{
+      border-left: 4px solid var(--secondary);
+      background: #f0f9ff;
+    }}
+
+    .card-title {{
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }}
+
+    .card-text {{
+      font-size: 12px;
+      color: var(--gray-600);
+      line-height: 1.45;
+    }}
+
+    /* Roadmap Box */
+    .roadmap-box {{
+      background: #ffffff;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }}
+
+    .roadmap-header {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }}
+
+    .roadmap-header h4 {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      color: var(--dark);
+      font-weight: 700;
+    }}
+
+    .roadmap-list {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }}
+
+    .roadmap-item {{
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 11px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+    }}
+
+    .roadmap-item.active {{
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+      font-weight: 700;
+    }}
+
+    .roadmap-item.done {{
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+      font-weight: 600;
+    }}
+
+    .rm-badge {{
+      background: var(--gray-200);
+      color: var(--gray-700);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }}
+
+    .roadmap-item.active .rm-badge {{
+      background: #d97706;
+      color: #fff;
+    }}
+
+    .roadmap-item.done .rm-badge {{
+      background: #059669;
+      color: #fff;
+    }}
+
+    /* Tables */
+    table {{
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px;
+      font-size: 12px;
+      background: var(--white);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }}
+
+    th {{
+      background: var(--primary);
+      color: var(--white);
+      padding: 9px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }}
+
+    td {{
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--gray-200);
+      color: var(--gray-700);
+    }}
+
+    tr:last-child td {{
+      border-bottom: none;
+    }}
+
+    tr:nth-child(even) td {{
+      background-color: var(--gray-50);
+    }}
+
+    .total-row td {{
+      background-color: #0f172a !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 12px;
+    }}
+
+    .subtotal-row td {{
+      background-color: #f1f5f9 !important;
+      font-weight: 700;
+      color: var(--dark);
+    }}
+
+    /* Badges */
+    .badge {{
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }}
+
+    .badge-primary {{ background: #e0f2fe; color: #0369a1; }}
+    .badge-accent {{ background: #fef3c7; color: #b45309; }}
+    .badge-success {{ background: #dcfce7; color: #15803d; }}
+    .badge-danger {{ background: #fee2e2; color: #b91c1c; }}
+    .badge-secondary {{ background: #f3e8ff; color: #6b21a8; }}
+
+    /* Milestone Detailed Box */
+    .milestone-card {{
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }}
+
+    .milestone-header {{
+      background: #f8fafc;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 9px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }}
+
+    .milestone-left {{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }}
+
+    .ms-tag {{
+      background: var(--primary);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }}
+
+    .ms-title {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--dark);
+    }}
+
+    .milestone-right {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+
+    .ms-duration {{
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-600);
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }}
+
+    .ms-payment-badge {{
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+    }}
+
+    .milestone-body {{
+      padding: 12px 14px;
+      background: var(--white);
+    }}
+
+    .ms-detail-grid {{
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 14px;
+    }}
+
+    .ms-subheading {{
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 700;
+      color: var(--gray-500);
+      margin-bottom: 5px;
+    }}
+
+    .feature-list {{
+      list-style-type: none;
+    }}
+
+    .feature-list li {{
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 4px;
+      font-size: 11.5px;
+      color: var(--gray-700);
+    }}
+
+    .feature-list li::before {{
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }}
+
+    .tech-badge-list {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }}
+
+    .tech-pill {{
+      font-size: 10.5px;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      padding: 2px 7px;
+      border-radius: 3px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }}
+
+    .signoff-box {{
+      background: #f8fafc;
+      border-left: 3px solid var(--secondary);
+      padding: 7px 10px;
+      margin-top: 8px;
+      border-radius: 0 4px 4px 0;
+      font-size: 11px;
+    }}
+
+    .signoff-title {{
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 2px;
+    }}
+
+    /* Approval Grid */
+    .approval-grid {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }}
+
+    .sign-box {{
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      background: var(--white);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 230px;
+      position: relative;
+    }}
+
+    .sign-box.signed {{
+      border: 2px solid var(--success);
+      background: #fcfdfc;
+    }}
+
+    .sign-box.disagreed {{
+      border: 2px solid var(--danger);
+      background: #fef2f2;
+    }}
+
+    .sign-header {{
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }}
+
+    .sign-role {{
+      font-size: 10.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }}
+
+    .sign-name {{
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--dark);
+    }}
+
+    .sign-org {{
+      font-size: 10.5px;
+      color: var(--gray-500);
+    }}
+
+    .signature-area {{
+      margin: 8px 0;
+      min-height: 80px;
+      border: 1px dashed var(--gray-300);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+    }}
+
+    .signature-img {{
+      max-height: 70px;
+      max-width: 90%;
+      object-fit: contain;
+    }}
+
+    .sign-meta {{
+      font-size: 10px;
+      color: var(--gray-500);
+      margin-top: 4px;
+      border-top: 1px solid var(--gray-200);
+      padding-top: 4px;
+    }}
+
+    .verified-seal {{
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--success);
+      font-weight: 700;
+      font-size: 10.5px;
+    }}
+
+    /* Web Action Header */
+    .web-action-bar {{
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }}
+
+    .web-action-left {{
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }}
+
+    .portal-branding {{
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+
+    .web-action-right {{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }}
+
+    .btn {{
+      font-family: 'Inter', sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: none;
+    }}
+
+    .btn-primary {{ background: #0284c7; color: #ffffff; }}
+    .btn-primary:hover {{ background: #0369a1; }}
+
+    .btn-accent {{ background: #d97706; color: #ffffff; }}
+    .btn-accent:hover {{ background: #b45309; }}
+
+    .btn-outline {{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+    }}
+    .btn-outline:hover {{
+      background: rgba(255,255,255,0.1);
+      border-color: #ffffff;
+    }}
+
+    .btn-danger {{ background: #ef4444; color: #ffffff; }}
+    .btn-danger:hover {{ background: #dc2626; }}
+
+    /* Footer */
+    .doc-footer {{
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 16px 45px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }}
+
+    /* Print Break Utilities */
+    @media print {{
+      body {{ background: #ffffff !important; font-size: 11px; }}
+      .web-action-bar, .interactive-controls, .signature-action-btn {{ display: none !important; }}
+      .document-container {{ box-shadow: none !important; margin: 0 !important; max-width: 100% !important; }}
+      .page-break {{ page-break-before: always; }}
+      .avoid-break {{ page-break-inside: avoid; }}
+      .doc-header {{ padding: 18px 25px 12px !important; }}
+      .doc-body {{ padding: 18px 25px 20px !important; }}
+      .doc-footer {{ padding: 10px 25px !important; }}
+    }}
+
+    /* Interactive Pad Modal */
+    .modal-overlay {{
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }}
+
+    .modal-card {{
+      background: #ffffff;
+      border-radius: 10px;
+      max-width: 550px;
+      width: 90%;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }}
+
+    .sig-canvas-wrap {{
+      border: 2px dashed #cbd5e1;
+      border-radius: 6px;
+      margin: 14px 0;
+      background: #fafafa;
+    }}
+
+    canvas#sig-canvas {{
+      width: 100%;
+      height: 180px;
+      display: block;
+      cursor: crosshair;
+    }}
+  </style>
+</head>
+<body>
+
+<!-- ==================== WEB PORTAL TOP ACTION BAR ==================== -->
+<div class="web-action-bar">
+  <div class="web-action-left">
+    <a href="index.php" class="portal-branding">
+      <span style="background:#0284c7; color:#fff; border-radius:4px; padding:2px 6px; font-size:11px;">PORTAL</span>
+      SaNDS Lab • Popular ERP Governance
+    </a>
+    <span style="color:#64748b;">|</span>
+    <span style="font-family:'JetBrains Mono'; font-size:12px; color:#38bdf8;">DOC: SL-POP-ERP-MS-003</span>
+    <?php if ($is_locked): ?>
+      <span class="badge badge-success">🔒 FINALIZED & LOCKED</span>
+    <?php else: ?>
+      <span class="badge badge-accent">📝 IN ACTIVE REVIEW</span>
+    <?php endif; ?>
+  </div>
+  <div class="web-action-right">
+    <a href="index.php" class="btn btn-outline">← Back to Portal</a>
+    <button onclick="window.print();" class="btn btn-outline">🖨️ Print Document</button>
+    <a href="SL-POP-ERP-MS-003.pdf" download class="btn btn-accent">📥 Download Signed PDF</a>
+  </div>
+</div>
+
+<div class="document-container">
+
+  <!-- ==================== HEADER BANNER WITH EMBEDDED LOGOS ==================== -->
+  <header class="doc-header">
+    <div class="header-top">
+      <div class="logo-group">
+        <img src="{logo_sands_white}" alt="SaNDS Lab" class="logo-sands">
+        <div class="divider-line"></div>
+        <img src="{logo_uniglobal_white}" alt="UniGlobal Consultancy" class="logo-uniglobal">
+      </div>
+      <div>
+        <img src="{logo_popular}" alt="Popular Auto Spa

@@ -1,3 +1,188 @@
+<?php
+// PHP Backend for Digital Signature & Finalization API (SL-POP-ERP-MS-001)
+if (session_status() === PHP_SESSION_NONE) {
+    $session_save_dir = __DIR__ . '/.sessions';
+    if (!is_dir($session_save_dir)) {
+        @mkdir($session_save_dir, 0700, true);
+    }
+    if (is_dir($session_save_dir) && is_writable($session_save_dir)) {
+        @session_save_path($session_save_dir);
+    } elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
+}
+
+$doc_id = 'SL-POP-ERP-MS-001';
+
+$db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
+foreach ($db_candidates as $dbc) {
+    if (file_exists($dbc)) {
+        require_once $dbc;
+        break;
+    }
+}
+
+$authenticated_user = isset($_SESSION['authenticated_user']) ? $_SESSION['authenticated_user'] : (isset($_COOKIE['sands_auth_device']) ? 'authorized_user' : '');
+
+// Handle direct AJAX POST actions
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    $action = trim($_POST['action']);
+
+    if ($action === 'sign_document') {
+        $sig_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
+        $s_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
+        $s_org  = isset($_POST['signer_org']) ? trim($_POST['signer_org']) : '';
+        $s_role = isset($_POST['signer_role']) ? trim($_POST['signer_role']) : 'Executive Sponsor';
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+
+        if (empty($sig_data)) {
+            echo json_encode(array('success' => false, 'message' => 'Please draw your signature before submitting.'));
+            exit;
+        }
+
+        if ($pdo) {
+            $mstmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+            $mstmt->execute(array($post_doc_id));
+            if ($mstmt->fetchColumn() === 'FINALIZED_AND_LOCKED') {
+                echo json_encode(array('success' => false, 'message' => 'This document is finalized and locked. No further signature edits are permitted.'));
+                exit;
+            }
+        }
+
+        $signer_email = !empty($_POST['signer_email']) ? strtolower(trim($_POST['signer_email'])) : (!empty($authenticated_user) ? strtolower(trim($authenticated_user)) : '');
+        if (empty($signer_email) || $signer_email === 'authorized_user') {
+            $lo_org = strtolower($s_org);
+            $lo_role = strtolower($s_role);
+            $lo_name = strtolower($s_name);
+            if (strpos($lo_org, 'popular') !== false || strpos($lo_role, 'client') !== false || strpos($lo_role, 'director') !== false || strpos($lo_role, 'sponsor') !== false) {
+                $signer_email = 'director@popularbahrain.com';
+            } elseif (strpos($lo_org, 'uniglobal') !== false || strpos($lo_role, 'consultant') !== false || strpos($lo_role, 'auditor') !== false) {
+                $signer_email = 'consultant@uniglobal.com';
+            } elseif (strpos($lo_org, 'sands') !== false || strpos($lo_name, 'ajit') !== false || strpos($lo_role, 'architect') !== false || strpos($lo_role, 'admin') !== false) {
+                $signer_email = 'ajit@sandslab.com';
+            } else {
+                $signer_email = 'director@popularbahrain.com';
+            }
+        }
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+
+        if ($pdo) {
+            try {
+                $now_str = date('Y-m-d H:i:s');
+                $check = $pdo->prepare("SELECT id FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+                $check->execute(array($post_doc_id, $signer_email));
+                $existing_id = $check->fetchColumn();
+
+                if ($existing_id) {
+                    $up = $pdo->prepare("UPDATE document_signatures SET full_name = ?, organization = ?, role = ?, status = 'SIGNED', signature_data = ?, disagree_reason = NULL, ip_address = ?, device_name = ?, signed_at = ? WHERE id = ?");
+                    $up->execute(array($s_name, $s_org, $s_role, $sig_data, $ip, $ua, $now_str, $existing_id));
+                } else {
+                    $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, email, full_name, organization, role, status, signature_data, ip_address, device_name, signed_at) VALUES (?, ?, ?, ?, ?, 'SIGNED', ?, ?, ?, ?)");
+                    $ins->execute(array($post_doc_id, $signer_email, $s_name, $s_org, $s_role, $sig_data, $ip, $ua, $now_str));
+                }
+
+                echo json_encode(array('success' => true, 'message' => 'Digital signature successfully recorded and verified!'));
+                exit;
+            } catch (Exception $e) {
+                echo json_encode(array('success' => false, 'message' => 'Database Error: ' . $e->getMessage()));
+                exit;
+            }
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Database connection unavailable.'));
+            exit;
+        }
+    }
+
+    if ($action === 'disagree_document') {
+        $reason = isset($_POST['disagree_reason']) ? trim($_POST['disagree_reason']) : '';
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+
+        if (empty($reason)) {
+            echo json_encode(array('success' => false, 'message' => 'Please provide a descriptive reason for disagreement.'));
+            exit;
+        }
+
+        $signer_email = !empty($_POST['signer_email']) ? strtolower(trim($_POST['signer_email'])) : (!empty($authenticated_user) ? strtolower(trim($authenticated_user)) : 'director@popularbahrain.com');
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+
+        if ($pdo) {
+            try {
+                $now_str = date('Y-m-d H:i:s');
+                $check = $pdo->prepare("SELECT id FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+                $check->execute(array($post_doc_id, $signer_email));
+                $existing_id = $check->fetchColumn();
+
+                if ($existing_id) {
+                    $up = $pdo->prepare("UPDATE document_signatures SET status = 'DISAGREED', signature_data = NULL, disagree_reason = ?, ip_address = ?, device_name = ?, signed_at = ? WHERE id = ?");
+                    $up->execute(array($reason, $ip, $ua, $now_str, $existing_id));
+                } else {
+                    $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, email, full_name, organization, role, status, disagree_reason, ip_address, device_name, signed_at) VALUES (?, ?, 'Executive', 'Stakeholder', 'Stakeholder', 'DISAGREED', ?, ?, ?, ?)");
+                    $ins->execute(array($post_doc_id, $signer_email, $reason, $ip, $ua, $now_str));
+                }
+
+                echo json_encode(array('success' => true, 'message' => 'Revision request submitted and recorded.'));
+                exit;
+            } catch (Exception $e) {
+                echo json_encode(array('success' => false, 'message' => 'Database Error: ' . $e->getMessage()));
+                exit;
+            }
+        }
+    }
+
+    if ($action === 'finalize_document') {
+        $final_by = !empty($authenticated_user) ? $authenticated_user : 'ajit@sandslab.com';
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+        if ($pdo) {
+            $now_str = date('Y-m-d H:i:s');
+            $fstmt = $pdo->prepare("UPDATE document_meta SET status = 'FINALIZED_AND_LOCKED', finalized_by = ?, finalized_at = ? WHERE doc_id = ?");
+            $fstmt->execute(array($final_by, $now_str, $post_doc_id));
+            echo json_encode(array('success' => true, 'message' => 'Document finalized and locked.'));
+            exit;
+        }
+    }
+
+    if ($action === 'admin_reopen_document') {
+        $clear_sigs = isset($_POST['clear_signatures']) && ($_POST['clear_signatures'] === '1' || $_POST['clear_signatures'] === 'true');
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+        if ($pdo) {
+            $rstmt = $pdo->prepare("UPDATE document_meta SET status = 'IN_REVIEW', finalized_by = NULL, finalized_at = NULL WHERE doc_id = ?");
+            $rstmt->execute(array($post_doc_id));
+            if ($clear_sigs) {
+                $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+                $del->execute(array($post_doc_id));
+            }
+            echo json_encode(array('success' => true, 'message' => 'Document reopened for review.'));
+            exit;
+        }
+    }
+
+    if ($action === 'admin_clear_all_signatures') {
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+        if ($pdo) {
+            $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ?");
+            $del->execute(array($post_doc_id));
+            echo json_encode(array('success' => true, 'message' => 'All signatures cleared successfully.'));
+            exit;
+        }
+    }
+
+    if ($action === 'admin_clear_signature') {
+        $target = isset($_POST['target_email']) ? strtolower(trim($_POST['target_email'])) : '';
+        $post_doc_id = isset($_POST['doc_id']) ? trim($_POST['doc_id']) : $doc_id;
+        if ($pdo && !empty($target)) {
+            $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND LOWER(email) = LOWER(?)");
+            $del->execute(array($post_doc_id, $target));
+            echo json_encode(array('success' => true, 'message' => 'Signature cleared successfully.'));
+            exit;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2022,26 +2207,12 @@
     $user_record = null;
 
     if (!isset($pdo) || !$pdo) {
-        $db_candidates = array(
-            __DIR__ . '/.auth_portal.db',
-            __DIR__ . '/popular/.auth_portal.db',
-            dirname(__DIR__) . '/.auth_portal.db',
-            dirname(__DIR__) . '/popular/.auth_portal.db'
-        );
-        $best_db = null;
-        $best_mtime = 0;
-        foreach ($db_candidates as $cand) {
-            if (file_exists($cand) && filemtime($cand) > $best_mtime) {
-                $best_db = $cand;
-                $best_mtime = filemtime($cand);
+        $db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
+        foreach ($db_candidates as $dbc) {
+            if (file_exists($dbc)) {
+                require_once $dbc;
+                break;
             }
-        }
-        if ($best_db) {
-            try {
-                $pdo = new PDO('sqlite:' . $best_db);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            } catch (Exception $e) {}
         }
     }
 
@@ -2607,6 +2778,22 @@
         document.getElementById('disagreeModal').style.display = 'none';
       }
 
+      function showLoadingModal(title, text) {
+        Swal.fire({
+          title: title || 'Processing Request...',
+          html: '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; margin:16px 0 6px 0;">' +
+                '  <div style="width:42px; height:42px; border:4px solid #fecdd3; border-top-color:#e11d48; border-radius:50%; animation:docSpin 0.75s linear infinite;"></div>' +
+                '  <div style="font-size:13px; color:#475569; font-weight:500;">' + (text || 'Updating document & recording status...') + '</div>' +
+                '</div>',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      }
+
       function submitDigitalSignature(e) {
         e.preventDefault();
         if (!hasDrawn || strokes.length === 0) {
@@ -2628,25 +2815,29 @@
         btn.disabled = true;
         btn.innerText = 'Recording Signature...';
 
+        showLoadingModal('Recording Signature...', 'Saving signature and updating milestone...');
+
         var formData = new FormData();
         formData.append('action', 'sign_document');
         formData.append('doc_id', 'SL-POP-ERP-MS-001');
+        formData.append('signer_email', '<?php echo !empty($authenticated_user) ? htmlspecialchars($authenticated_user, ENT_QUOTES) : ""; ?>');
         formData.append('signature_data', sigData);
         formData.append('signer_name', name);
         formData.append('signer_org', org);
         formData.append('signer_role', role);
 
-        fetch('', {
+        fetch(window.location.href, {
           method: 'POST',
           body: formData
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
-          if (data.success) {
+          Swal.close();
+          if (data && data.success) {
             Swal.fire({
               icon: 'success',
               title: 'Signature Recorded!',
-              text: 'Milestone document signed and recorded successfully!',
+              text: data.message || 'Milestone document signed and recorded successfully!',
               confirmButtonColor: '#15803d',
               confirmButtonText: 'Great!'
             }).then(function() {
@@ -2656,7 +2847,7 @@
             Swal.fire({
               icon: 'error',
               title: 'Notice',
-              text: data.message,
+              text: (data && data.message) ? data.message : 'Error recording signature.',
               confirmButtonColor: '#be123c'
             });
             btn.disabled = false;
@@ -2664,10 +2855,11 @@
           }
         })
         .catch(function(err) {
+          Swal.close();
           Swal.fire({
             icon: 'error',
             title: 'Network Error',
-            text: 'Unable to record signature. Please try again.',
+            text: 'Unable to record signature: ' + (err.message || 'Network error'),
             confirmButtonColor: '#be123c'
           });
           btn.disabled = false;
@@ -2691,24 +2883,27 @@
         var btn = document.getElementById('btnSubmitDisagree');
         btn.disabled = true;
         btn.innerText = 'Submitting Feedback...';
+        showLoadingModal('Submitting Feedback...', 'Recording revision request...');
 
         var formData = new FormData();
         formData.append('action', 'disagree_document');
         formData.append('doc_id', 'SL-POP-ERP-MS-001');
+        formData.append('signer_email', '<?php echo !empty($authenticated_user) ? htmlspecialchars($authenticated_user, ENT_QUOTES) : ""; ?>');
         formData.append('disagree_reason', reason);
 
-        fetch('', {
+        fetch(window.location.href, {
           method: 'POST',
           body: formData
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
-          if (data.success) {
+          Swal.close();
+          if (data && data.success) {
             closeDisagreeModal();
             Swal.fire({
               icon: 'info',
               title: 'Feedback Submitted',
-              text: 'Your milestone revision request has been logged for Super Admin review.',
+              text: data.message || 'Your milestone revision request has been logged.',
               confirmButtonColor: '#0a2540'
             }).then(function() {
               window.location.reload();
@@ -2717,7 +2912,7 @@
             Swal.fire({
               icon: 'error',
               title: 'Notice',
-              text: data.message,
+              text: (data && data.message) ? data.message : 'Error submitting feedback.',
               confirmButtonColor: '#be123c'
             });
             btn.disabled = false;
@@ -2725,30 +2920,15 @@
           }
         })
         .catch(function(err) {
+          Swal.close();
           Swal.fire({
             icon: 'error',
             title: 'Network Error',
-            text: 'Network Error submitting revision request. Please try again.',
+            text: 'Network Error submitting revision request.',
             confirmButtonColor: '#be123c'
           });
           btn.disabled = false;
           btn.innerText = 'Submit Revision Request';
-        });
-      }
-
-      function showLoadingModal(title, text) {
-        Swal.fire({
-          title: title || 'Processing Request...',
-          html: '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; margin:16px 0 6px 0;">' +
-                '  <div style="width:42px; height:42px; border:4px solid #fecdd3; border-top-color:#e11d48; border-radius:50%; animation:docSpin 0.75s linear infinite;"></div>' +
-                '  <div style="font-size:13px; color:#475569; font-weight:500;">' + (text || 'Please wait while we update documents & synchronize PDF...') + '</div>' +
-                '</div>',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false,
-          didOpen: () => {
-            Swal.showLoading();
-          }
         });
       }
 
@@ -2775,24 +2955,26 @@
       }
 
       function adminExecuteReopen(clearSigs) {
-        showLoadingModal('Re-opening Document...', 'Updating document lifecycle status & regenerating PDF...');
+        showLoadingModal('Re-opening Document...', 'Updating document lifecycle status...');
         var fd = new FormData();
         fd.append('action', 'admin_reopen_document');
         fd.append('doc_id', 'SL-POP-ERP-MS-001');
         fd.append('clear_signatures', clearSigs ? '1' : '0');
 
-        fetch('', { method: 'POST', body: fd })
+        fetch(window.location.href, { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(d) {
-          if (d.success) {
-            Swal.fire({ icon: 'success', title: 'Document Reopened', text: d.message, confirmButtonColor: '#15803d' })
+          Swal.close();
+          if (d && d.success) {
+            Swal.fire({ icon: 'success', title: 'Document Reopened', text: d.message || 'Document reopened successfully.', confirmButtonColor: '#15803d' })
             .then(function() { window.location.reload(); });
           } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: (d && d.message) ? d.message : 'Error reopening document.', confirmButtonColor: '#be123c' });
           }
         })
         .catch(function(err) {
-          Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed. Please check network connection.', confirmButtonColor: '#be123c' });
+          Swal.close();
+          Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed: ' + (err.message || 'Network error'), confirmButtonColor: '#be123c' });
         });
       }
 
@@ -2808,19 +2990,25 @@
           cancelButtonText: 'Cancel'
         }).then(function(result) {
           if (result.isConfirmed) {
-            showLoadingModal('Finalizing & Sealing Document...', 'Generating official locked PDF & Digital Execution Certificates...');
+            showLoadingModal('Finalizing & Locking...', 'Locking milestone and generating certificates...');
             var fd = new FormData();
             fd.append('action', 'finalize_document');
-            fd.append('admin_action', 'finalize_document');
             fd.append('doc_id', 'SL-POP-ERP-MS-001');
 
-            fetch('', { method: 'POST', body: fd })
-            .then(function() {
-              Swal.fire({ icon: 'success', title: 'Document Finalized', text: 'Document is locked and certificates activated.', confirmButtonColor: '#15803d' })
-              .then(function() { window.location.reload(); });
+            fetch(window.location.href, { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              Swal.close();
+              if (d && d.success) {
+                Swal.fire({ icon: 'success', title: 'Document Finalized', text: d.message || 'Document is locked and certificates activated.', confirmButtonColor: '#15803d' })
+                .then(function() { window.location.reload(); });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: (d && d.message) ? d.message : 'Error finalizing document.', confirmButtonColor: '#be123c' });
+              }
             })
             .catch(function(err) {
-              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' });
+              Swal.close();
+              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed: ' + (err.message || 'Network error'), confirmButtonColor: '#be123c' });
             });
           }
         });
@@ -2838,23 +3026,25 @@
           cancelButtonText: 'Cancel'
         }).then(function(result) {
           if (result.isConfirmed) {
-            showLoadingModal('Clearing All Signatures...', 'Deleting digital ink signatures and rebuilding fresh document...');
+            showLoadingModal('Clearing All Signatures...', 'Deleting ink signatures...');
             var fd = new FormData();
             fd.append('action', 'admin_clear_all_signatures');
             fd.append('doc_id', 'SL-POP-ERP-MS-001');
 
-            fetch('', { method: 'POST', body: fd })
+            fetch(window.location.href, { method: 'POST', body: fd })
             .then(function(r) { return r.json(); })
             .then(function(d) {
-              if (d.success) {
-                Swal.fire({ icon: 'success', title: 'Signatures Cleared', text: d.message, confirmButtonColor: '#15803d' })
+              Swal.close();
+              if (d && d.success) {
+                Swal.fire({ icon: 'success', title: 'Signatures Cleared', text: d.message || 'All signatures cleared successfully.', confirmButtonColor: '#15803d' })
                 .then(function() { window.location.reload(); });
               } else {
-                Swal.fire({ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' });
+                Swal.fire({ icon: 'error', title: 'Error', text: (d && d.message) ? d.message : 'Error clearing signatures.', confirmButtonColor: '#be123c' });
               }
             })
             .catch(function(err) {
-              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' });
+              Swal.close();
+              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed: ' + (err.message || 'Network error'), confirmButtonColor: '#be123c' });
             });
           }
         });
@@ -2863,7 +3053,7 @@
       function adminClearSingleSig(btn, email, name) {
         Swal.fire({
           title: 'Clear Stakeholder Signature?',
-          html: 'Are you sure you want to clear the signature for <strong>' + name + '</strong> (' + email + ')?<br><br><span style="font-size:12px; color:#64748b;">Their signature will be removed, and they will be able to sign again.</span>',
+          html: 'Are you sure you want to clear the signature for <strong>' + name + '</strong> (' + email + ')?<br><br><span style="font-size:12px; color:#64748b;">Their signature will be removed from this document, and they will be able to sign again.</span>',
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#be123c',
@@ -2876,32 +3066,34 @@
               btn.innerHTML = '<span class="inline-spinner"></span> Clearing...';
               btn.disabled = true;
             }
-            showLoadingModal('Clearing Signature...', 'Removing signature for ' + name + ' and synchronizing PDF...');
+            showLoadingModal('Clearing Signature...', 'Removing signature for ' + name + '...');
             var fd = new FormData();
             fd.append('action', 'admin_clear_signature');
             fd.append('doc_id', 'SL-POP-ERP-MS-001');
             fd.append('target_email', email);
 
-            fetch('', { method: 'POST', body: fd })
+            fetch(window.location.href, { method: 'POST', body: fd })
             .then(function(r) { return r.json(); })
             .then(function(d) {
-              if (d.success) {
-                Swal.fire({ icon: 'success', title: 'Signature Cleared', text: d.message, confirmButtonColor: '#15803d' })
+              Swal.close();
+              if (d && d.success) {
+                Swal.fire({ icon: 'success', title: 'Signature Cleared', text: d.message || 'Signature cleared successfully.', confirmButtonColor: '#15803d' })
                 .then(function() { window.location.reload(); });
               } else {
                 if (btn && btn.tagName === 'BUTTON') {
                   btn.innerHTML = '🗑️ Clear';
                   btn.disabled = false;
                 }
-                Swal.fire({ icon: 'error', title: 'Error', text: d.message, confirmButtonColor: '#be123c' });
+                Swal.fire({ icon: 'error', title: 'Error', text: (d && d.message) ? d.message : 'Error clearing signature.', confirmButtonColor: '#be123c' });
               }
             })
             .catch(function(err) {
+              Swal.close();
               if (btn && btn.tagName === 'BUTTON') {
                 btn.innerHTML = '🗑️ Clear';
                 btn.disabled = false;
               }
-              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed. Please try again.', confirmButtonColor: '#be123c' });
+              Swal.fire({ icon: 'error', title: 'Network Error', text: 'Operation failed: ' + (err.message || 'Network error'), confirmButtonColor: '#be123c' });
             });
           }
         });

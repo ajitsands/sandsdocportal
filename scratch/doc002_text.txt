@@ -1,0 +1,1247 @@
+TOTAL PAGES: 33
+
+=== PAGE 1 ===
+BUSINESSANALYSIS
+REPORT
+client
+Popular Auto Spare and A/C Parts Co. W.L.L
+20-02-2026
+DOC - 002
+Ver 1.0
+Prepared By
+SaNDS Lab Middle East W.L.L
+Consultant
+VENDOR & PURCHASE 
+PROCESS FLOW
+
+=== PAGE 2 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 2
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+PREFACE  
+This document describes the workflow and functional processes related to the 
+Purchase and Vendor Management System. It has been prepared based on the 
+discussions held with the management and operational teams, with the objective 
+of clearly defining the purchase procedures, data flow, approval hierarchy, and 
+standard operating practices.
+The document outlines the end-to-end process, starting from branch requirements 
+and stock shortages, through the purchase request process, vendor quotation 
+management, purchase order generation, verification procedures, and final stock 
+updates. It also explains the roles and responsibilities of each department involved, 
+including the Branches, Main Store, Purchase Department, and Management.
+This document primarily concentrates on the workflow of the Purchase Department 
+and its integration with the Main Store and Branch operations. While this document 
+defines the purchase-related processes and associated data flow in detail, the 
+complete branch-level operational workflow is described separately in the next 
+document Doc-003 v-1. The objective here is to clearly establish how purchase 
+activities are initiated, processed, approved, executed, and recorded within the 
+system.
+In addition to the functional workflow, this document includes key management 
+control points, vendor evaluation logic, approval stages, audit tracking mechanisms, 
+and structured data flow processes required to ensure accuracy, transparency, 
+compliance, and accountability in procurement activities.
+This preface serves as an introduction to the overall Purchase and Vendor 
+Management framework. The document should be used as a reference for system 
+development, implementation planning, operational execution, and standardization 
+across departments. The contents of this document are based on the requirements 
+and discussions conducted during the analysis phase and are intended to guide 
+both technical development and operational usage of the system. 
+
+=== PAGE 3 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 3
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+TABLE OF CONTENT
+1. Vendor Master Management ----------------------------------------------------------------------------6
+2. Vendor Communication Framework – Current vs Proposed System -----------------------------6
+3. Automated Low-Stock Reporting  --------------------------------------------------------------------- 8
+4. Less Item List Handling ------------------------------------------------------------------------------- 12
+5.- Purchase-Review-and-Approval-Workflow ----------------------------------------------------------14
+5.1. Purchase Team Review --------------------------------------------------------------------------------- 14
+5.2. CTO Approval Purchase Request ----------------------------------------------------------------------- 15
+5.3. Request for Quotation (RFQ) Generation -------------------------------------------------------------- 15
+5.4. Business Benefits of RFQ Link and Offline RFQ-------------------------------------------------------- 17
+6. Purchase Order Module --------------------------------------------------------------------------------19
+6.1. Current Scenario  --------------------------------------------------------------------------------------- 19
+6.2. Proposed Purchase Order Generation  ----------------------------------------------------------------- 19
+6.3. Business Benefits --------------------------------------------------------------------------------------- 20
+7.- Purchase-Verification-Note ----------------------------------------------------------------------------20
+7.1. Quotation/Invoice-to-PVN (Purchase Verification Note) Conversion --------------------------------- 20
+7.2. Verification Stage --------------------------------------------------------------------------------------- 21
+7.3. Invoice Matching Control ------------------------------------------------------------------------------- 21
+7.4. Partial Delivery Handling ------------------------------------------------------------------------------- 22
+7.5. Item-Level Visibility in PVN ---------------------------------------------------------------------------- 22
+7.6. Business Benefits --------------------------------------------------------------------------------------- 22
+8. Reporting Module ---------------------------------------------------------------------------------------24
+9. Management Review – Key Points (Current vs Proposed System) ---------------------------- 24
+9.1. Centralized Multi-Country Purchase Control ----------------------------------------------------------- 24
+9.2. Vendor Communication Transformation --------------------------------------------------------------- 24
+9.3. Automated Less Item / Minimum Order Handling ---------------------------------------------------- 25
+9.4. Branch-Specific Inventory Intelligence ---------------------------------------------------------------- 25
+9.5. Store Verification Workflow ---------------------------------------------------------------------------- 25
+9.6. Purchase Decision Dashboard -------------------------------------------------------------------------- 25
+9.7. CTO Strategic Control Panel ---------------------------------------------------------------------------- 25
+9.8. Automated Multi-Vendor Purchase Order Generation ------------------------------------------------- 26
+9.9. Purchase Quotation Intelligence ----------------------------------------------------------------------- 26
+9.10.Global Price Master Governance ---------------------------------------------------------------------- 26
+9.11.Audit Trail & Accountability --------------------------------------------------------------------------- 26
+
+=== PAGE 4 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 4
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+9.12. Purchase Order Creation Governance --------------------------------------------------------------- 26
+10.  Data Flow Process for Purchase --------------------------------------------------------------------29
+10.1. Step 1: Branch Requirement to Main Store --------------------------------------------------------- 29
+10.2. Step 2: Main Store Availability Check  -------------------------------------------------------------- 29
+10.3. Step 3: Items Not Available – Creation of Store Purchase Request ------------------------------- 29
+10.4. Step 4: Purchase Department Receives Request --------------------------------------------------- 30
+10.5. Step 5: Purchase Pattern Analysis ------------------------------------------------------------------- 30
+10.6. Step 6: Submission to CTO for Approval ------------------------------------------------------------ 30
+10.7. Step 7: Quotation Request to Multiple Vendors ----------------------------------------------------- 30
+10.8. Step 8: Vendor Quotation Submission -------------------------------------------------------------- 31
+10.9. Step 9: Vendor Evaluation and Selection ------------------------------------------------------------ 31
+10.10. Step 10: Purchase Order (PO) Issuance ----------------------------------------------------------- 31
+10.11. Step 11: Vendor Shipment ------------------------------------------------------------------------- 32
+10.12. Step 12: Purchase Department Invoice Verification ----------------------------------------------- 32
+10.13. Step 13: Main Store Physical Verification ---------------------------------------------------------- 32
+10.14. Step 14: Final Purchase Confirmation -------------------------------------------------------------- 33
+10.15. Step 15: Stock Update and Visibility --------------------------------------------------------------- 33
+
+=== PAGE 5 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 5
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+CLIENT CONSULTANT DEVELOPER
+Stages Name Date Status Signature
+Prepared By  
+SaNDS Lab
+Ancy Varghese Thekkan 
+(Software Architect) 18-Feb-2026 Completed YES
+Verified By 
+SaNDS Lab Ajit Kumar KV (CEO) 20-Feb-2026 Checked & 
+Verified YES
+Consultant Review 
+UniGlobal
+Client Approval 
+Popular
+Doc ID Version Revision Date Status
+DOC - 002 v1.0 0 20-Feb-2026 Initial Draft
+
+=== PAGE 6 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 6
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+1. Vendor Master Management
+Popular Auto Spare and A/C Parts Co.  operates as a multi-country, multi-branch enterprise; 
+however, the fundamental operating principle is that all procurement activities are centrally controlled 
+from a designated headquarters location. This centralized purchasing model ensures uniform pricing 
+strategy, supplier governance, negotiation control, and compliance consistency across all branches and 
+countries.
+Vendors from different countries will be registered within a unified global Vendor Master. Each supplier 
+record will capture country-specific regulatory, tax, currency, and banking details while remaining 
+governed under centralized approval authority. This structure allows the company to maintain a single 
+source of truth for supplier data while supporting international procurement operations.
+Vendor master records include the following key parameters:
+ • Vendor name
+ • Vendor code 
+ • Legal entity name
+ • Contact person details
+ • Phone and email information
+ • Registered address
+ • Country and operating region
+ • Tax/VAT registration details
+ • Payment terms
+ • Currency preference
+ • Bank and remittance details
+ • Supplier category (OEM / Aftermarket / Local / International)
+ • Brand association (if applicable)
+ • Credit limit and risk classification
+ • Status (Active / On Hold / Inactive)
+2. Vendor Communication Framework – Current vs 
+Proposed System
+Current Scenario
+In the existing operational environment, communication between the purchase team and vendors is 
+handled through external third-party applications such as email and messaging platforms including 
+WeChat and WhatsApp. While these tools enable quick interaction, they introduce several operational 
+limitations:
+
+=== PAGE 7 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 7
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Communication is fragmented across multiple platforms
+ • No centralized record of vendor conversations
+ • Difficulty in tracking quotation history and negotiations
+ • Loss of institutional knowledge when staff change
+ • No audit trail for compliance review
+ • Dependency on personal accounts or unmanaged tools
+ • Risk of data leakage and confidentiality exposure
+As a result, vendor communication lacks governance, traceability, and long-term organizational memory.
+Proposed ERP-Integrated Vendor Communication Model
+The proposed ERP introduces a secure, system-controlled vendor communication framework that 
+replaces or supplements third-party tools with a structured digital channel.
+Key Concept:
+For request for quotation, the system generates a unique secure vendor link. This link acts as a controlled 
+communication portal between the supplier and the purchase department.
+Once the user sends the RFQ link to the vendor for pricing, the vendor can access the link and update 
+the price and availability details for the specified products.
+After the vendor submits the quotation, the CTO has the authority to lock the RFQ link. Once the link is 
+locked, the vendor can still log in and view the submitted quotation details, but they will not be able to 
+modify or update any values.
+If any revisions are required, the CTO can unlock the RFQ link, allowing the vendor to update and 
+resubmit the necessary changes. This mechanism ensures controlled quotation management while 
+maintaining flexibility when corrections are needed.
+Core Features
+1. Unique Transaction Link
+ • Each supplier receives a dedicated secure link tied to a specific transaction
+ • Links are time-stamped and system-tracked
+ • Access is restricted to authorized vendor representatives
+2. Integrated Chat Interface
+ • A built-in chat interface is embedded inside the link
+ • Suppliers and purchase staff communicate within the ERP ecosystem
+ • No need to switch to external messaging platforms
+3. Permanent Communication History
+ • All chat messages are stored automatically
+
+=== PAGE 8 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 8
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • Linked directly to the transaction record
+ • Searchable for future reference and dispute resolution
+ • Visible to authorized management users
+4. Conversation Continuity
+ • Each time the vendor opens the link, the full chat history is displayed
+ • Ensures transparency and continuity
+ • Eliminates repeated explanations or lost context
+Implementation Options
+Option 1 – Full ERP Communication Model
+ • Replace third-party apps completely
+ • All vendor communication happens inside ERP
+ • Maximum governance and audit control
+Option 2 – Hybrid Communication Model
+ • ERP communication becomes the official record
+ • External apps may still be used for informal speed
+ • Critical communication logged inside ERP
+ • Gradual transition strategy
+3. Automated Low-Stock Reporting 
+Current Scenario
+At present, low-stock reporting from branches to the centralized purchase department is handled 
+manually using Excel templates.
+Branch managers or sales supervisors prepare a daily spreadsheet containing:
+ • OEM number
+ • Brand
+ • Model
+ • Item description
+ • Available quantity
+ • Required quantity
+The file is then emailed to the purchase department.
+This process creates operational pressure and inefficiency:
+ • Sales staff must interrupt customer service to prepare reports
+
+=== PAGE 9 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 9
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Repetitive manual data entry
+ • Risk of missing or delayed submissions
+ • High dependency on email communication
+ • No real-time visibility
+ • Risk of duplicate ordering
+ • No centralized tracking of request status
+ • Lack of automation or audit trail
+The process is reactive, time-consuming, and prone to human error.
+Proposed ERP Enhancement – Automated Minimum Order & Replenishment Engine
+The proposed ERP replaces Excel-based reporting with an automated, system-driven replenishment 
+workflow.
+Branch/Store-Specific-Minimum-Order-Configuration
+The system allows the Branch Manager/Store Manager to define minimum order quantities for selected 
+items at the branch/store level; however, configuring minimum levels is not mandatory for all items. 
+Branch-wise configuration is essential for required items because item movement varies by location, 
+customer preference, and regional demand patterns. Since the Branch Manager has the best operational 
+understanding of local sales behaviour and fast-moving products, they are authorized to set thresholds 
+that accurately reflect branch-specific consumption trends. This allows intelligent, localized inventory 
+control.
+Automatic Low-Stock Detection
+When sales or stock transfers occur:
+ • Inventory updates in real time
+ • The system continuously checks minimum thresholds
+ • Once stock reaches the minimum level:
+ •  Item is automatically added to the Low-Stock List
+ •  No manual reporting required
+Sales staff do not need to monitor or prepare Excel sheets.
+Algorithm-Based-Detection-for-Unconfigured-Items-(AI-Driven-Reordering)
+The system uses an AI-based algorithm to automatically detect items that are not properly configured 
+for reordering or are running at risk of stock-out. This intelligent mechanism continuously monitors 
+inventory movement across all branches and the main store, analyzing historical consumption patterns, 
+seasonal demand, lead times, and current stock levels. Based on this analysis, the algorithm identifies 
+items that either do not have predefined reorder levels or whose existing configuration is insufficient 
+compared to actual usage trends.
+When such unconfigured or under-configured items are detected, the system automatically adds them 
+
+=== PAGE 10 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 10
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+to the Less Item List or Reorder Recommendation Pool. The concerned departments receive these 
+recommendations along with suggested reorder quantities, preferred vendors, and expected delivery 
+timelines. The suggestions are generated by comparing past purchase data, average consumption rates, 
+and supplier performance.
+This AI-driven approach reduces the dependency on manual monitoring, minimizes stock shortages, and 
+ensures that frequently used items are always available. It also helps standardize the purchasing process 
+by providing data-backed recommendations, improving decision-making, and optimizing inventory levels 
+across all branches.
+However, the accuracy and effectiveness of this algorithm will significantly improve with a minimum of 
+three years of historical data.
+With at least three years of transactional and consumption data, the system will be able to perform 
+more reliable trend analysis, seasonal forecasting, and demand prediction, resulting in more precise low-
+stock identification and better purchase planning.
+In summary, the algorithm acts as an intelligent assistant to the users, automatically detecting 
+unconfigured items, recommending reorder actions, and supporting a more efficient and predictive 
+procurement process.
+AI Assistant ChatBot (Powered By SaNDS Lab)
+An AI-integrated chatbot will be implemented using OpenAI APIs. This chatbot will be connected to 
+the purchase , sales or related datasets, enabling users to interact with the system through natural 
+language queries.
+The chatbot will analyze the available data and provide meaningful insights. For example, users can ask 
+questions such as:
+1. “Which product had the highest sales this month?”
+2. “Which vendor supplied the most items in the last quarter?”
+3. “What is the average purchase price trend for a specific product?”
+The chatbot will process the dataset, interpret the query, and generate accurate and relevant outputs. 
+This feature will enhance decision-making by allowing users to quickly extract insights without manually 
+generating reports. However, the accuracy and effectiveness of this algorithm will significantly improve 
+with a minimum of three years of historical data.
+Review-&-Confirmation-Workflow-of-Less-Item-List
+Store/Branch Users can:
+ • Add items manually if required
+ • Remove incorrect entries
+ • Adjust quantities
+ • Update remarks
+The Sales Manager reviews and confirms the list.
+
+=== PAGE 11 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 11
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+Once-confirmed:
+The request is automatically sent to the main store 
+ • Items are tagged as Request Sent
+ • No email communication required.
+Purchase Tracking & Status Visibility
+Each item in the low-stock list includes lifecycle tracking:
+ • Request Sent
+ • Purchase Order Issued
+ • In Transit
+ • Arrived at Store
+ • Stock Updated
+Branch/Store users can monitor status in real time.
+This prevents:
+ • Duplicate ordering
+ • Panic reordering
+ • Miscommunication between departments
+If a user tries to reorder an item already in process:
+ • The system displays a warning message
+ • Prevents accidental repetition
+Cross-Branch Availability Visibility
+Managers can view:
+ • Stock availability in central warehouse
+ • Stock in other branches
+This enables smarter internal redistribution before external procurement.
+Business-Benefits
+ • Eliminates Excel reporting workload
+ • Reduces interruption to sales operations
+ • Fully automated low-stock detection
+ • Prevents duplicate purchases
+ • Centralized procurement coordination
+ • Real-time inventory transparency
+
+=== PAGE 12 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 12
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • Faster replenishment cycle
+ • Improved stock planning
+ • Reduced emergency purchases
+ • Strong audit trail and governance
+4. Less Item List Handling
+Current Process
+In the existing environment, the less item list is generated manually and handled through paper-based 
+and fragmented workflows:
+ • The less item list will be received from the branches/store through email.
+ • The purchase team will print the less item list and handed over to the store team.
+ • Store staff physically verify each item against available stock and manually mark quantities on 
+paper.
+ • The purchase team re-enters the entire list into the system.
+ • Purchase officers cross-check past transactions and purchase history item-by-item before raising 
+RFQ.
+ • Searching historical transactions in the current system is slow and difficult, especially for previous 
+accounting years.
+ • System performance issues and loading delays further increase processing time.
+ • Final RFQs are prepared and sent to suppliers by the Purchase Team or CTO.
+This process is labor-intensive, error-prone, and heavily dependent on manual verification and duplicate 
+data entry.
+Proposed-ERP-Workflow
+In the proposed ERP workflow, once branch managers confirm their individual Less Item Lists, the 
+system automatically generates a consolidated multi-branch view for centralized store verification. This 
+ensures that replenishment decisions are made based on complete organizational visibility rather than 
+isolated branch requests.
+Consolidated View Structure
+The Store Manager receives a structured dashboard that aggregates confirmed requests from all 
+branches in a single matrix-style report. The report includes:
+ • Item details
+ • Branch-wise required quantity
+ • Branch-wise available quantity
+ • Central store available quantity
+
+=== PAGE 13 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 13
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Central store required quantity
+ • Total available quantity across all locations
+ • Total required quantity across all locations
+This consolidated visibility allows the Store Manager to make informed stock allocation and procurement 
+decisions.
+ • Store Manager Verification Process
+ • The Store Manager performs a centralized review before sending to the purchase team
+ • Cross-checks actual central store inventory against system balances
+ • Verifies urgency of branch requirements
+ • Evaluates redistribution opportunities between branches
+ • Adjusts quantities if internal transfers can satisfy demand
+ • Confirms final consolidated requirement
+Once-verified:
+ • The consolidated request is digitally approved
+ • The system locks the request to prevent duplicate edits
+ • The approved list is automatically routed to the Purchase Department
+System Controls and Safeguards
+ • All branch confirmations are timestamped
+ • Store-level adjustments are audit logged
+ • Changes require authorization
+ • Duplicate requests are automatically blocked
+ • Pending items remain visible in tracking dashboards
+ • Historical request records remain searchable
+This ensures accountability and transparency across departments.
+The consolidated less-item verification workflow transforms replenishment into a coordinated, 
+organization-wide decision process. By providing the Store Manager with full multi-branch visibility before 
+procurement, the ERP ensures optimal stock utilization, cost efficiency, and disciplined purchasing.
+Internal Store-to-Branch Transfer Scenario
+Before initiating external procurement, the ERP evaluates whether the central store can fulfill branch 
+shortages.
+If-the-store-has-sufficient-available-stock:
+The Store Manager initiates a Store → Branch stock transfer directly from the dashboard.
+ • Transfer quantities are logged in the system with:
+
+=== PAGE 14 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 14
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • Item details
+ • Source location
+ • Destination branch
+ • Transfer quantity
+ • Timestamp
+ • Responsible user
+ • The transfer status is tracked (Initiated → In Transit → Received).
+ • Branch and store inventory balances update automatically in real time.
+ • The Less Item List is recalculated immediately:
+ • Fulfilled quantities are removed
+ • Remaining shortages are adjusted
+ • Only the net shortage is forwarded to the Purchase Department.
+This ensures internal stock redistribution is prioritized before external purchasing.
+The internal stock tranfer workflow is explained in the Doc-003 V1.0
+5. Purchase Review and Approval Workflow
+Once the Less Item List has been verified and confirmed by the Store Manager, it is forwarded to 
+the Purchase Department for detailed analysis and decision-making. The proposed ERP supports 
+comprehensive visibility and workflow controls to ensure accurate, efficient, and auditable procurement.
+5.1. Purchase Team Review
+ • Dashboard Access: The Purchase Manager or Purchase Officer can view the confirmed Less Item 
+List in the ERP, which includes:
+ • Item details – OEM Number, Brand, Company
+ • Branch-wise and store-wise required quantities
+ • Current stock levels
+ • Transaction Analysis: For each item based on the OEM number, the system displays recent activity 
+including:
+ • Branch-wise purchase transactions
+ • Branch-wise sales transactions
+ • Local purchases performed per branch
+ • Historical Data: By default, the last 20 transactions are shown, with options to search for 
+older transactions if required.
+ • Decision Making: Using this data, the purchase team decides:
+ • Final procurement quantity per item
+
+=== PAGE 15 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 15
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Prioritization of purchase items based on demand, stock, and usage trends
+ • Forwarding for Approval : Once decisions are made, the list is submitted to the CTO for final 
+review.
+5.2. CTO Approval Purchase Request
+The CTO receives a consolidated dashboard displaying each item with:
+ • Required quantity
+ • Potential vendors for procurement
+ • Delivery timelines
+ • Last purchase price
+ • Brand and OEM reference for requested items
+CTO Capabilities:
+ • Vendor Selection: The CTO evaluates the list and decides which vendor(s) should receive the RFQ 
+for each item.
+ • Brand Adjustment: Based on experience, the CTO can change the recommended brand for an item 
+if suitable alternatives exist.
+ • Quantity-Confirmation: The CTO confirms the quantity to be ordered per item, considering stock 
+levels, branch needs, and procurement strategy.
+Vendor Selection Method Using AI Algorithm modals 
+While the user identifies vendors, the system will suggest the best vendors based on the last 20 
+transactions, considering factors such as pricing and delivery accuracy. This evaluation will be performed 
+using an AI-based algorithm, which helps the user select the most suitable vendor.
+If the user chooses a vendor other than the one suggested by the system, the user must provide a 
+comment explaining the reason for selecting a different vendor for that particular order. This action will 
+be recorded in the system along with the user’s name for tracking and audit purposes.
+5.3. Request for Quotation (RFQ) Generation
+Once approved:
+The ERP generates multiple RFQ, mapping items to selected vendors automatically.
+Vendor-Specific-Links: The system can create a unique link for each RFQ and for each vendor, which 
+can be sent directly to the respective vendor.
+How this link works ?
+The system will generate an RFQ (Request for Quotation) link for different vendors and send it to their 
+registered email addresses. Each email will include the RFQ link along with a temporarily generated 
+password for secure access.
+
+=== PAGE 16 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 16
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+When a vendor accesses the link using the specified password, they will be able to enter 
+the price for each item and specify the expected delivery time. Once the vendor submits this 
+information through the web form, the details will be automatically updated in the system.  
+ 
+At the same time, the submitted quotations from different vendors will be populated automatically in 
+the system, allowing the user to compare them. The system will also highlight the best vendor based on 
+pricing and delivery availability.
+These links include:
+ • Item list (OEM,Part Number, Brand)
+ • Required Quantities
+ • Expected Delivery timelines
+ • Terms and conditions
+Vendor Inputs: Vendors can provide the following information directly through the link:
+ • Available quantity
+ • Pricing per item
+ • Discounts (if applicable)
+ • Delivery timelines
+ • Terms and conditions
+Export Option: For vendors who require offline documents, RFQ can be exported to Excel/PDF and 
+sent manually.
+How it works ?
+When a user generates an offline RFQ document, the system will maintain a standard export format and 
+assign a unique reference number to that document.
+If the user sends the RFQ to the vendor without using the system link—such as through email, WhatsApp, 
+or other communication methods—the system still supports the quotation update process.
+When the vendor returns the quotation in the same Excel file with the required details filled in, the user 
+can import that file into the system. The system will automatically map and update the submitted data 
+against the corresponding RFQ using the unique reference number.
+If the vendor sends the quotation through other formats, such as images or text messages, 
+the user can retrieve the RFQ request from the system and manually update only the new 
+values. This eliminates the need for multiple data entries and reduces the verification effort.  
+ 
+This process helps improve efficiency, maintain consistency, and minimize errors in quotation handling.
+Tracking and Audit: Each RFQ link or export is logged in the ERP for tracking and audit purposes.
+
+=== PAGE 17 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 17
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+5.4. Business-Benefits-of-RFQ-Link-and-Offline-RFQ
+ • Online RFQ Link
+ • Offline RFQ Document
+Both methods are designed to ensure flexibility, accuracy, and efficiency in the procurement process. 
+These options allow the organization to work with vendors who have different levels of technical capability 
+and communication preferences.
+Benefits-of-the-RFQ-Link-(Online-Quotation)
+1. Real-Time Quotation Submission
+Vendors can submit their prices and availability directly through a secure link. The data is instantly 
+updated in the system, eliminating delays caused by manual entry.
+2. Reduced Manual Data Entry
+Since vendors enter their own pricing and delivery details, the system removes the need for users to 
+manually input quotation data. This reduces:
+ • Human errors
+ • Duplicate entries
+ • Data inconsistencies
+3. Faster Vendor Comparison
+All vendor quotations are automatically populated into the system. This allows users to:
+ • Compare prices instantly
+ • Evaluate delivery timelines
+ • Identify the best vendor quickly
+4. Improved Accuracy and Transparency
+Each quotation is:
+ • Submitted directly by the vendor
+ • Time-stamped
+ • Linked to a specific RFQ
+This ensures full transparency and auditability.
+5. Secure Access
+The RFQ link is:
+ • Password-protected
+ • Sent only to registered vendor email addresses
+
+=== PAGE 18 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 18
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+This ensures that only authorized vendors can access and submit quotations.
+6. Automated Vendor Ranking
+The system can automatically highlight the best vendor based on:
+ • Price
+ • Availability
+ • Past performance
+This supports better and faster decision-making.
+Benefits-of-Offline-RFQ-(Excel-or-Document-Based)
+1. Flexibility for All Vendors
+Some vendors may:
+ • Prefer email communication
+ • Have limited access to online systems
+ • Use WhatsApp or other channels
+Offline-RFQ-allows-these-vendors-to-participate-without-technical-barriers.
+2. Standardized Format with Unique Reference
+Each offline RFQ:
+ • Uses a standard export format
+ • Includes a unique reference number
+This ensures that returned quotations can be correctly mapped to the original request.
+3. Easy Import and Auto-Mapping
+When vendors return the same Excel file:
+ • The user can import it into the system.
+ • The system automatically maps the updated data.
+This eliminates the need for manual data entry.
+4. Manual Update for Non-Standard Responses
+If vendors send quotations via:
+ • Images
+ • PDF files
+ • WhatsApp messages
+ • Phone confirmations
+
+=== PAGE 19 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 19
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+The user can:
+ • Open the RFQ in the system
+ • Update only the changed values
+This reduces multiple entries and simplifies verification.
+5. Reduced-Operational-Effort
+The offline RFQ process:
+ • Minimizes repeated data entry
+ • Reduces verification time
+ • Improves user productivity
+6. Purchase Order Module
+The Purchase Order Module manages the process of generating, evaluating, and sending purchase 
+orders to vendors based on RFQ from vendors. The module ensures accurate comparison, proper 
+documentation, and traceable communication with vendors.
+6.1. Current Scenario 
+Currently, the CTO receives quotations from different vendors through various platforms such as email 
+and WhatsApp. After collecting all the quotation details from these multiple sources, the CTO manually 
+compiles the information into an Excel sheet.
+All vendor pricing, availability, and related details are entered manually into the spreadsheet. Based on 
+this data, the CTO prepares a price comparison table within Excel to evaluate the quotations.
+The comparison of pricing and availability is performed manually, and the most suitable vendor is 
+selected based on this evaluation. Once the decision is made, the CTO manually prepares and issues the 
+Purchase Order (PO) to the selected vendor.
+Due to the manual data entry, compilation, and comparison process, preparing a single Purchase Order 
+becomes a time-consuming and labor-intensive task.
+6.2. Proposed Purchase Order Generation 
+After the automated RFQ comparison (Refer : 5.4) is completed, the system suggests vendors based 
+on its evaluation, and the CTO may either accept the system-suggested vendors or select vendors 
+manually.
+Once the vendors are finalized, the CTO can proceed to generate the purchase quotations or purchase 
+orders.
+In this process, the RFQ may contain multiple items. For example, if the RFQ includes 100 items:
+ • The first 10 items may be assigned to Vendor 1.
+
+=== PAGE 20 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 20
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • The next 10 items may be assigned to Vendor 2.
+ • The remaining items can be distributed among other vendors based on price, availability, or strategic 
+decisions.
+The CTO has the ability to split and map the items to different vendors as required.
+After this vendor-wise item allocation is completed, the CTO can click the “Generate Quotations” or 
+“Generate Purchase Orders” button. The system will then automatically generate multiple quotations or 
+purchase orders, each containing only the items assigned to the respective vendor.
+These vendor-specific purchase orders can then be sent directly to each vendor’s registered email 
+address for confirmation via link or exported document.
+6.3. Business-Benefits
+ • Efficient-Vendor- Comparison:-Automatic item-wise comparison ensures selection of optimal 
+vendor(s) based on objective criteria.
+ • Audit Trail: All communication and response submissions are logged for compliance and future 
+reference.
+Reduced-Manual-Effort: Minimizes repetitive work of manually tracking responses and generating 
+quotations.
+Transparency: Provides clear governance with manual override controls and required justification.
+Flexibility: Supports both link-based digital workflows and traditional manual entry for hybrid 
+operations.
+Faster Turnaround: Streamlines the quotation process, reducing procurement cycle time.
+7. Purchase Verification Note
+Current Scenario
+In the current scenario, once vendors send invoices, the purchase team manually re-enters invoice 
+items into the system to generate purchase verification note. This duplicate data entry consumes time, 
+increases the risk of human error, and reduces visibility into quotation tracking.
+In the proposed ERP, purchase order creation is directly integrated with the quotation module, eliminating 
+repetitive manual work and improving traceability.
+Proposed-Workflow
+7.1. Quotation/Invoice-to-PVN-(Purchase-Verification-Note)-Conversion
+ • Approved vendor quotations can be directly converted into PVN.
+ • The system automatically carries forward item details, quantities, pricing, and vendor information.
+ • All critical item details are automatically carried forward:
+ • Pcode
+
+=== PAGE 21 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 21
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Alias
+ • OEM/Manufacturer part number
+ • Brand
+ • Part name
+ • Vehicle model
+ • Engine number
+ • Engine CC
+ • Position / Fitment
+ • Size / Specification
+ • Comments / Special instructions
+ • Quantity
+ • Unit of measure
+ • Pricing
+7.2. Verification-Stage
+ • After conversion, the purchase team reviews the generated list.
+ • Users can:
+ • Cross-check invoice items
+ • Modify quantities or values if required
+ • Add remarks explaining changes
+ • All edits are logged for audit tracking.
+7.3. Invoice Matching Control
+ • If an item exists in the quotation but is missing in the vendor invoice:
+ • The system flags the discrepancy
+ • User confirmation is required
+ • Status remains Pending until resolved
+ • If all quotation items are invoiced and delivered:
+ • The quotation status automatically changes to Completed
+Some use case solution 
+If the user identifies an item in the invoice that is not present in the quotation, there are two possible 
+scenarios:
+Case 1: Item received from a previous quotation
+The item may belong to a previous pending quotation from the same vendor. In this case, the system 
+will provide an option to view the vendor’s previous pending purchase orders or quotations.
+
+=== PAGE 22 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 22
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • If the pending item is found to match the received item in the invoice, the user can select the 
+corresponding PO item and update the record.
+ • The user will also have the facility to update the status of the purchase order, if required.
+Case 2: Wrong item received
+ • If the item received is incorrect or was mistakenly dispatched by the vendor:
+ • The user can identify the item using the OEM number and map it to the correct PCode.
+ • The item can then be added to the Purchase Verification Note (PVN).
+ • If the item does not have a PCode:
+ • The user can request a new PCode from the CTO by submitting the item details.
+ • The item will be marked and highlighted as a Non-PCode item.
+ • The PVN will be created with this status until the PCode is assigned.
+7.4. Partial Delivery Handling
+ • Items delivered partially remain tracked individually.
+ • The system maintains visibility of:
+ • Ordered items
+ • Delivered items
+ • Pending items
+7.5. Item-Level Visibility in PVN
+Each PVN includes a detailed item list for operational clarity:
+ • PCode (internal identifier)
+ • Item name and alias
+ • OEM / Manufacturer part number
+ • Brand and part name
+ • Vehicle model, engine number, and engine CC
+ • Position / fitment
+ • Size / specifications
+ • Comments or special instructions
+ • Ordered quantity and unit of measure
+This ensures that all users, from store to purchase and CTO, have full visibility of the items being 
+procured, with reference to technical and operational details.
+7.6. Business-Benefits
+The proposed ERP introduces full lifecycle tracking of purchase quotations and orders, giving management 
+real-time operational visibility and long-term audit traceability.
+
+=== PAGE 23 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 23
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+Key-benefits-include:
+ • Real-time purchase status monitoring
+All purchase quotations and PVNs can be tracked from creation through vendor confirmation, dispatch, 
+partial delivery, and completion. Users can instantly view the current stage of each item and vendor 
+commitment.
+ • Prevention of duplicate reordering
+The system flags items already under active procurement, preventing accidental reordering of the same 
+item while it is still in process.
+ • Accurate delivery tracking
+Item-wise tracking ensures visibility of delivered, partially delivered, and pending quantities. This 
+supports better warehouse planning and branch allocation.
+ • Clear vendor performance visibility
+Delivery timelines, fulfilment accuracy, and pricing history are stored and analysable, enabling objective 
+vendor performance evaluation.
+ • Improved procurement planning
+Historical purchase data, pending orders, and demand trends help the purchase team make informed 
+quantity and vendor decisions.
+ • Permanent invoice attachment & retrieval
+Vendor invoices can be digitally attached to the corresponding purchase quotation/order inside the ERP. 
+These documents remain permanently archived and can be retrieved at any time for audit, reconciliation, 
+warranty reference, or dispute resolution.
+ • Digital Document – Multiple Upload Facility
+The system will provide an option to upload multiple digital copies of documents received from the 
+vendor. All related documents, such as invoices, delivery notes, quotations, and supporting files, can be 
+uploaded and stored in the system against the respective document numbers.
+Each uploaded file will be properly indexed and linked to its corresponding Purchase Order (PO) , 
+invoice number, or Purchase-Verification-Note-(PVN). This ensures easy retrieval and structured 
+record management.
+This feature enables centralized document storage, allowing authorized users to access real reference 
+documents at any time for verification, audit, or clarification purposes. It improves transparency, reduces 
+dependency on physical files, and ensures that all purchase-related documents are securely maintained 
+in one centralized system.
+Operational Outcome
+This workflow ensures that the purchase team can clearly see which items are:
+
+=== PAGE 24 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 24
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • Ordered
+ • In transit
+ • Delivered
+ • Pending invoice
+ • Pending vendor action
+The system acts as a live procurement dashboard rather than a static record system.
+8. Reporting Module
+The system will include a flexible and dynamic Reporting Module that allows users to generate reports 
+based on the available data within the system.
+Users will have the ability to create custom reports according to their specific operational and management 
+requirements. In addition to custom reports, standard reports will be developed.
+The reporting structure will be designed to support future enhancements, allowing reports to be 
+customized or expanded as business needs evolve.
+An AI-assisted reporting feature will also be implemented. This feature will enable users to generate 
+reports using intelligent filtering and query options. Users will be able to apply multiple filters such as 
+date range, branch, vendor, product, status, and other parameters to generate precise and meaningful 
+reports.
+The AI-assisted reporting module will help users quickly extract insights, reduce manual effort, and 
+improve decision-making efficiency.
+9. Management Review – Key Points (Current vs Proposed 
+System)
+9.1. Centralized Multi-Country Purchase Control
+ • All purchase activities will operate from a centralized location while serving multi-country and multi-
+branch operations.
+ • Vendor registration will support international suppliers under a unified master structure.
+ • Ensures standardization, pricing control, and reduced duplication across regions.
+9.2. Vendor Communication Transformation
+Current:
+Communication handled via third-party tools (email, chat apps), causing scattered records and lack of 
+traceability.
+Proposed:
+ • Unique secure vendor links for purchase requests, quotations, and invoices.
+
+=== PAGE 25 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 25
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Integrated chatbot communication stored within the system.
+ • Full conversation history available for audit and future reference.
+ • Option for hybrid communication (system + external tools if required).
+ • Management Benefit: Controlled communication, transparency, and dispute-proof documentation.
+9.3. Automated Less Item / Minimum Order Handling
+Current:
+Manual Excel reporting by branches email ,re-entry by purchase team ,high error risk and delays.
+Proposed:
+ • Branch managers define minimum order quantity (optional per item).
+ • System auto-detects low stock during sales or transfers.
+ • Auto-generated Less Item List — no manual Excel required.
+ • Smart algorithm suggests reorder levels for items without fixed minimum quantity.
+ • Duplicate ordering prevention with real-time status tracking.
+Management-Benefit: Reduced human dependency, faster replenishment, and inventory accuracy.
+9.4. Branch-Specific-Inventory-Intelligence
+ • Minimum quantity can be branch-wise due to local demand behavior.
+ • Branch managers apply location knowledge (fast-moving items differ by region).
+ • System respects operational flexibility while maintaining central oversight.
+9.5. Store-Verification-Workflow
+ • Store team views consolidated branch shortage list.
+ • Available quantities auto-filled from live inventory.
+ • Store manager confirms required quantities.
+ • Stok transfer facility with be available with SOP.
+ • Adjusted list forwarded to purchase department.
+Management-Benefit:-Internal stock optimization before external purchase.
+9.6. Purchase Decision Dashboard
+ • Purchase team sees item movement (sales + purchases + branch local buying).
+ • Default last 20 transactions with deep search option.
+ • Data-driven quantity confirmation before escalation.
+9.7. CTO Strategic Control Panel
+ • Required items displayed with vendor history.
+ • Delivery timelines, last purchase price, brand options per OEM.
+
+=== PAGE 26 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 26
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+ • CTO may override vendor/brand based on experience.
+ • System logs decisions for governance.
+9.8. Automated Multi-Vendor Purchase Order Generation
+ • System creates vendor-specific POs automatically.
+ • Unique link sharing or Excel export option available.
+ • Vendor interaction centralized and traceable.
+9.9. Purchase Quotation Intelligence
+ • Vendors submit quotes through structured digital form.
+ • System auto-compares vendor responses item-wise.
+ • Smart vendor recommendation engine.
+ • Manual override allowed with mandatory justification.
+Management-Benefit: Balanced automation + human authority.
+9.10. Global Price Master Governance
+ • System flags price differences vs existing item master.
+ • CTO receives alerts for price deviations.
+ • Approved price updates sync across all countries instantly.
+ • Maintains global pricing consistency.
+9.11. Audit Trail & Accountability
+Every confirmation step logged: branch store , purchase , CTO.
+Chat communication archived.
+Price changes recorded.
+ • Vendor selection reasoning stored.
+Management-Benefit: Compliance-ready operations.
+9.12.  Purchase Order Creation Governance
+Current:
+Purchase invoices are manually entered into the system, and purchase orders are recreated from 
+scratch, increasing workload and risk of mismatch between quotations and invoices.
+Proposed:
+ • Direct conversion of approved quotations into purchase orders
+ • System cross-verifies invoice vs quotation automatically
+ • Missing or extra items flagged for review
+
+=== PAGE 27 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 27
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+ • Remarks option for justified deviations
+ • Partial delivery tracking maintained
+ • Quotation remains open until all items are fully delivered
+ • Real-time visibility of pending vs completed items
+ • Prevents accidental reordering of already committed stock
+Management-Benefit:
+Full procurement lifecycle visibility, error reduction, and stronger delivery tracking discipline.
+Thumb Rule for the Purchase Process
+Simple Rule:
+“If the store has the item, deliver it. If not, request, purchase, verify, and then update stock.”
+ • Expanded Thumb Rule
+1. Check stock first.
+2. If available  deliver to branch.
+3. If not available  raise purchase request.
+4. Get quotations and issue PO.
+5. Receive and verify items.
+6. Confirm purchase.
+7. Update stock and make it visible to all branches.
+
+=== PAGE 28 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 28
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+
+
+=== PAGE 29 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 29
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+10. Data Flow Process for Purchase
+Overview
+This process explains how a stock request originating from a branch is handled through the main store, 
+purchase department, CTO approval, vendor quotation, purchase order generation, goods receipt, and 
+final stock update. The objective of this process is to ensure accurate procurement, controlled approvals, 
+and proper stock visibility across all branches.
+10.1. Step 1: Branch Requirement to Main Store
+When a branch identifies that certain items are running low or out of stock, the branch manager creates 
+a stock request in the system.
+This request is automatically sent to the Main Store.
+The request includes: (Details in the Page No : 8)
+ • Branch name
+ • Item details
+ • Required quantities
+ • Request date
+ • Requesting user
+This ensures that all stock movements begin from a centralized process.
+10.2. Step 2: Main Store Availability Check 
+Once the request reaches the Main Store, the Store Manager reviews the request and checks whether 
+the requested items are available in the main store inventory.
+If items are available:
+1. The Store Manager assigns the request to a Store Keeper.
+2. The Store Keeper collects the requested items.
+3. The items are placed in the designated branch pickup area.
+4. The system generates a Store Delivery Note for that branch.
+5. The branch is notified that the items are ready for pickup.
+This completes the process for items that are available in the main store. (Detailed Explanation in Doc-
+003 V1.0))
+10.3. Step 3: Items Not Available – Creation of Store Purchase Request
+If the requested items are not available or insufficient in the main store:
+1. The Store Manager creates a Store Purchase Request.
+2. These items are added to a centralized pool called the “Less Item List.”
+
+=== PAGE 30 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 30
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+The Less Item List is a consolidated list of all items that need to be purchased due to shortages across 
+branches.
+10.4. Step 4: Purchase Department Receives Request
+The Purchase Department accesses the Less Item List and reviews the pending purchase requests.
+For each item, the purchase team identifies:
+ • Which branch requested the item
+ • Total quantity required
+ • Priority level
+The purchase process then begins based on these details.
+10.5. Step 5: Purchase Pattern Analysis
+Before initiating procurement, the Purchase Department analyzes historical data, including:
+ • Previous purchase orders
+ • Vendor history
+ • Brand preferences
+ • Price trends
+ • Consumption patterns
+This helps the purchase team:
+ • Select the right vendors
+ • Avoid overpricing
+ • Maintain consistency in brand or quality
+After analysis, the request is forwarded for approval.
+10.6. Step 6: Submission to CTO for Approval
+The Purchase Department submits the analyzed purchase request to the CTO for approval.
+The CTO reviews:
+ • Required items
+ • Quantities
+ • Historical data
+ • Budget considerations
+Once satisfied, the CTO proceeds with the quotation process.
+10.7. Step 7: Quotation Request to Multiple Vendors
+The CTO selects the items and chooses one or more vendors from the system.
+
+=== PAGE 31 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 31
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+The system automatically:
+ • Generates quotation requests
+ • Sends them to vendors via email or secure link
+Each vendor receives:
+ • Item list
+ • Required quantities
+ • Response link
+ • Attached PDF request
+This enables competitive pricing.
+10.8. Step 8: Vendor Quotation Submission
+Vendors respond by submitting:
+ • Unit price
+ • Available quantity
+ • Delivery time
+This information is submitted through the provided link or via email.
+The system records all quotations automatically.
+10.9. Step 9: Vendor Evaluation and Selection
+The CTO reviews all submitted quotations using the system’s comparison interface.
+The evaluation is based on:
+ • Best price
+ • Product availability
+ • Delivery timeline
+ • Vendor performance history
+After analysis, the CTO selects the most suitable vendor.
+10.10. Step 10: Purchase Order (PO) Issuance
+Once the vendor is selected:
+ • The system generates a Purchase Order (PO) automatically.
+ • The PO is sent to the selected vendor via:
+ • Email, or
+ • Secure system link
+
+=== PAGE 32 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 32
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc-2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+20-Feb-2026
+The PO includes:
+ • Item details
+ • Quantities
+ • Agreed prices
+ • Delivery terms
+ • Payment terms
+10.11. Step 11: Vendor Shipment
+After confirming the PO:
+ • The vendor prepares the shipment.
+ • The items are delivered to the main store.
+ • The shipment includes:
+ • Invoice
+ • Delivery Note
+10.12. Step-12:-Purchase-Department-Invoice-Verification
+Upon receipt of the shipment:
+ • The Purchase Department compares:
+ • Invoice
+ • Quotation
+ • Purchase Order
+ • If all details match, the department generates a:
+Purchase-Verification-Note
+This note confirms that the documents are correct and moves to the Main Store for physical verification.
+10.13. Step-13:-Main-Store-Physical-Verification
+The Main Store receives the Purchase Verification Note and performs a physical inspection.
+The store keeper:
+ • Opens the shipment
+ • Checks items against the invoice
+ • Verifies quantities and condition
+If discrepancies are found:
+ • The system notifies the Purchase Department.
+
+=== PAGE 33 ===
+SaNDS Lab Middle East W.L.L  Office No : 24, Building : 661, Road NO  : 1208, Block : 712,Salmabad , Kingdom Of Bahrain
+Page - 33
+ERP Solution Business Analysis Document for – Popular Auto Spare & A/C Parts Co. W.L.L Doc -2 Ver: 1.0
+Prepared by
+WWW.SANDSLAB.COM
+20-Feb-2026
+POPULARERP DOCUMENT 2.0 DRAFT - CONFIDENTIAL
+If everything is correct:
+ • The store manager confirms the verification.
+10.14. Step-14:-Final-Purchase-Confirmation
+After the Main Store confirmation:
+ • The Purchase Verification Note is sent back to the Purchase Department.
+ • The Purchase Department makes any necessary adjustments based on:
+ • Short deliveries
+ • Damaged items
+ • Quantity differences
+The department confirms the purchase by approving the verification in the system.
+10.15. Step 15: Stock Update and Visibility
+Once the purchase is confirmed:
+ • The system updates the stock in the Main Store.
+ • The newly received items become:
+ • Visible in the main store inventory
+ • Available for all branches
+ • Branches can now:
+ • View updated quantities
+ • Request the items for replenishment
+This-completes-the-purchase-data-flow-process.
+End of Session
+
