@@ -1,3 +1,116 @@
+<?php
+// PHP Backend for Digital Signature & Finalization API (SL-POP-ERP-SUMMARY-001)
+if (session_status() === PHP_SESSION_NONE) {
+    $session_save_dir = __DIR__ . '/.sessions';
+    if (!is_dir($session_save_dir)) {
+        @mkdir($session_save_dir, 0700, true);
+    }
+    if (is_dir($session_save_dir) && is_writable($session_save_dir)) {
+        @session_save_path($session_save_dir);
+    } elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
+}
+
+$doc_id = 'SL-POP-ERP-SUMMARY-001';
+
+$db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
+foreach ($db_candidates as $dbc) {
+    if (file_exists($dbc)) {
+        require_once $dbc;
+        break;
+    }
+}
+
+$is_locked = false;
+if (isset($pdo) && $pdo) {
+    try {
+        $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+        $meta_stmt->execute(array($doc_id));
+        $status_val = $meta_stmt->fetchColumn();
+        if ($status_val === 'FINALIZED_AND_LOCKED') {
+            $is_locked = true;
+        }
+    } catch (Exception $e) {}
+}
+
+$authenticated_user = isset($_SESSION['authenticated_user']) ? $_SESSION['authenticated_user'] : (isset($_COOKIE['sands_auth_device']) ? $_COOKIE['sands_auth_device'] : '');
+
+// Handle Ajax Actions
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    $action = $_POST['action'];
+    
+    if (!$authenticated_user) {
+        echo json_encode(array('success' => false, 'message' => 'Unauthorized access. Please log in via the portal.'));
+        exit;
+    }
+    
+    if ($action === 'sign_milestone') {
+        $role = isset($_POST['role']) ? trim($_POST['role']) : '';
+        $signer_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
+        $signer_designation = isset($_POST['signer_designation']) ? trim($_POST['signer_designation']) : '';
+        $signature_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
+        
+        if (empty($role) || empty($signer_name) || empty($signature_data)) {
+            echo json_encode(array('success' => false, 'message' => 'Missing required signature fields.'));
+            exit;
+        }
+        
+        try {
+            $now = date('Y-m-d H:i:s');
+            
+            // Check if document record exists in document_meta
+            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM document_meta WHERE doc_id = ?");
+            $check_stmt->execute(array($doc_id));
+            if ($check_stmt->fetchColumn() == 0) {
+                $ins_stmt = $pdo->prepare("INSERT INTO document_meta (doc_id, title, status) VALUES (?, ?, 'IN_REVIEW')");
+                $ins_stmt->execute(array($doc_id, 'Master Executive Milestone Summary & Complete 9-Module Budgeting Roadmap'));
+            }
+            
+            // Check if column exists or update document_signatures
+            if ($db_driver_active === 'mysql') {
+                $sig_stmt = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) 
+                                           VALUES (?, ?, ?, ?, ?, ?, ?)
+                                           ON DUPLICATE KEY UPDATE signer_name = VALUES(signer_name), signer_designation = VALUES(signer_designation), signature_data = VALUES(signature_data), signed_at = VALUES(signed_at)");
+                $sig_stmt->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
+            } else {
+                $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND role = ?");
+                $del->execute(array($doc_id, $role));
+                $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $ins->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
+            }
+            
+            // Log to audit trail
+            $audit_stmt = $pdo->prepare("INSERT INTO audit_trail (user_email, action, details, ip_address) VALUES (?, ?, ?, ?)");
+            $audit_stmt->execute(array($authenticated_user, 'SIGN_DOCUMENT', "Signed $doc_id as $role ($signer_name)", $_SERVER['REMOTE_ADDR']));
+            
+            echo json_encode(array('success' => true, 'message' => 'Master Summary Signature recorded successfully!', 'signed_at' => $now));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Database error: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    if ($action === 'get_signatures') {
+        try {
+            $stmt = $pdo->prepare("SELECT role, signer_name, signer_designation, signer_email, signature_data, signed_at FROM document_signatures WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            $signatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(array('success' => true, 'signatures' => $signatures));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Error fetching signatures: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    echo json_encode(array('success' => false, 'message' => 'Unknown action.'));
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -617,6 +730,69 @@
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .mod-doc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #0a2540;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+      box-shadow: 0 1px 2px rgba(10,37,64,0.15);
+    }
+
+    .mod-ba-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .mod-domain-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0a2540;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    .gate-pill {
+      display: inline-block;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .share-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 700;
+      font-size: 11.5px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid #dbeafe;
+      white-space: nowrap;
     }
 
     /* Milestone Phase Accordion Cards */
@@ -1074,27 +1250,6 @@
         margin-bottom: 15px;
       }
     }
-  
-    .sidebar-card {
-      margin-top: 20px;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--gray-50, #f8fafc) 0%, var(--gray-100, #f1f5f9) 100%);
-      border-radius: var(--radius-md, 8px);
-      border: 1px solid var(--gray-200, #e2e8f0);
-      font-size: 12px;
-      color: var(--gray-700, #334155);
-    }
-
-    .sidebar-card-title {
-      font-weight: 700;
-      color: var(--primary, #0a2540);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-    }
-
   </style>
 </head>
 <body>
@@ -1273,137 +1428,182 @@
         <table class="master-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Doc ID</th>
-              <th>Module Scope & Domain Name</th>
+              <th style="width: 35px; text-align: center;">#</th>
+              <th>Module Scope & Implementation Domain</th>
               <th>Timeline</th>
-              <th>Effort (Mo)</th>
-              <th>Tranches</th>
+              <th>Effort</th>
+              <th>Milestone Gates</th>
               <th>Total Cost (BHD)</th>
-              <th>Weekly Burn (BHD)</th>
+              <th>Weekly Burn</th>
               <th>Share (%)</th>
-              <th>Action</th>
+              <th style="text-align: center;">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>1</strong></td>
-              <td><span class="mod-tag">MS-001</span></td>
-              <td><strong>PCode Generation, Cataloguing & Item Master Engine</strong></td>
-              <td>10 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">1</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-001</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-001 v1.0</span>
+                </div>
+                <div class="mod-domain-title">PCode Generation, Cataloguing & Item Master Engine</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">10 Weeks</span></td>
               <td>2.50 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 3,409.091</span></td>
               <td>BD 340.909</td>
-              <td>10.00%</td>
-              <td><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">10.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>2</strong></td>
-              <td><span class="mod-tag">MS-002</span></td>
-              <td><strong>Vendor & Purchase Management, Supplier Portal & 3-Way Match</strong></td>
-              <td>12 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">2</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-002</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-002 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Vendor & Purchase Management, Supplier Portal & 3-Way Match</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,090.909</span></td>
               <td>BD 340.909</td>
-              <td>12.00%</td>
-              <td><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">12.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>3</strong></td>
-              <td><span class="mod-tag">MS-003</span></td>
-              <td><strong>Store Verification, Multi-Warehouse Stock & Location Matrix</strong></td>
-              <td>15 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">3</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-003</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-003 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Store Verification, Multi-Warehouse Stock & Location Matrix</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,113.636</span></td>
               <td>BD 340.909</td>
-              <td>15.00%</td>
-              <td><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">15.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>4</strong></td>
-              <td><span class="mod-tag">MS-004</span></td>
-              <td><strong>Sales Process, Mobile POS, Multi-Branch Billing & Return Control</strong></td>
-              <td>15 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">4</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-004</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-004 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Sales Process, Mobile POS, Multi-Branch Billing & Return Control</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,113.636</span></td>
               <td>BD 340.909</td>
-              <td>15.00%</td>
-              <td><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">15.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>5</strong></td>
-              <td><span class="mod-tag">MS-005</span></td>
-              <td><strong>Accounting & Financial Management, General Ledger, AP/AR & VAT</strong></td>
-              <td>13 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">5</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-005</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-005 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Accounting & Financial Management, General Ledger, AP/AR & VAT</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">13 Weeks</span></td>
               <td>3.25 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,431.818</span></td>
               <td>BD 340.909</td>
-              <td>13.00%</td>
-              <td><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">13.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>6</strong></td>
-              <td><span class="mod-tag">MS-006</span></td>
-              <td><strong>Enterprise Administration, Facility, Fixed Assets, Fleet & Vault</strong></td>
-              <td>12 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">6</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-006</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-006 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Enterprise Administration, Facility, Fixed Assets, Fleet & Vault</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,090.909</span></td>
               <td>BD 340.909</td>
-              <td>12.00%</td>
-              <td><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">12.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>7</strong></td>
-              <td><span class="mod-tag">MS-007</span></td>
-              <td><strong>Human Resource Management, Biometrics, Leave, Payroll & Gratuity</strong></td>
-              <td>16 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">7</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-007</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-007 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Human Resource Management, Biometrics, Leave, Payroll & Gratuity</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">16 Weeks</span></td>
               <td>4.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,454.548</span></td>
               <td>BD 340.909</td>
-              <td>16.00%</td>
-              <td><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">16.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>8</strong></td>
-              <td><span class="mod-tag">MS-008</span></td>
-              <td><strong>Hardware Setup, Handheld QR Devices, ESC/POS & Cloud Cluster</strong></td>
-              <td>3 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">8</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-008</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: ARCH-001 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Hardware Setup, Handheld QR Devices, ESC/POS & Cloud Cluster</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">3 Weeks</span></td>
               <td>0.75 Mo</td>
-              <td>3 Gates (33%)</td>
+              <td><span class="gate-pill">3 Gates (33%)</span></td>
               <td><span class="currency-bhd">BD 1,022.727</span></td>
               <td>BD 340.909</td>
-              <td>3.00%</td>
-              <td><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">3.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>9</strong></td>
-              <td><span class="mod-tag">MS-009</span></td>
-              <td><strong>Executive Management Dashboard, 8-Module BI & Mobile Cockpit</strong></td>
-              <td>4 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">9</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-009</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-009 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Executive Management Dashboard, 8-Module BI & Mobile Cockpit</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">4 Weeks</span></td>
               <td>1.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 1,363.636</span></td>
               <td>BD 340.909</td>
-              <td>4.00%</td>
-              <td><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">4.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
+              <td colspan="2"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
               <td><strong>88 Weeks</strong></td>
               <td><strong>17.60 Mo</strong></td>
               <td><strong>35 Gates</strong></td>
-              <td colspan="2"><strong style="color: var(--accent-gold); font-size: 16px;">BD 34,090.910</strong></td>
+              <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 34,090.910</span></td>
+              <td><strong>BD 387.397</strong></td>
               <td><strong>100.00%</strong></td>
-              <td><strong>Full Suite</strong></td>
+              <td style="text-align: center;"><strong>Full Suite</strong></td>
             </tr>
           </tfoot>
         </table>

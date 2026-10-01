@@ -750,6 +750,69 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       color: var(--primary);
+      white-space: nowrap;
+    }}
+
+    .mod-doc-badge {{
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #0a2540;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+      box-shadow: 0 1px 2px rgba(10,37,64,0.15);
+    }}
+
+    .mod-ba-badge {{
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }}
+
+    .mod-domain-title {{
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0a2540;
+      line-height: 1.35;
+      margin-top: 2px;
+    }}
+
+    .gate-pill {{
+      display: inline-block;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #334155;
+      white-space: nowrap;
+    }}
+
+    .share-badge {{
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 700;
+      font-size: 11.5px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid #dbeafe;
+      white-space: nowrap;
     }}
 
     /* Milestone Phase Accordion Cards */
@@ -1385,137 +1448,182 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
         <table class="master-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Doc ID</th>
-              <th>Module Scope & Domain Name</th>
+              <th style="width: 35px; text-align: center;">#</th>
+              <th>Module Scope & Implementation Domain</th>
               <th>Timeline</th>
-              <th>Effort (Mo)</th>
-              <th>Tranches</th>
+              <th>Effort</th>
+              <th>Milestone Gates</th>
               <th>Total Cost (BHD)</th>
-              <th>Weekly Burn (BHD)</th>
+              <th>Weekly Burn</th>
               <th>Share (%)</th>
-              <th>Action</th>
+              <th style="text-align: center;">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>1</strong></td>
-              <td><span class="mod-tag">MS-001</span></td>
-              <td><strong>PCode Generation, Cataloguing & Item Master Engine</strong></td>
-              <td>10 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">1</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-001</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-001 v1.0</span>
+                </div>
+                <div class="mod-domain-title">PCode Generation, Cataloguing & Item Master Engine</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">10 Weeks</span></td>
               <td>2.50 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 3,409.091</span></td>
               <td>BD 340.909</td>
-              <td>10.00%</td>
-              <td><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">10.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>2</strong></td>
-              <td><span class="mod-tag">MS-002</span></td>
-              <td><strong>Vendor & Purchase Management, Supplier Portal & 3-Way Match</strong></td>
-              <td>12 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">2</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-002</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-002 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Vendor & Purchase Management, Supplier Portal & 3-Way Match</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,090.909</span></td>
               <td>BD 340.909</td>
-              <td>12.00%</td>
-              <td><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">12.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>3</strong></td>
-              <td><span class="mod-tag">MS-003</span></td>
-              <td><strong>Store Verification, Multi-Warehouse Stock & Location Matrix</strong></td>
-              <td>15 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">3</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-003</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-003 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Store Verification, Multi-Warehouse Stock & Location Matrix</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,113.636</span></td>
               <td>BD 340.909</td>
-              <td>15.00%</td>
-              <td><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">15.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>4</strong></td>
-              <td><span class="mod-tag">MS-004</span></td>
-              <td><strong>Sales Process, Mobile POS, Multi-Branch Billing & Return Control</strong></td>
-              <td>15 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">4</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-004</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-004 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Sales Process, Mobile POS, Multi-Branch Billing & Return Control</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,113.636</span></td>
               <td>BD 340.909</td>
-              <td>15.00%</td>
-              <td><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">15.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>5</strong></td>
-              <td><span class="mod-tag">MS-005</span></td>
-              <td><strong>Accounting & Financial Management, General Ledger, AP/AR & VAT</strong></td>
-              <td>13 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">5</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-005</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-005 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Accounting & Financial Management, General Ledger, AP/AR & VAT</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">13 Weeks</span></td>
               <td>3.25 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,431.818</span></td>
               <td>BD 340.909</td>
-              <td>13.00%</td>
-              <td><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">13.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>6</strong></td>
-              <td><span class="mod-tag">MS-006</span></td>
-              <td><strong>Enterprise Administration, Facility, Fixed Assets, Fleet & Vault</strong></td>
-              <td>12 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">6</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-006</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-006 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Enterprise Administration, Facility, Fixed Assets, Fleet & Vault</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 4,090.909</span></td>
               <td>BD 340.909</td>
-              <td>12.00%</td>
-              <td><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">12.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>7</strong></td>
-              <td><span class="mod-tag">MS-007</span></td>
-              <td><strong>Human Resource Management, Biometrics, Leave, Payroll & Gratuity</strong></td>
-              <td>16 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">7</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-007</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-007 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Human Resource Management, Biometrics, Leave, Payroll & Gratuity</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">16 Weeks</span></td>
               <td>4.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 5,454.548</span></td>
               <td>BD 340.909</td>
-              <td>16.00%</td>
-              <td><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">16.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>8</strong></td>
-              <td><span class="mod-tag">MS-008</span></td>
-              <td><strong>Hardware Setup, Handheld QR Devices, ESC/POS & Cloud Cluster</strong></td>
-              <td>3 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">8</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-008</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: ARCH-001 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Hardware Setup, Handheld QR Devices, ESC/POS & Cloud Cluster</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">3 Weeks</span></td>
               <td>0.75 Mo</td>
-              <td>3 Gates (33%)</td>
+              <td><span class="gate-pill">3 Gates (33%)</span></td>
               <td><span class="currency-bhd">BD 1,022.727</span></td>
               <td>BD 340.909</td>
-              <td>3.00%</td>
-              <td><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">3.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
             <tr>
-              <td><strong>9</strong></td>
-              <td><span class="mod-tag">MS-009</span></td>
-              <td><strong>Executive Management Dashboard, 8-Module BI & Mobile Cockpit</strong></td>
-              <td>4 Weeks</td>
+              <td style="text-align: center; font-weight: 800; color: #0a2540;">9</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="mod-doc-badge">SL-POP-ERP-MS-009</span>
+                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-009 v1.0</span>
+                </div>
+                <div class="mod-domain-title">Executive Management Dashboard, 8-Module BI & Mobile Cockpit</div>
+              </td>
+              <td><span style="font-weight: 600; color: #1e293b;">4 Weeks</span></td>
               <td>1.00 Mo</td>
-              <td>4 Gates (25%)</td>
+              <td><span class="gate-pill">4 Gates (25%)</span></td>
               <td><span class="currency-bhd">BD 1,363.636</span></td>
               <td>BD 340.909</td>
-              <td>4.00%</td>
-              <td><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              <td><span class="share-badge">4.00%</span></td>
+              <td style="text-align: center;"><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
+              <td colspan="2"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
               <td><strong>88 Weeks</strong></td>
               <td><strong>17.60 Mo</strong></td>
               <td><strong>35 Gates</strong></td>
-              <td colspan="2"><strong style="color: var(--accent-gold); font-size: 16px;">BD 34,090.910</strong></td>
+              <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 34,090.910</span></td>
+              <td><strong>BD 387.397</strong></td>
               <td><strong>100.00%</strong></td>
-              <td><strong>Full Suite</strong></td>
+              <td style="text-align: center;"><strong>Full Suite</strong></td>
             </tr>
           </tfoot>
         </table>
@@ -2731,7 +2839,7 @@ print('Generated and distributed HTML files.')
 # 2. Render through PHP and generate PDF with Chrome Headless
 rendered_html_path = os.path.join(BASE_DIR, 'rendered_summary.html')
 with open(rendered_html_path, 'w', encoding='utf-8') as rf:
-    subprocess.run(['php', '-f', html_path_1], stdout=rf, check=True, cwd=BASE_DIR)
+    rf.write(html_content)
 
 chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 pdf_output_root_1 = os.path.join(BASE_DIR, 'SL-POP-ERP-SUMMARY-001.pdf')
