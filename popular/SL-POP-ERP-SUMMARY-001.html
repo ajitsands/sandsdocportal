@@ -2562,215 +2562,151 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       </div>
     </div>
 
-    
-        <span class="badge-accent">Official Acceptance</span>
+    <!-- SECTION 8: Stakeholder Authorization & Digital Sign-Off Section -->
+    <section class="doc-section signoff-section" id="sec-signoff" style="background: var(--white); border-radius: var(--radius-xl, 16px); padding: 35px; border: 1px solid var(--gray-200, #e2e8f0); box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1)); margin-bottom: 30px; margin-top: 30px;">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #f1f5f9;">
+        <div class="section-title-wrap">
+          <span class="section-num" style="background: #e67e22; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">FINAL STAGE</span>
+          <h2 class="section-title" style="margin-top: 4px; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: #0a2540;">
+            Stakeholder Authorization & Digital Sign-Off Console
+          </h2>
+        </div>
+        <span class="badge-success" style="background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">
+          <i class="fa-solid fa-shield-halved"></i> OFFICIAL ACCEPTANCE & DIGITAL VERIFICATION
+        </span>
       </div>
 
-      <p style="font-size: 13px; color: var(--gray-700); margin-bottom: 20px;">
-        By affixing digital signatures below, all participating executive stakeholders ratify this Master Milestone & Budgeting Summary as the official baseline for the Popular Auto Spare ERP implementation.
+      <p style="font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 22px;">
+        By affixing digital signatures and authorizations below, all participating executive and technical stakeholders ratify the deliverables, implementation timeline, SLA commitments, and financial disbursement gates for <strong>Master 9-Module ERP Milestone & Budget Roadmap (SL-POP-ERP-SUMMARY-001)</strong>:
       </p>
 
-      <div class="signoff-grid">
-        <!-- Signoff 1 -->
-        <div class="signoff-card">
-          <div>
-            <div class="signoff-card-title">Popular Auto Spare Co. W.L.L</div>
-            <div class="signoff-card-sub">Client Executive Sign-off & Commercial Approval</div>
-            <div class="signoff-box-area" id="sig_area_client">
-              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
+      <!-- Block 1: Engineering Preparation & Multi-Tier Verification Matrix -->
+      <div style="margin-bottom: 28px;">
+        <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-code-branch" style="color: #d97706;"></i> 1. Engineering Preparation & Stakeholder Verification Matrix
+        </h3>
+        <div class="signoff-box-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
+          <!-- Prepared By Developer / Architect -->
+          <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
+            <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">DEVELOPER / ARCHITECT</div>
+            <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ancy Varghese Thekkan</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Software Architect, SaNDS Lab</div>
+            <div style="margin-bottom: 8px;">
+              <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fas fa-check"></i> Prepared (25-September-2026)
+              </span>
             </div>
-            <span class="signoff-status-badge status-pending" id="badge_client">PENDING SIGN-OFF</span>
+            <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">COMPLETED</span>
           </div>
-          <button class="btn-sign" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Managing Director / Commercial Lead')">
-            <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
-          </button>
-        </div>
 
-        <!-- Signoff 2 -->
-        <div class="signoff-card">
-          <div>
-            <div class="signoff-card-title">SaNDS Lab Middle East W.L.L</div>
-            <div class="signoff-card-sub">Lead Solutions Architect & Engineering Director</div>
-            <div class="signoff-box-area" id="sig_area_architect">
-              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
+          <!-- Verified By CEO / Managing Director -->
+          <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
+            <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">VERIFIED BY (DEVELOPER)</div>
+            <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ajit Kumar KV</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">CEO & Managing Director, SaNDS Lab</div>
+            <div style="margin-bottom: 8px;">
+              <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fas fa-check"></i> Verified (30-September-2026)
+              </span>
             </div>
-            <span class="signoff-status-badge status-pending" id="badge_architect">PENDING SIGN-OFF</span>
+            <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">CHECKED & VERIFIED</span>
           </div>
-          <button class="btn-sign" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Enterprise Solutions Architect')">
-            <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
-          </button>
-        </div>
 
-        <!-- Signoff 3 -->
-        <div class="signoff-card">
-          <div>
-            <div class="signoff-card-title">UniGlobal Consultancy</div>
-            <div class="signoff-card-sub">Executive Strategic Advisor & Governance Lead</div>
-            <div class="signoff-box-area" id="sig_area_advisor">
-              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
+          <!-- Consultant Review -->
+          <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
+            <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CONSULTANT REVIEW</div>
+            <div style="font-size: 13px; font-weight: 700; color: #1e293b;">UniGlobal Business Solutions</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Project Management Consultant</div>
+            <div style="margin-bottom: 8px;" id="sig_badge_consultant_review">
+              <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i> In Active Review
+              </span>
             </div>
-            <span class="signoff-status-badge status-pending" id="badge_advisor">PENDING SIGN-OFF</span>
+            <span class="signoff-status-badge status-pending" id="badge_consultant_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">IN REVIEW</span>
           </div>
-          <button class="btn-sign" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Senior Strategic Advisor')">
-            <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
-          </button>
+
+          <!-- Client Approval -->
+          <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
+            <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CLIENT APPROVAL</div>
+            <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Popular Auto Spare & A/C Parts</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Authorized Executive Signatory</div>
+            <div style="margin-bottom: 8px;" id="sig_badge_client_review">
+              <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i> Pending Approval
+              </span>
+            </div>
+            <span class="signoff-status-badge status-pending" id="badge_client_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">PENDING SIGNATURE</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Footer -->
-    
+      <!-- Block 2: 3-Party Executive Governance Digital Sign-Off Console -->
       <div>
-        Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.
+        <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-signature" style="color: #d97706;"></i> 2. Executive Multi-Party Digital Acceptance Console
+        </h3>
+        <div class="signoff-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+          <!-- Signoff 1: Client -->
+          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">Popular Auto Spare Co. W.L.L</div>
+              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Client Executive Sign-off & Commercial Approval</div>
+              <div class="signoff-box-area" id="sig_area_client" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
+                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+              </div>
+              <div style="margin-bottom: 14px;">
+                <span class="signoff-status-badge status-pending" id="badge_client" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Authorized Executive Signatory')">
+              <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
+            </button>
+          </div>
+
+          <!-- Signoff 2: Developer / Architect -->
+          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">SaNDS Lab Middle East W.L.L</div>
+              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Lead Solutions Architect & Engineering Director</div>
+              <div class="signoff-box-area" id="sig_area_architect" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
+                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+              </div>
+              <div style="margin-bottom: 14px;">
+                <span class="signoff-status-badge status-pending" id="badge_architect" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Lead Solutions Architect & Managing Director')">
+              <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
+            </button>
+          </div>
+
+          <!-- Signoff 3: Consultant -->
+          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">UniGlobal Consultancy</div>
+              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Executive Strategic Advisor & Governance Lead</div>
+              <div class="signoff-box-area" id="sig_area_advisor" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
+                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+              </div>
+              <div style="margin-bottom: 14px;">
+                <span class="signoff-status-badge status-pending" id="badge_advisor" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Executive Strategic Advisor')">
+              <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Document Footer -->
+    <footer class="doc-footer" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> &bull; Kingdom of Bahrain &bull; Commercial Registration (CR) Active</div>
+      <div>Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.</div>
+    </footer>
 
   </div>
-
-  
-      <!-- Stakeholder Authorization & Digital Sign-Off Section -->
-      <section class="doc-section signoff-section" id="sec-signoff" style="background: var(--white); border-radius: var(--radius-xl, 16px); padding: 35px; border: 1px solid var(--gray-200, #e2e8f0); box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1)); margin-bottom: 30px;">
-        <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #f1f5f9;">
-          <div class="section-title-wrap">
-            <span class="section-num" style="background: #e67e22; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">FINAL STAGE</span>
-            <h2 class="section-title" style="margin-top: 4px; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: #0a2540;">
-              Stakeholder Authorization & Digital Sign-Off Console
-            </h2>
-          </div>
-          <span class="badge-success" style="background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">
-            <i class="fa-solid fa-shield-halved"></i> OFFICIAL ACCEPTANCE & DIGITAL VERIFICATION
-          </span>
-        </div>
-
-        <p style="font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 22px;">
-          By affixing digital signatures and authorizations below, all participating executive and technical stakeholders ratify the deliverables, implementation timeline, SLA commitments, and financial disbursement gates for <strong>Master 9-Module ERP Milestone & Budget Roadmap (SL-POP-ERP-SUMMARY-001)</strong>:
-        </p>
-
-        <!-- Block 1: Engineering Preparation & Multi-Tier Verification Matrix (Screenshot 2) -->
-        <div style="margin-bottom: 28px;">
-          <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-code-branch" style="color: #d97706;"></i> 1. Engineering Preparation & Stakeholder Verification Matrix
-          </h3>
-          <div class="signoff-box-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
-            <!-- Prepared By Developer / Architect -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">DEVELOPER / ARCHITECT</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ancy Varghese Thekkan</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Software Architect, SaNDS Lab</div>
-              <div style="margin-bottom: 8px;">
-                <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-check"></i> Prepared (25-September-2026)
-                </span>
-              </div>
-              <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">COMPLETED</span>
-            </div>
-
-            <!-- Verified By CEO / Managing Director -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">VERIFIED BY (DEVELOPER)</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ajit Kumar KV</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">CEO & Managing Director, SaNDS Lab</div>
-              <div style="margin-bottom: 8px;">
-                <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-check"></i> Verified (30-September-2026)
-                </span>
-              </div>
-              <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">CHECKED & VERIFIED</span>
-            </div>
-
-            <!-- Consultant Review -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CONSULTANT REVIEW</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">UniGlobal Business Solutions</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Project Management Consultant</div>
-              <div style="margin-bottom: 8px;" id="sig_badge_consultant_review">
-                <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-clock"></i> In Active Review
-                </span>
-              </div>
-              <span class="signoff-status-badge status-pending" id="badge_consultant_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">IN REVIEW</span>
-            </div>
-
-            <!-- Client Approval -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CLIENT APPROVAL</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Popular Auto Spare & A/C Parts</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Authorized Executive Signatory</div>
-              <div style="margin-bottom: 8px;" id="sig_badge_client_review">
-                <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-clock"></i> Pending Approval
-                </span>
-              </div>
-              <span class="signoff-status-badge status-pending" id="badge_client_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">PENDING SIGNATURE</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Block 2: 3-Party Executive Governance Digital Sign-Off Console (Screenshot 1) -->
-        <div>
-          <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-signature" style="color: #d97706;"></i> 2. Executive Multi-Party Digital Acceptance Console
-          </h3>
-          <div class="signoff-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
-            <!-- Signoff 1: Client -->
-            <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">Popular Auto Spare Co. W.L.L</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Client Executive Sign-off & Commercial Approval</div>
-                <div class="signoff-box-area" id="sig_area_client" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                  <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-                </div>
-                <div style="margin-bottom: 14px;">
-                  <span class="signoff-status-badge status-pending" id="badge_client" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-                </div>
-              </div>
-              <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Authorized Executive Signatory')">
-                <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
-              </button>
-            </div>
-
-            <!-- Signoff 2: Developer / Architect -->
-            <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">SaNDS Lab Middle East W.L.L</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Lead Solutions Architect & Engineering Director</div>
-                <div class="signoff-box-area" id="sig_area_architect" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                  <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-                </div>
-                <div style="margin-bottom: 14px;">
-                  <span class="signoff-status-badge status-pending" id="badge_architect" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-                </div>
-              </div>
-              <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Lead Solutions Architect & Managing Director')">
-                <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
-              </button>
-            </div>
-
-            <!-- Signoff 3: Consultant -->
-            <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">UniGlobal Consultancy</div>
-                <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Executive Strategic Advisor & Governance Lead</div>
-                <div class="signoff-box-area" id="sig_area_advisor" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                  <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-                </div>
-                <div style="margin-bottom: 14px;">
-                  <span class="signoff-status-badge status-pending" id="badge_advisor" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-                </div>
-              </div>
-              <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Executive Strategic Advisor')">
-                <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Document Footer -->
-      <footer class="doc-footer" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div><strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> &bull; Kingdom of Bahrain &bull; Commercial Registration (CR) Active</div>
-        <div>Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.</div>
-      </footer>
 
   <!-- Unified Signature Capture Modal -->
   <div class="modal-overlay" id="sigModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
