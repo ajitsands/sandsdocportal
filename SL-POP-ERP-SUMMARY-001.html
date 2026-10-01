@@ -2980,7 +2980,167 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       onScroll();
     }
 
+    // Master Graphical Analytics (Budget Doughnut & Timeline Bar Chart)
+    function initMasterCharts() {
+      const canvasBudget = document.getElementById('budgetChart');
+      const canvasTimeline = document.getElementById('timelineChart');
+
+      if (typeof Chart === 'undefined') {
+        console.warn('Chart.js not loaded yet. Retrying in 200ms...');
+        setTimeout(initMasterCharts, 200);
+        return;
+      }
+
+      if (canvasBudget) {
+        const ctxBudget = canvasBudget.getContext('2d');
+        new Chart(ctxBudget, {
+          type: 'doughnut',
+          data: {
+            labels: [
+              'M1: PCode & Item Master',
+              'M2: Vendor & Purchase',
+              'M3: Store Verification',
+              'M4: Sales & POS Billing',
+              'M5: Accounts & VAT',
+              'M6: Enterprise Admin',
+              'M7: HRM & Payroll',
+              'M8: Hardware & Servers',
+              'M9: Executive BI Dashboard'
+            ],
+            datasets: [{
+              data: [3409.091, 4090.909, 5113.636, 5113.636, 4431.818, 4090.909, 5454.548, 1022.727, 1363.636],
+              backgroundColor: [
+                '#0284c7',
+                '#0d9488',
+                '#10b981',
+                '#f59e0b',
+                '#6366f1',
+                '#ec4899',
+                '#8b5cf6',
+                '#64748b',
+                '#d97706'
+              ],
+              borderWidth: 2,
+              borderColor: '#ffffff',
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  boxWidth: 12,
+                  padding: 10,
+                  font: {
+                    family: 'Inter',
+                    size: 11,
+                    weight: '500'
+                  },
+                  color: '#334155'
+                }
+              },
+              tooltip: {
+                backgroundColor: '#0a2540',
+                padding: 10,
+                cornerRadius: 6,
+                callbacks: {
+                  label: function(context) {
+                    const val = context.parsed;
+                    const total = 34090.910;
+                    const pct = ((val / total) * 100).toFixed(1);
+                    return ` ${context.label}: BD ${val.toLocaleString('en-US', {minimumFractionDigits: 3})} (${pct}%)`;
+                  }
+                }
+              }
+            },
+            cutout: '60%'
+          }
+        });
+      }
+
+      if (canvasTimeline) {
+        const ctxTimeline = canvasTimeline.getContext('2d');
+        new Chart(ctxTimeline, {
+          type: 'bar',
+          data: {
+            labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9'],
+            datasets: [{
+              label: 'Duration (Weeks)',
+              data: [10, 12, 15, 15, 13, 12, 16, 3, 4],
+              backgroundColor: '#0a2540',
+              borderRadius: 6,
+              hoverBackgroundColor: '#d97706'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Engineering Weeks',
+                  font: { family: 'Inter', size: 11, weight: '600' },
+                  color: '#64748b'
+                },
+                grid: {
+                  color: '#f1f5f9'
+                },
+                ticks: {
+                  color: '#64748b',
+                  font: { family: 'Inter', size: 11 }
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#1e293b',
+                  font: { family: 'Outfit', size: 12, weight: '700' }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: '#0a2540',
+                padding: 10,
+                cornerRadius: 6,
+                callbacks: {
+                  title: function(items) {
+                    const names = [
+                      'Module 1: PCode & Item Master',
+                      'Module 2: Vendor & Purchase',
+                      'Module 3: Store Verification',
+                      'Module 4: Sales & POS Billing',
+                      'Module 5: Accounts & VAT',
+                      'Module 6: Enterprise Admin',
+                      'Module 7: HRM & Payroll',
+                      'Module 8: Hardware & Servers',
+                      'Module 9: Executive BI Dashboard'
+                    ];
+                    return names[items[0].dataIndex] || items[0].label;
+                  },
+                  label: function(context) {
+                    return ` Implementation Effort: ${context.parsed.y} Working Weeks (${(context.parsed.y / 4).toFixed(2)} Months)`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      initMasterCharts();
       loadSavedSignatures();
       initScrollSpy();
     });
