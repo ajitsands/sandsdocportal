@@ -1069,6 +1069,49 @@
         grid-template-columns: 1fr !important;
       }
     }
+  
+    /* Mobile Responsive Optimizations for Architecture Document */
+    @media (max-width: 900px) {
+      body {
+        background-color: #ffffff !important;
+        font-size: 11px !important;
+      }
+      .document-wrapper {
+        margin: 0 !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      .page {
+        padding: 16px 14px !important;
+        min-height: auto !important;
+      }
+      .page-break {
+        border-bottom: 2px dashed #cbd5e1 !important;
+        margin-bottom: 25px !important;
+        padding-bottom: 25px !important;
+      }
+      .header-container, .footer-container {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 8px !important;
+      }
+      .grid-2, .grid-3, .grid-4, .stats-row, .kpi-row {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      .table-container, table {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+        width: 100% !important;
+      }
+      .card {
+        padding: 14px !important;
+        margin-bottom: 14px !important;
+      }
+    }
+
   </style>
 </head>
 <body>

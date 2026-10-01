@@ -1142,6 +1142,124 @@ if (!$authenticated_user) {
       font-size: 11.5px;
       color: rgba(255, 255, 255, 0.6);
     }
+  
+    /* =========================================================================
+       COMPREHENSIVE MOBILE RESPONSIVE STYLING FOR PORTAL HUB & ADMIN CONSOLE
+       ========================================================================= */
+    @media (max-width: 1024px) {
+      .portal-header {
+        padding: 16px 20px !important;
+      }
+      .portal-container {
+        padding: 0 16px !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .portal-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 14px 16px !important;
+      }
+      .portal-nav-left, .portal-nav-right {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .portal-user-badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+      }
+      .admin-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .admin-title {
+        font-size: 20px !important;
+      }
+      .admin-tabs-nav {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        white-space: nowrap !important;
+        padding: 6px 8px !important;
+        gap: 6px !important;
+      }
+      .admin-tab-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+      }
+      .doc-card {
+        padding: 18px 16px !important;
+      }
+      .doc-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+      }
+      .doc-title {
+        font-size: 16px !important;
+      }
+      .doc-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+      .doc-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+      }
+      .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 6px !important;
+      }
+      .table-responsive, .dataTables_wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+      .btn {
+        font-size: 11.5px !important;
+        padding: 7px 12px !important;
+      }
+      .portal-footer {
+        font-size: 10px !important;
+        padding: 20px 10px !important;
+      }
+    }
+
   </style>
   <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -2099,9 +2217,125 @@ if ($is_super_admin && isset($_GET['view']) && $_GET['view'] === 'admin') {
       }
     }
 
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-      table { display: block; overflow-x: auto; }
+    
+  
+    /* =========================================================================
+       COMPREHENSIVE MOBILE RESPONSIVE STYLING FOR PORTAL HUB & ADMIN CONSOLE
+       ========================================================================= */
+    @media (max-width: 1024px) {
+      .portal-header {
+        padding: 16px 20px !important;
+      }
+      .portal-container {
+        padding: 0 16px !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
     }
+
+    @media (max-width: 768px) {
+      .portal-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 14px 16px !important;
+      }
+      .portal-nav-left, .portal-nav-right {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .portal-user-badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+      }
+      .admin-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .admin-title {
+        font-size: 20px !important;
+      }
+      .admin-tabs-nav {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        white-space: nowrap !important;
+        padding: 6px 8px !important;
+        gap: 6px !important;
+      }
+      .admin-tab-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+      }
+      .doc-card {
+        padding: 18px 16px !important;
+      }
+      .doc-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+      }
+      .doc-title {
+        font-size: 16px !important;
+      }
+      .doc-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+      .doc-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+      }
+      .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 6px !important;
+      }
+      .table-responsive, .dataTables_wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+      .btn {
+        font-size: 11.5px !important;
+        padding: 7px 12px !important;
+      }
+      .portal-footer {
+        font-size: 10px !important;
+        padding: 20px 10px !important;
+      }
+    }
+
   </style>
   <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -3417,6 +3651,124 @@ log_document_access($authenticated_user, 'PORTAL_HUB', 'Popular ERP Document Rep
       .doc-actions { flex-direction: column; }
       .doc-actions .btn { width: 100%; justify-content: center; }
     }
+  
+    /* =========================================================================
+       COMPREHENSIVE MOBILE RESPONSIVE STYLING FOR PORTAL HUB & ADMIN CONSOLE
+       ========================================================================= */
+    @media (max-width: 1024px) {
+      .portal-header {
+        padding: 16px 20px !important;
+      }
+      .portal-container {
+        padding: 0 16px !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .portal-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 14px 16px !important;
+      }
+      .portal-nav-left, .portal-nav-right {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .portal-user-badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+      }
+      .admin-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .admin-title {
+        font-size: 20px !important;
+      }
+      .admin-tabs-nav {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        white-space: nowrap !important;
+        padding: 6px 8px !important;
+        gap: 6px !important;
+      }
+      .admin-tab-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+      }
+      .doc-card {
+        padding: 18px 16px !important;
+      }
+      .doc-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+      }
+      .doc-title {
+        font-size: 16px !important;
+      }
+      .doc-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+      .doc-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+      }
+      .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 6px !important;
+      }
+      .table-responsive, .dataTables_wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .doc-meta-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+      .btn {
+        font-size: 11.5px !important;
+        padding: 7px 12px !important;
+      }
+      .portal-footer {
+        font-size: 10px !important;
+        padding: 20px 10px !important;
+      }
+    }
+
   </style>
   <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
