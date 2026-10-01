@@ -1,10 +1,23 @@
-# SQLite Database (Auto-created on server)
+# SQLite Database & Sessions (Auto-created on server)
 .auth_portal.db
 .sessions/
+
+# Development, Scratch & Raw Reference Folders
+scratch/
+Docs/
+popular/
+
+# Python Generator, Test & Maintenance Scripts
+*.py
+__pycache__/
+
+# Archive Packages, Previews & Temporary Exports
+*.zip
+*.tar.gz
+*.log
+*_preview.png
+pdf_text.txt
 
 # OS / Editor Files
 .DS_Store
 Thumbs.db
-*.log
-*_preview.png
-pdf_text.txt
