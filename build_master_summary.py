@@ -2568,7 +2568,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
         <ul>
           <li><strong>Zero Blind Upfront Risk:</strong> Invoices are raised strictly upon completion, demonstration, and staging sign-off of each milestone tranche (25% or 33.3% per gate).</li>
           <li><strong>15-Day Verification & UAT Grace Period:</strong> The client is entitled to a 15-calendar-day UAT review window per milestone to test all specified acceptance criteria before signing off.</li>
-          <li><strong>Change Request (CR) Protocol:</strong> Any features outside the defined scope are logged via Jira/Confluence and quoted using the transparent hourly rate card (BD 8.523 / Hour).</li>
+          <li><strong>Change Request (CR) Protocol:</strong> Any features outside the defined scope are logged via SaNDS Lab Portal and quoted using the transparent hourly rate card (BD 8.523 / Hour).</li>
         </ul>
       </div>
 
