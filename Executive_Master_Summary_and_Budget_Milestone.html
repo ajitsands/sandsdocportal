@@ -1110,31 +1110,76 @@
       align-items: center;
     }
 
-    /* Print Optimizations */
+    /* Print Optimizations - Landscape Orientation & Full Table Visibility */
+    @page {
+      size: A4 landscape;
+      margin: 8mm 10mm;
+    }
+
     @media print {
-      .web-action-bar, .modal-overlay, .btn-sign, .mod-link-btn {
+      .web-action-bar, .modal-overlay, .btn-sign, .mod-link-btn, #sigModal {
         display: none !important;
       }
       body {
-        background: #ffffff;
-        font-size: 11pt;
+        background: #ffffff !important;
+        font-size: 10pt !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .doc-top-bar {
+        padding: 16px 20px !important;
+      }
+      .header-logos img {
+        height: 38px !important;
       }
       .container {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 15px auto !important;
+        padding: 0 10px !important;
       }
       .hero-card, .section-card, .stat-card, .signoff-section, .total-cost-hero-box {
         box-shadow: none !important;
-        border: 1px solid #ccc !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 20px !important;
+        margin-bottom: 20px !important;
         page-break-inside: avoid;
+        break-inside: avoid;
       }
       .charts-grid {
-        display: block !important;
-      }
-      .chart-box {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px !important;
         page-break-inside: avoid;
-        margin-bottom: 15px;
+        break-inside: avoid;
+      }
+      .chart-wrapper {
+        height: 240px !important;
+      }
+      .table-container {
+        overflow: visible !important;
+        width: 100% !important;
+        margin: 10px 0 !important;
+      }
+      table.master-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        font-size: 10.5px !important;
+        table-layout: auto !important;
+      }
+      table.master-table th, table.master-table td {
+        padding: 6px 8px !important;
+      }
+      .mod-domain-title {
+        font-size: 11.5px !important;
+      }
+      .stat-row {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 12px !important;
+      }
+      .modules-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 14px !important;
       }
     }
       /* =========================================================================
