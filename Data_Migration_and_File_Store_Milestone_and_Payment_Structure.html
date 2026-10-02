@@ -601,11 +601,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
       position: relative;
     }
 
-    @media (max-width: 768px) {
-      .doc-hero { padding: 25px 20px; }
-      .doc-title { font-size: 22px; }
-      .section-card { padding: 20px; }
-      .table-responsive { overflow-x: auto; }
+    @media screen and (max-width: 900px) {
+      .main-container { padding: 0 12px; margin-top: 15px; }
+      .doc-hero { padding: 24px 18px; }
+      .doc-title { font-size: 21px; }
+      .meta-grid { grid-template-columns: 1fr 1fr; }
+      .summary-metrics { grid-template-columns: 1fr 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .signoff-grid { grid-template-columns: 1fr; gap: 14px; }
+      .styled-table { display: block; overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+    }
+    @media screen and (max-width: 600px) {
+      .web-action-bar { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px 14px; }
+      .web-action-bar .actions { display: flex; flex-direction: column; width: 100%; }
+      .web-action-bar .actions .btn { width: 100%; justify-content: center; }
+      .doc-hero { padding: 18px 14px; }
+      .doc-title { font-size: 18px; }
+      .meta-grid { grid-template-columns: 1fr; }
+      .summary-metrics { grid-template-columns: 1fr; }
+      .section-card { padding: 16px 14px; }
+      .modal-box { padding: 16px; width: 95%; max-width: 95%; }
     }
   </style>
 </head>

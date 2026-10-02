@@ -876,6 +876,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         print-color-adjust: exact !important;
       }
     }
+
+    /* Mobile Responsiveness */
+    @media screen and (max-width: 900px) {
+      .main-container { padding: 0 10px 30px; margin-top: 14px; }
+      .header-banner { padding: 18px 16px; }
+      .doc-main-title { font-size: 17px; }
+      .meta-bar { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .specs-grid { grid-template-columns: 1fr 1fr; }
+      .signoff-grid { grid-template-columns: 1fr; }
+      .hardware-spotlight { grid-template-columns: 1fr; text-align: center; }
+      .styled-table { display: block; overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+    }
+    @media screen and (max-width: 600px) {
+      .web-action-bar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 14px; }
+      .web-action-bar .left-group, .web-action-bar .right-group { display: flex; flex-direction: column; width: 100%; gap: 6px; }
+      .web-action-bar .btn-portal { width: 100%; justify-content: center; }
+      .logo-cluster { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .doc-main-title { font-size: 16px; }
+      .meta-bar { grid-template-columns: 1fr; }
+      .specs-grid { grid-template-columns: 1fr; }
+      .pricing-banner { flex-direction: column; align-items: stretch; gap: 12px; }
+      .pricing-right { border-left: none; border-top: 1px solid rgba(255,255,255,0.15); padding-left: 0; padding-top: 10px; text-align: left; }
+      .content-body { padding: 16px 12px; }
+      .modal-content { width: 95%; max-width: 95%; padding: 14px; }
+    }
   </style>
 </head>
 <body>
