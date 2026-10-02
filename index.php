@@ -165,7 +165,7 @@ $routes = array(
         'scope'    => '3 vCPU, 12 GB RAM, 200 GB NVMe, cPanel, CloudLinux, Imunify360, JetBackup 500GB & 24/7 Support',
         'ba_ref'   => 'SRV-001 (Ver 1.0)',
         'date'     => '02/10/2026',
-        'desc'     => 'Enterprise dedicated cloud server specification and fully managed SLA maintenance agreement. Includes 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup + 500 GB dedicated offsite backup storage, 99.9% uptime SLA, and 24/7 proactive DevOps maintenance (BD 44.000 / Month).'
+        'desc'     => 'Enterprise dedicated cloud server specification and fully managed SLA maintenance agreement. Includes 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup + 500 GB dedicated offsite backup storage, 99.9% uptime SLA, and 24/7 proactive DevOps maintenance (BD 40.000 / Month).'
     ),
     'SL-POP-ERP-AI-001' => array(
         'title'    => 'Vigilo AI: Intelligent Computer Vision CCTV Surveillance, Automated Threat Detection & Forensic Video Analytics Specification Agreement',
@@ -4037,7 +4037,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Monthly Retainer</div>
-          <div class="meta-item-val" style="color:#059669; font-weight:700;">BD 44.000 / Month</div>
+          <div class="meta-item-val" style="color:#059669; font-weight:700;">BD 40.000 / Month</div>
         </div>
         <div>
           <div class="meta-item-label">Support SLA & Backup</div>
@@ -4046,7 +4046,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Dedicated cloud infrastructure specification and managed maintenance agreement. Fully provisioned with 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup with 500 GB offsite storage tier, and 24/7 DevOps monitoring and proactive maintenance (BD 44.000 / Month).
+        Dedicated cloud infrastructure specification and managed maintenance agreement. Fully provisioned with 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup with 500 GB offsite storage tier, and 24/7 DevOps monitoring and proactive maintenance (BD 40.000 / Month).
       </p>
 
       <div class="doc-actions">
