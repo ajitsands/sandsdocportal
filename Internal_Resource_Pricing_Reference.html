@@ -3,22 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTERNAL ONLY: Resource Cost, Executive Advisory & Employee Pricing Reference</title>
+  <title>INTERNAL ONLY: Resource Cost, Executive Advisory & Complete 9-Module Pricing Reference</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0a2540;
+      --primary-dark: #07192c;
       --accent: #d97706;
+      --accent-hover: #b45309;
       --dark: #0f172a;
       --gray-800: #1e293b;
       --gray-700: #334155;
+      --gray-600: #475569;
       --gray-200: #e2e8f0;
       --gray-100: #f1f5f9;
       --white: #ffffff;
       --blue-subtle: #f0f9ff;
       --amber-subtle: #fffbeb;
+      --emerald-subtle: #ecfdf5;
+      --emerald: #10b981;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -26,15 +36,16 @@
       color: var(--gray-700);
       padding: 30px;
       font-size: 13px;
+      line-height: 1.5;
     }
     .container {
-      max-width: 950px;
+      max-width: 1000px;
       margin: 0 auto;
       background: #fff;
-      padding: 35px;
-      border-radius: 8px;
+      padding: 35px 40px;
+      border-radius: 10px;
       border: 1px solid var(--gray-200);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
     .badge-confidential {
       display: inline-block;
@@ -45,26 +56,67 @@
       padding: 4px 10px;
       border-radius: 4px;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 12px;
     }
     h1 {
       font-family: 'Outfit', sans-serif;
       color: var(--dark);
-      font-size: 22px;
-      margin-bottom: 6px;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary);
+      font-size: 17px;
+      margin-top: 30px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     h3 {
       font-family: 'Outfit', sans-serif;
       color: var(--primary);
-      font-size: 15px;
+      font-size: 14.5px;
       margin-top: 24px;
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .badge-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--blue-subtle);
+      color: #0284c7;
+      border: 1px solid #bae6fd;
+      font-family: 'Inter', sans-serif;
+    }
+    .badge-pill.amber {
+      background: var(--amber-subtle);
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .badge-pill.emerald {
+      background: var(--emerald-subtle);
+      color: #047857;
+      border-color: #a7f3d0;
     }
     p { margin-bottom: 12px; }
+    .table-responsive {
+      overflow-x: auto;
+      margin: 10px 0 20px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0 20px;
       font-size: 12px;
     }
     th {
@@ -73,12 +125,16 @@
       padding: 10px 14px;
       text-align: left;
       font-weight: 600;
+      letter-spacing: 0.3px;
     }
     td {
       padding: 9px 14px;
       border-bottom: 1px solid var(--gray-200);
     }
     tr:nth-child(even) td { background: #f8fafc; }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
     .tier-header td {
       background: #e2e8f0 !important;
       color: #0f172a !important;
@@ -101,227 +157,632 @@
     .card {
       background: #f1f5f9;
       border-left: 4px solid var(--accent);
-      padding: 15px;
+      padding: 16px 20px;
       border-radius: 4px;
-      margin-top: 15px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .card.emerald {
+      background: var(--emerald-subtle);
+      border-left-color: var(--emerald);
+    }
+    .notes-box {
+      font-size: 11.5px;
+      color: var(--gray-600);
+      margin-top: 4px;
     }
   
     @media (max-width: 768px) {
       body { padding: 12px !important; font-size: 12px !important; }
-      .container { padding: 16px !important; }
+      .container { padding: 18px !important; }
       .table-responsive, table { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; display: block !important; }
+      h1 { font-size: 20px !important; }
+      h2 { font-size: 15px !important; }
+      h3 { font-size: 13.5px !important; }
     }
-
   </style>
 </head>
 <body>
   <div class="container">
     <div class="badge-confidential">STRICTLY INTERNAL - NOT FOR CLIENT DISTRIBUTION</div>
-    <h1>SaNDS Lab: Master Resource Cost, Executive Advisory & Pricing Matrix</h1>
-    <p>This master rate card defines the baseline employee costs in Indian Rupees (INR) and Bahraini Dinars (BHD), coupled with the <strong>Executive Steering, Domain Specialist, and Security Advisory Tier</strong> used for estimating all 9 ERP process modules for Popular Auto Spare & A/C Parts Co. W.L.L. (Total Project Contract Value: <strong>BD 38,090.910</strong> across 88 Working Weeks / 17.60 Months).</p>
+    <h1>SaNDS Lab: Master Resource Cost, Executive Advisory & Complete 9-Module Pricing Matrix</h1>
+    <p>This master rate card defines the baseline engineering squad and employee costs in Indian Rupees (INR) and Bahraini Dinars (BHD), coupled with the <strong>Executive Steering, Domain Specialist, and Security Advisory Tier</strong> used for estimating all 9 core ERP process modules for <strong>Popular Auto Spare & A/C Parts Co. W.L.L.</strong> (Total Project Contract Value: <strong>BD 38,090.910</strong> across 88 Working Weeks / 17.60 Months / 440 Working Days).</p>
     
-    <h3>1. Monthly Consolidated Rate Card (1 BHD = 220.00 INR)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Designation / Domain Role</th>
-          <th>Monthly (INR)</th>
-          <th>Monthly (BHD)</th>
-          <th>Weekly (BHD)</th>
-          <th>Hourly (160h/mo)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- TIER 1: Dedicated Engineering Squad -->
-        <tr class="tier-header">
-          <td colspan="5">A. Core Dedicated Engineering Squad (Direct Employee Costs)</td>
-        </tr>
-        <tr>
-          <td><strong>Project Manager</strong></td>
-          <td>₹ 120,000</td>
-          <td><strong>BD 545.455</strong></td>
-          <td>BD 136.364</td>
-          <td>BD 3.409</td>
-        </tr>
-        <tr>
-          <td><strong>Back end Lead Eng</strong></td>
-          <td>₹ 50,000</td>
-          <td><strong>BD 227.273</strong></td>
-          <td>BD 56.818</td>
-          <td>BD 1.420</td>
-        </tr>
-        <tr>
-          <td><strong>Front End Lead Eng</strong></td>
-          <td>₹ 50,000</td>
-          <td><strong>BD 227.273</strong></td>
-          <td>BD 56.818</td>
-          <td>BD 1.420</td>
-        </tr>
-        <tr>
-          <td><strong>Database and Cloud</strong></td>
-          <td>₹ 45,000</td>
-          <td><strong>BD 204.545</strong></td>
-          <td>BD 51.136</td>
-          <td>BD 1.278</td>
-        </tr>
-        <tr>
-          <td><strong>QA (Testing)</strong></td>
-          <td>₹ 35,000</td>
-          <td><strong>BD 159.091</strong></td>
-          <td>BD 39.773</td>
-          <td>BD 0.994</td>
-        </tr>
-        <tr class="subtotal-row">
-          <td><strong>Subtotal: Core Engineering Squad</strong></td>
-          <td><strong>₹ 300,000</strong></td>
-          <td><strong>BD 1,363.636</strong></td>
-          <td><strong>BD 340.909</strong></td>
-          <td><strong>BD 8.523</strong></td>
-        </tr>
+    <!-- SECTION 1: MONTHLY RATE CARD -->
+    <h2>1. Monthly Consolidated Rate Card (Conversion: 1 BHD = 220.00 INR)</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Designation / Domain Role</th>
+            <th>Monthly (INR)</th>
+            <th>Monthly (BHD)</th>
+            <th>Weekly (BHD)</th>
+            <th>Hourly (160h/mo)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- TIER 1: Dedicated Engineering Squad -->
+          <tr class="tier-header">
+            <td colspan="5">A. Core Dedicated Engineering Squad (Direct Employee Costs)</td>
+          </tr>
+          <tr>
+            <td><strong>Project Manager</strong></td>
+            <td>₹ 120,000</td>
+            <td><strong class="mono">BD 545.455</strong></td>
+            <td class="mono">BD 136.364</td>
+            <td class="mono">BD 3.409</td>
+          </tr>
+          <tr>
+            <td><strong>Back end Lead Eng</strong></td>
+            <td>₹ 50,000</td>
+            <td><strong class="mono">BD 227.273</strong></td>
+            <td class="mono">BD 56.818</td>
+            <td class="mono">BD 1.420</td>
+          </tr>
+          <tr>
+            <td><strong>Front End Lead Eng</strong></td>
+            <td>₹ 50,000</td>
+            <td><strong class="mono">BD 227.273</strong></td>
+            <td class="mono">BD 56.818</td>
+            <td class="mono">BD 1.420</td>
+          </tr>
+          <tr>
+            <td><strong>Database and Cloud</strong></td>
+            <td>₹ 45,000</td>
+            <td><strong class="mono">BD 204.545</strong></td>
+            <td class="mono">BD 51.136</td>
+            <td class="mono">BD 1.278</td>
+          </tr>
+          <tr>
+            <td><strong>QA (Testing)</strong></td>
+            <td>₹ 35,000</td>
+            <td><strong class="mono">BD 159.091</strong></td>
+            <td class="mono">BD 39.773</td>
+            <td class="mono">BD 0.994</td>
+          </tr>
+          <tr class="subtotal-row">
+            <td><strong>Subtotal: Core Engineering Squad</strong></td>
+            <td><strong>₹ 300,000</strong></td>
+            <td><strong class="mono">BD 1,363.636</strong></td>
+            <td class="mono"><strong>BD 340.909</strong></td>
+            <td class="mono"><strong>BD 8.523</strong></td>
+          </tr>
 
-        <!-- TIER 2: Higher Officials & Domain Advisory -->
-        <tr class="tier-header">
-          <td colspan="5">B. Executive Steering, Domain Experts & Advisory Tier</td>
-        </tr>
-        <tr>
-          <td><strong>Executive Steering & C-Level Governance Director</strong></td>
-          <td>₹ 15,000</td>
-          <td><strong>BD 68.182</strong></td>
-          <td>BD 17.045</td>
-          <td>BD 0.426</td>
-        </tr>
-        <tr>
-          <td><strong>Principal Automotive ERP Domain Specialist</strong></td>
-          <td>₹ 12,000</td>
-          <td><strong>BD 54.545</strong></td>
-          <td>BD 13.636</td>
-          <td>BD 0.341</td>
-        </tr>
-        <tr>
-          <td><strong>Enterprise Security, VAPT & Cloud Governance Specialist</strong></td>
-          <td>₹ 8,200</td>
-          <td><strong>BD 37.273</strong></td>
-          <td>BD 9.318</td>
-          <td>BD 0.233</td>
-        </tr>
-        <tr class="subtotal-row">
-          <td><strong>Subtotal: Executive & Domain Advisory</strong></td>
-          <td><strong>₹ 35,200</strong></td>
-          <td><strong>BD 160.000</strong></td>
-          <td><strong>BD 40.000</strong></td>
-          <td><strong>BD 1.000</strong></td>
-        </tr>
+          <!-- TIER 2: Higher Officials & Domain Advisory -->
+          <tr class="tier-header">
+            <td colspan="5">B. Executive Steering, Domain Experts & Advisory Tier</td>
+          </tr>
+          <tr>
+            <td><strong>Executive Steering & C-Level Governance Director</strong></td>
+            <td>₹ 15,000</td>
+            <td><strong class="mono">BD 68.182</strong></td>
+            <td class="mono">BD 17.045</td>
+            <td class="mono">BD 0.426</td>
+          </tr>
+          <tr>
+            <td><strong>Principal Automotive ERP Domain Specialist</strong></td>
+            <td>₹ 12,000</td>
+            <td><strong class="mono">BD 54.545</strong></td>
+            <td class="mono">BD 13.636</td>
+            <td class="mono">BD 0.341</td>
+          </tr>
+          <tr>
+            <td><strong>Enterprise Security, VAPT & Cloud Governance Specialist</strong></td>
+            <td>₹ 8,200</td>
+            <td><strong class="mono">BD 37.273</strong></td>
+            <td class="mono">BD 9.318</td>
+            <td class="mono">BD 0.233</td>
+          </tr>
+          <tr class="subtotal-row">
+            <td><strong>Subtotal: Executive & Domain Advisory</strong></td>
+            <td><strong>₹ 35,200</strong></td>
+            <td><strong class="mono">BD 160.000</strong></td>
+            <td class="mono"><strong>BD 40.000</strong></td>
+            <td class="mono"><strong>BD 1.000</strong></td>
+          </tr>
 
-        <!-- GRAND TOTAL -->
-        <tr class="total-row">
-          <td><strong>TOTAL PROJECT DELIVERY MATRIX (PER MONTH)</strong></td>
-          <td><strong>₹ 335,200</strong></td>
-          <td><strong>BD 1,523.636</strong></td>
-          <td><strong>BD 380.909</strong></td>
-          <td><strong>BD 9.523</strong></td>
-        </tr>
-      </tbody>
-    </table>
+          <!-- GRAND TOTAL -->
+          <tr class="total-row">
+            <td><strong>TOTAL PROJECT DELIVERY MATRIX (PER MONTH)</strong></td>
+            <td><strong>₹ 335,200</strong></td>
+            <td><strong class="mono">BD 1,523.636</strong></td>
+            <td class="mono"><strong>BD 380.909</strong></td>
+            <td class="mono"><strong>BD 9.523</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <h3>2. Module 1: PCode Generation Cost Breakdown (10 Weeks / 2.5 Months)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Category / Component</th>
-          <th>Effort Allocation</th>
-          <th>Total Cost (INR)</th>
-          <th>Total Cost (BHD)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Core Dedicated Engineering Squad (5 Members)</td>
-          <td>2.5 Months (10 Wks)</td>
-          <td>₹ 750,000.00</td>
-          <td>BD 3,409.091</td>
-        </tr>
-        <tr>
-          <td>Executive Steering, Domain Experts & Advisory Tier</td>
-          <td>2.5 Months (10 Wks)</td>
-          <td>₹ 88,000.00</td>
-          <td>BD 400.000</td>
-        </tr>
-        <tr class="total-row">
-          <td><strong>Total Module 1 Baseline Cost</strong></td>
-          <td><strong>2.5 Months (10 Wks)</strong></td>
-          <td><strong>₹ 838,000.00</strong></td>
-          <td><strong>BD 3,809.091</strong></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- SECTION 2: CONSOLIDATED 9-MODULE PORTFOLIO ROLL-UP -->
+    <h2>2. Consolidated 9-Module Portfolio Master Roll-Up Summary</h2>
+    <p>Comprehensive overview of timeline allocation, engineering squad investment, advisory apportionment, and total contract disbursements across all 9 ERP modules:</p>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Module Reference & Title</th>
+            <th>Duration</th>
+            <th>Core Squad (INR)</th>
+            <th>Advisory (INR)</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Module 1:</strong> PCode Generation & Item Master</td>
+            <td>10 Wks (2.5 Mo)</td>
+            <td>₹ 750,000</td>
+            <td>₹ 88,000</td>
+            <td>₹ 838,000</td>
+            <td><strong class="mono">BD 3,809.091</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 2:</strong> Vendor & Purchase Process</td>
+            <td>12 Wks (3.0 Mo)</td>
+            <td>₹ 900,000</td>
+            <td>₹ 105,600</td>
+            <td>₹ 1,005,600</td>
+            <td><strong class="mono">BD 4,570.909</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 3:</strong> Store Verification & Stock Control</td>
+            <td>15 Wks (3.75 Mo)</td>
+            <td>₹ 1,125,000</td>
+            <td>₹ 132,000</td>
+            <td>₹ 1,257,000</td>
+            <td><strong class="mono">BD 5,713.636</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 4:</strong> Sales Process, POS & Branch Financials</td>
+            <td>15 Wks (3.75 Mo)</td>
+            <td>₹ 1,125,000</td>
+            <td>₹ 132,000</td>
+            <td>₹ 1,257,000</td>
+            <td><strong class="mono">BD 5,713.636</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 5:</strong> Accounts, GL, Treasury & VAT</td>
+            <td>13 Wks (3.25 Mo)</td>
+            <td>₹ 975,000</td>
+            <td>₹ 114,400</td>
+            <td>₹ 1,089,400</td>
+            <td><strong class="mono">BD 4,951.818</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 6:</strong> Administration, Fixed Assets & Fleet</td>
+            <td>12 Wks (3.0 Mo)</td>
+            <td>₹ 900,000</td>
+            <td>₹ 105,600</td>
+            <td>₹ 1,005,600</td>
+            <td><strong class="mono">BD 4,570.909</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 7:</strong> HRM, Biometrics, Payroll & EOSB</td>
+            <td>16 Wks (4.0 Mo)</td>
+            <td>₹ 1,200,000</td>
+            <td>₹ 140,800</td>
+            <td>₹ 1,340,800</td>
+            <td><strong class="mono">BD 6,094.548</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 8:</strong> Hardware Integration & Cloud Setup</td>
+            <td>3 Wks (0.75 Mo)</td>
+            <td>₹ 225,000</td>
+            <td>₹ 26,400</td>
+            <td>₹ 251,400</td>
+            <td><strong class="mono">BD 1,142.727</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Module 9:</strong> Executive Dashboard & BI Analytics</td>
+            <td>4 Wks (1.0 Mo)</td>
+            <td>₹ 300,000</td>
+            <td>₹ 35,200</td>
+            <td>₹ 335,200</td>
+            <td><strong class="mono">BD 1,523.636</strong></td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>TOTAL 9-MODULE PORTFOLIO</strong></td>
+            <td><strong>88 Wks (17.6 Mo)</strong></td>
+            <td><strong>₹ 7,575,000</strong></td>
+            <td><strong>₹ 880,000</strong></td>
+            <td><strong>₹ 8,455,000</strong></td>
+            <td><strong class="mono">BD 38,090.910</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <h3>3. Module 2: Vendor & Purchase Process Cost Breakdown (12 Weeks / 3.0 Months)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Category / Component</th>
-          <th>Effort Allocation</th>
-          <th>Total Cost (INR)</th>
-          <th>Total Cost (BHD)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Core Dedicated Engineering Squad (5 Members)</td>
-          <td>3.0 Months (12 Wks)</td>
-          <td>₹ 900,000.00</td>
-          <td>BD 4,090.909</td>
-        </tr>
-        <tr>
-          <td>Executive Steering, Domain Experts & Advisory Tier</td>
-          <td>3.0 Months (12 Wks)</td>
-          <td>₹ 105,600.00</td>
-          <td>BD 480.000</td>
-        </tr>
-        <tr class="total-row">
-          <td><strong>Total Module 2 Baseline Cost</strong></td>
-          <td><strong>3.0 Months (12 Wks)</strong></td>
-          <td><strong>₹ 1,005,600.00</strong></td>
-          <td><strong>BD 4,570.909</strong></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- SECTION 3: INDIVIDUAL MODULE BREAKDOWNS (MODULES 1 TO 9) -->
+    <h2>3. Granular Module Cost Breakdowns (Modules 1 Through 9)</h2>
 
-    <h3>4. Module 3: Store Verification & Stock Control Cost Breakdown (15 Weeks / 3.75 Months)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Category / Component</th>
-          <th>Effort Allocation</th>
-          <th>Total Cost (INR)</th>
-          <th>Total Cost (BHD)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Core Dedicated Engineering Squad (5 Members)</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 1,125,000.00</td>
-          <td>BD 5,113.636</td>
-        </tr>
-        <tr>
-          <td>Executive Steering, Domain Experts & Advisory Tier</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 132,000.00</td>
-          <td>BD 600.000</td>
-        </tr>
-        <tr class="total-row">
-          <td><strong>Total Module 3 Baseline Cost</strong></td>
-          <td><strong>3.75 Months (15 Wks)</strong></td>
-          <td><strong>₹ 1,257,000.00</strong></td>
-          <td><strong>BD 5,713.636</strong></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- MODULE 1 -->
+    <h3>
+      <span>Module 1: PCode Generation & Item Master (SL-POP-ERP-MS-001)</span>
+      <span class="badge-pill">10 Weeks / 2.5 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>2.5 Months (10 Wks / 50 Days)</td>
+            <td>₹ 750,000.00</td>
+            <td class="mono">BD 3,409.091</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>2.5 Months (10 Wks / 50 Days)</td>
+            <td>₹ 88,000.00</td>
+            <td class="mono">BD 400.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 1 Baseline Cost</strong></td>
+            <td><strong>2.5 Months (10 Wks)</strong></td>
+            <td><strong>₹ 838,000.00</strong></td>
+            <td><strong class="mono">BD 3,809.091</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="card">
+    <!-- MODULE 2 -->
+    <h3>
+      <span>Module 2: Vendor & Purchase Process Management (SL-POP-ERP-MS-002)</span>
+      <span class="badge-pill">12 Weeks / 3.0 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>3.0 Months (12 Wks / 60 Days)</td>
+            <td>₹ 900,000.00</td>
+            <td class="mono">BD 4,090.909</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>3.0 Months (12 Wks / 60 Days)</td>
+            <td>₹ 105,600.00</td>
+            <td class="mono">BD 480.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 2 Baseline Cost</strong></td>
+            <td><strong>3.0 Months (12 Wks)</strong></td>
+            <td><strong>₹ 1,005,600.00</strong></td>
+            <td><strong class="mono">BD 4,570.909</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 3 -->
+    <h3>
+      <span>Module 3: Store Verification & Stock Control (SL-POP-ERP-MS-003)</span>
+      <span class="badge-pill">15 Weeks / 3.75 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>3.75 Months (15 Wks / 75 Days)</td>
+            <td>₹ 1,125,000.00</td>
+            <td class="mono">BD 5,113.636</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>3.75 Months (15 Wks / 75 Days)</td>
+            <td>₹ 132,000.00</td>
+            <td class="mono">BD 600.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 3 Baseline Cost</strong></td>
+            <td><strong>3.75 Months (15 Wks)</strong></td>
+            <td><strong>₹ 1,257,000.00</strong></td>
+            <td><strong class="mono">BD 5,713.636</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 4 -->
+    <h3>
+      <span>Module 4: Sales Process, POS & Branch Financial Control (SL-POP-ERP-MS-004)</span>
+      <span class="badge-pill">15 Weeks / 3.75 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>3.75 Months (15 Wks / 75 Days)</td>
+            <td>₹ 1,125,000.00</td>
+            <td class="mono">BD 5,113.636</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>3.75 Months (15 Wks / 75 Days)</td>
+            <td>₹ 132,000.00</td>
+            <td class="mono">BD 600.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 4 Baseline Cost</strong></td>
+            <td><strong>3.75 Months (15 Wks)</strong></td>
+            <td><strong>₹ 1,257,000.00</strong></td>
+            <td><strong class="mono">BD 5,713.636</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 5 -->
+    <h3>
+      <span>Module 5: Accounting & Financial Management, General Ledger & VAT (SL-POP-ERP-MS-005)</span>
+      <span class="badge-pill">13 Weeks / 3.25 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>3.25 Months (13 Wks / 65 Days)</td>
+            <td>₹ 975,000.00</td>
+            <td class="mono">BD 4,431.818</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>3.25 Months (13 Wks / 65 Days)</td>
+            <td>₹ 114,400.00</td>
+            <td class="mono">BD 520.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 5 Baseline Cost</strong></td>
+            <td><strong>3.25 Months (13 Wks)</strong></td>
+            <td><strong>₹ 1,089,400.00</strong></td>
+            <td><strong class="mono">BD 4,951.818</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 6 -->
+    <h3>
+      <span>Module 6: Enterprise Administration, Fixed Assets & Fleet Governance (SL-POP-ERP-MS-006)</span>
+      <span class="badge-pill">12 Weeks / 3.0 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>3.0 Months (12 Wks / 60 Days)</td>
+            <td>₹ 900,000.00</td>
+            <td class="mono">BD 4,090.909</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>3.0 Months (12 Wks / 60 Days)</td>
+            <td>₹ 105,600.00</td>
+            <td class="mono">BD 480.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 6 Baseline Cost</strong></td>
+            <td><strong>3.0 Months (12 Wks)</strong></td>
+            <td><strong>₹ 1,005,600.00</strong></td>
+            <td><strong class="mono">BD 4,570.909</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 7 -->
+    <h3>
+      <span>Module 7: Human Resource Management, Biometric Attendance & Payroll (SL-POP-ERP-MS-007)</span>
+      <span class="badge-pill">16 Weeks / 4.0 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>4.0 Months (16 Wks / 80 Days)</td>
+            <td>₹ 1,200,000.00</td>
+            <td class="mono">BD 5,454.548</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>4.0 Months (16 Wks / 80 Days)</td>
+            <td>₹ 140,800.00</td>
+            <td class="mono">BD 640.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 7 Baseline Cost</strong></td>
+            <td><strong>4.0 Months (16 Wks)</strong></td>
+            <td><strong>₹ 1,340,800.00</strong></td>
+            <td><strong class="mono">BD 6,094.548</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 8 -->
+    <h3>
+      <span>Module 8: Hardware Integration, Handheld Device & Cloud Setup (SL-POP-ERP-MS-008)</span>
+      <span class="badge-pill">3 Weeks / 0.75 Months</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>0.75 Months (3 Wks / 15 Days)</td>
+            <td>₹ 225,000.00</td>
+            <td class="mono">BD 1,022.727</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>0.75 Months (3 Wks / 15 Days)</td>
+            <td>₹ 26,400.00</td>
+            <td class="mono">BD 120.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 8 Baseline Cost</strong></td>
+            <td><strong>0.75 Months (3 Wks)</strong></td>
+            <td><strong>₹ 251,400.00</strong></td>
+            <td><strong class="mono">BD 1,142.727</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 9 -->
+    <h3>
+      <span>Module 9: Executive Management Dashboard & Cross-Module BI Analytics (SL-POP-ERP-MS-009)</span>
+      <span class="badge-pill">4 Weeks / 1.0 Month</span>
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Category / Component</th>
+            <th>Effort Allocation</th>
+            <th>Total Cost (INR)</th>
+            <th>Total Cost (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core Dedicated Engineering Squad (5 Members)</td>
+            <td>1.0 Month (4 Wks / 20 Days)</td>
+            <td>₹ 300,000.00</td>
+            <td class="mono">BD 1,363.636</td>
+          </tr>
+          <tr>
+            <td>Executive Steering, Domain Experts & Advisory Tier</td>
+            <td>1.0 Month (4 Wks / 20 Days)</td>
+            <td>₹ 35,200.00</td>
+            <td class="mono">BD 160.000</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Module 9 Baseline Cost</strong></td>
+            <td><strong>1.0 Month (4 Wks)</strong></td>
+            <td><strong>₹ 335,200.00</strong></td>
+            <td><strong class="mono">BD 1,523.636</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 4: SUPPLEMENTARY SPECIALIZED INFRASTRUCTURE & AGREEMENTS REFERENCE -->
+    <h2>4. Supplementary Infrastructure, Migration & Advanced Solution Pricing Reference</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Document / Solution Reference</th>
+            <th>Contract Model / Scope</th>
+            <th>Engagement Duration</th>
+            <th>Commercial Terms (BHD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SL-POP-ERP-MIG-001:</strong> 5-Year Historical Data Migration & File Store</td>
+            <td>Schema Drift Harmonization, MS SQL to MySQL, Part No Deduplication & Hash Vault</td>
+            <td>30 Working Days (6 Weeks)</td>
+            <td><strong class="mono" style="color: #0284c7;">BD 2,800.000 (Fixed)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>SL-POP-ERP-SRV-001:</strong> Dedicated Cloud Server & 24/7 Managed SLA</td>
+            <td>3 vCPU, 12 GB RAM, 200 GB NVMe, cPanel, CloudLinux, Imunify360, JetBackup 500GB</td>
+            <td>Continuous Monthly Retainer</td>
+            <td><strong class="mono" style="color: #059669;">BD 40.000 / Month</strong></td>
+          </tr>
+          <tr>
+            <td><strong>SL-POP-ERP-AI-001:</strong> Vigilo AI CCTV Surveillance & Video Analytics</td>
+            <td>Zero Hardware CCTV AI Upgrade, 6 Vision Models, POS Shield & Talk-to-CCTV Search</td>
+            <td>Base Platform Deployment</td>
+            <td><strong class="mono" style="color: #7c3aed;">BD 3,000.000 (Base Suite)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>SL-POP-ERP-HW-001:</strong> Handheld PDA & Barcode Scanner Procurement</td>
+            <td>22 Zebra TC21 Touch PDAs (@ BD 300) + 7 Desktop Countertop Scanners (@ BD 35)</td>
+            <td>Procurement & MDM Staging</td>
+            <td><strong class="mono" style="color: #d97706;">BD 6,845.000 (Fixed)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card emerald">
       <strong>Enterprise Architecture & Governance Strategy:</strong>
-      <p style="margin-top: 5px; margin-bottom: 0;">By maintaining the core dedicated engineering squad at its baseline (₹300,000 / BD 1,363.636 per month) and provisioning the <strong>Executive Steering, Domain Specialist & Security Advisory Tier</strong> (₹35,200 / BD 160.000 per month), the overall engagement delivers institutional governance, industry best practices, and zero-defect delivery across all 9 modules (Total: <strong>BD 38,090.910</strong> over 88 Working Weeks).</p>
+      <p style="margin-top: 5px; margin-bottom: 0;">By maintaining the core dedicated engineering squad at its baseline (₹300,000 / BD 1,363.636 per month) and provisioning the <strong>Executive Steering, Domain Specialist & Security Advisory Tier</strong> (₹35,200 / BD 160.000 per month), the overall engagement delivers institutional governance, industry best practices, and zero-defect delivery across all 9 modules (Total: <strong>BD 38,090.910</strong> over 88 Working Weeks / 440 Working Days).</p>
     </div>
   </div>
 </body>
