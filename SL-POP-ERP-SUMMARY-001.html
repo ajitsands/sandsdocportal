@@ -1384,6 +1384,90 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
         font-size: 24px !important;
       }
     }
+
+    /* Print & Multi-Orientation Styles */
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    @page landscape-section {
+      size: A4 landscape;
+      margin: 10mm 12mm;
+    }
+
+    .landscape-section {
+      page: landscape-section;
+      page-break-before: always;
+      page-break-after: always;
+      break-before: page;
+      break-after: page;
+      width: 100%;
+    }
+
+    @media print {
+      .web-action-bar, .modal-overlay, #sigModal {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        font-size: 10.5pt !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .hero-card, .section-card, .signoff-section {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        break-inside: avoid;
+      }
+      .landscape-section {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .landscape-section .section-card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 10px 14px !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .landscape-section .section-header {
+        margin-bottom: 6px !important;
+        padding-bottom: 4px !important;
+      }
+      .landscape-section .table-container {
+        overflow: visible !important;
+        border: none !important;
+        margin: 4px 0 !important;
+      }
+      .landscape-section table.master-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        font-size: 8pt !important;
+      }
+      .landscape-section table.master-table th,
+      .landscape-section table.master-table td {
+        padding: 4px 6px !important;
+      }
+      .landscape-section .mod-domain-title {
+        font-size: 8pt !important;
+      }
+      .landscape-section .mod-doc-badge,
+      .landscape-section .mod-ba-badge,
+      .landscape-section .gate-pill,
+      .landscape-section .share-badge {
+        font-size: 7pt !important;
+        padding: 1px 5px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1516,11 +1600,11 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       </div>
     </div>
 
-    <!-- SECTION 1: Visual Graphical Analytics -->
+    <!-- SECTION 1: Visual Graphical Analytics (Inline Vector SVGs) -->
     <div class="section-card">
       <div class="section-header">
         <div>
-          <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Visual Milestone & Budget Analytics</div>
+          <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Visual Milestone &amp; Budget Analytics</div>
           <div class="section-subtitle">Visualizing budget distribution and engineering effort allocation across all 9 modules</div>
         </div>
         <span class="badge-accent">Interactive Visual Insights</span>
@@ -1532,8 +1616,80 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
             <span><i class="fa-solid fa-pie-chart"></i> Budget Distribution by Module (BHD)</span>
             <small style="font-size: 11px; color: var(--gray-500);">Total: BD 38,090.910</small>
           </div>
-          <div class="chart-wrapper">
-            <canvas id="budgetChart"></canvas>
+          <div class="chart-wrapper" style="height: auto; min-height: 240px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 480 270" width="100%" height="240" style="display: block; margin: 0 auto; overflow: visible;">
+              <g id="donut-slices">
+                <path d="M 135.00 25.00 A 110 110 0 0 1 199.66 46.01 L 174.97 79.99 A 68 68 0 0 0 135.00 67.00 Z" fill="#3b82f6" stroke="#ffffff" stroke-width="2"><title>M1: PCode Master: BD 3,809.091 (10.0%)</title></path>
+                <path d="M 199.66 46.01 A 110 110 0 0 1 243.05 114.39 L 201.80 122.26 A 68 68 0 0 0 174.97 79.99 Z" fill="#06b6d4" stroke="#ffffff" stroke-width="2"><title>M2: Vendor &amp; Purchase: BD 4,570.909 (12.0%)</title></path>
+                <path d="M 243.05 114.39 A 110 110 0 0 1 215.19 210.30 L 184.57 181.55 A 68 68 0 0 0 201.80 122.26 Z" fill="#10b981" stroke="#ffffff" stroke-width="2"><title>M3: Store Verification: BD 5,713.636 (15.0%)</title></path>
+                <path d="M 215.19 210.30 A 110 110 0 0 1 121.21 244.13 L 126.48 202.46 A 68 68 0 0 0 184.57 181.55 Z" fill="#f59e0b" stroke="#ffffff" stroke-width="2"><title>M4: Sales &amp; POS: BD 5,713.636 (15.0%)</title></path>
+                <path d="M 121.21 244.13 A 110 110 0 0 1 46.01 199.66 L 79.99 174.97 A 68 68 0 0 0 126.48 202.46 Z" fill="#8b5cf6" stroke="#ffffff" stroke-width="2"><title>M5: Accounts &amp; VAT: BD 4,951.818 (13.0%)</title></path>
+                <path d="M 46.01 199.66 A 110 110 0 0 1 25.87 121.21 L 67.54 126.48 A 68 68 0 0 0 79.99 174.97 Z" fill="#ec4899" stroke="#ffffff" stroke-width="2"><title>M6: Admin &amp; Fixed Assets: BD 4,570.909 (12.0%)</title></path>
+                <path d="M 25.87 121.21 A 110 110 0 0 1 88.16 35.47 L 106.05 73.47 A 68 68 0 0 0 67.54 126.48 Z" fill="#6366f1" stroke="#ffffff" stroke-width="2"><title>M7: HRM &amp; Payroll: BD 6,094.548 (16.0%)</title></path>
+                <path d="M 88.16 35.47 A 110 110 0 0 1 107.64 28.46 L 118.09 69.14 A 68 68 0 0 0 106.05 73.47 Z" fill="#f97316" stroke="#ffffff" stroke-width="2"><title>M8: Hardware Setup: BD 1,142.727 (3.0%)</title></path>
+                <path d="M 107.64 28.46 A 110 110 0 0 1 135.00 25.00 L 135.00 67.00 A 68 68 0 0 0 118.09 69.14 Z" fill="#0a2540" stroke="#ffffff" stroke-width="2"><title>M9: Executive BI Dashboard: BD 1,523.636 (4.0%)</title></path>
+              </g>
+              <circle cx="135" cy="135" r="67" fill="#ffffff" />
+              <text x="135" y="127" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="14" font-weight="800" fill="#0a2540">BD 38,091</text>
+              <text x="135" y="145" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#64748b" text-transform="uppercase" letter-spacing="0.5">Total Budget</text>
+              
+              <g transform="translate(280, 15)" font-family="'Inter', sans-serif" font-size="10">
+                <g transform="translate(0, 0)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#3b82f6" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M1</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> PCode Master</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">10.0%</text>
+                </g>
+                <g transform="translate(0, 26)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#06b6d4" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M2</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Vendor &amp; Purchase</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">12.0%</text>
+                </g>
+                <g transform="translate(0, 52)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#10b981" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M3</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Store Verification</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">15.0%</text>
+                </g>
+                <g transform="translate(0, 78)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#f59e0b" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M4</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Sales &amp; POS</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">15.0%</text>
+                </g>
+                <g transform="translate(0, 104)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#8b5cf6" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M5</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Accounts &amp; VAT</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">13.0%</text>
+                </g>
+                <g transform="translate(0, 130)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#ec4899" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M6</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Admin &amp; Fixed Assets</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">12.0%</text>
+                </g>
+                <g transform="translate(0, 156)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#6366f1" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M7</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> HRM &amp; Payroll</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">16.0%</text>
+                </g>
+                <g transform="translate(0, 182)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#f97316" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M8</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Hardware Setup</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">3.0%</text>
+                </g>
+                <g transform="translate(0, 208)">
+                  <rect x="0" y="0" width="10" height="10" rx="3" fill="#0a2540" />
+                  <text x="16" y="9" font-weight="600" fill="#1e293b">M9</text>
+                  <text x="44" y="9" font-weight="400" fill="#64748b"> Executive BI</text>
+                  <text x="190" y="9" text-anchor="end" font-family="'JetBrains Mono', monospace" font-weight="700" fill="#0a2540">4.0%</text>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
         <div class="chart-box">
@@ -1541,206 +1697,279 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
             <span><i class="fa-solid fa-chart-bar"></i> Engineering Timeline by Module (Weeks)</span>
             <small style="font-size: 11px; color: var(--gray-500);">Total: 88 Working Weeks</small>
           </div>
-          <div class="chart-wrapper">
-            <canvas id="timelineChart"></canvas>
+          <div class="chart-wrapper" style="height: auto; min-height: 240px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 480 270" width="100%" height="240" style="display: block; margin: 0 auto;">
+              <g stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3">
+                <line x1="45" y1="35" x2="465" y2="35" />
+                <line x1="45" y1="80" x2="465" y2="80" />
+                <line x1="45" y1="125" x2="465" y2="125" />
+                <line x1="45" y1="170" x2="465" y2="170" />
+                <line x1="45" y1="215" x2="465" y2="215" stroke-dasharray="none" stroke="#94a3b8" />
+              </g>
+              <g font-family="'Inter', sans-serif" font-size="9.5" fill="#64748b" text-anchor="end">
+                <text x="38" y="39">18w</text>
+                <text x="38" y="84">13w</text>
+                <text x="38" y="129">9w</text>
+                <text x="38" y="174">4w</text>
+                <text x="38" y="219">0w</text>
+              </g>
+              <g font-family="'Inter', sans-serif">
+                <g>
+                  <rect x="58" y="115.0" width="32" height="100.0" rx="5" fill="#3b82f6" opacity="0.95" />
+                  <text x="74.0" y="109.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">10w</text>
+                  <text x="74.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M1</text>
+                  <text x="74.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">10 Wks</text>
+                </g>
+                <g>
+                  <rect x="103" y="95.0" width="32" height="120.0" rx="5" fill="#06b6d4" opacity="0.95" />
+                  <text x="119.0" y="89.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">12w</text>
+                  <text x="119.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M2</text>
+                  <text x="119.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">12 Wks</text>
+                </g>
+                <g>
+                  <rect x="148" y="65.0" width="32" height="150.0" rx="5" fill="#10b981" opacity="0.95" />
+                  <text x="164.0" y="59.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">15w</text>
+                  <text x="164.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M3</text>
+                  <text x="164.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">15 Wks</text>
+                </g>
+                <g>
+                  <rect x="193" y="65.0" width="32" height="150.0" rx="5" fill="#f59e0b" opacity="0.95" />
+                  <text x="209.0" y="59.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">15w</text>
+                  <text x="209.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M4</text>
+                  <text x="209.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">15 Wks</text>
+                </g>
+                <g>
+                  <rect x="238" y="85.0" width="32" height="130.0" rx="5" fill="#8b5cf6" opacity="0.95" />
+                  <text x="254.0" y="79.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">13w</text>
+                  <text x="254.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M5</text>
+                  <text x="254.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">13 Wks</text>
+                </g>
+                <g>
+                  <rect x="283" y="95.0" width="32" height="120.0" rx="5" fill="#ec4899" opacity="0.95" />
+                  <text x="299.0" y="89.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">12w</text>
+                  <text x="299.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M6</text>
+                  <text x="299.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">12 Wks</text>
+                </g>
+                <g>
+                  <rect x="328" y="55.0" width="32" height="160.0" rx="5" fill="#6366f1" opacity="0.95" />
+                  <text x="344.0" y="49.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">16w</text>
+                  <text x="344.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M7</text>
+                  <text x="344.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">16 Wks</text>
+                </g>
+                <g>
+                  <rect x="373" y="185.0" width="32" height="30.0" rx="5" fill="#f97316" opacity="0.95" />
+                  <text x="389.0" y="179.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">3w</text>
+                  <text x="389.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M8</text>
+                  <text x="389.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">3 Wks</text>
+                </g>
+                <g>
+                  <rect x="418" y="175.0" width="32" height="40.0" rx="5" fill="#0a2540" opacity="0.95" />
+                  <text x="434.0" y="169.0" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#0a2540">4w</text>
+                  <text x="434.0" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b">M9</text>
+                  <text x="434.0" y="245" text-anchor="middle" font-size="8" fill="#64748b">4 Wks</text>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SECTION 2: Master Consolidated Milestone & Budget Table -->
-    <div class="section-card">
-      <div class="section-header">
-        <div>
-          <div class="section-title"><i class="fa-solid fa-table-list"></i> Master 9-Module Budgeting & Milestone Matrix (BHD)</div>
-          <div class="section-subtitle">At-a-glance comparative overview of all 9 modules, timelines, effort, deliverables, and total fees in Bahraini Dinars</div>
+    <!-- SECTION 2: Master Consolidated Milestone & Budget Table (LANDSCAPE ORIENTATION IN PDF) -->
+    <div class="landscape-section">
+      <div class="section-card">
+        <div class="section-header">
+          <div>
+            <div class="section-title"><i class="fa-solid fa-table-list"></i> Master 9-Module Budgeting &amp; Milestone Matrix (BHD)</div>
+            <div class="section-subtitle">At-a-glance comparative overview of all 9 modules, timelines, effort, deliverables, and total fees in Bahraini Dinars</div>
+          </div>
+          <span class="badge-success">All Amounts in Bahraini Dinars (BHD)</span>
         </div>
-        <span class="badge-success">All Amounts in Bahraini Dinars (BHD)</span>
-      </div>
 
-      <div class="table-container">
-        <table class="master-table">
-          <thead>
-            <tr>
-              <th style="width: 35px; text-align: center;">#</th>
-              <th>Module Scope & Implementation Domain</th>
-              <th>Timeline</th>
-              <th>Effort</th>
-              <th>Milestone Gates</th>
-              <th>Total Cost (BHD)</th>
-              <th>Weekly Burn</th>
-              <th>Share (%)</th>
-              <th style="text-align: center;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">1</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-001</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-001 v1.0</span>
-                </div>
-                <div class="mod-domain-title">PCode Generation, Cataloguing & Item Master Engine</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">10 Weeks</span></td>
-              <td>2.50 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 3,809.091</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">10.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">2</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-002</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-002 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Vendor & Purchase Management, Supplier Portal & 3-Way Match</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
-              <td>3.00 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,570.909</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">12.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">3</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-003</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-003 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Store Verification, Multi-Warehouse Stock & Location Matrix</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
-              <td>3.75 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 5,713.636</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">15.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">4</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-004</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-004 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Sales Process, Mobile POS, Multi-Branch Billing & Return Control</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
-              <td>3.75 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 5,713.636</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">15.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">5</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-005</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-005 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Accounting & Financial Management, General Ledger, AP/AR & VAT</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">13 Weeks</span></td>
-              <td>3.25 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,951.818</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">13.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">6</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-006</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-006 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Enterprise Administration, Facility, Fixed Assets, Fleet & Vault</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
-              <td>3.00 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,570.909</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">12.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">7</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-007</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-007 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Human Resource Management, Biometrics, Leave, Payroll & Gratuity</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">16 Weeks</span></td>
-              <td>4.00 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 6,094.548</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">16.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">8</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-008</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: ARCH-001 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Hardware Setup, Handheld QR Devices, ESC/POS & Cloud Cluster</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">3 Weeks</span></td>
-              <td>0.75 Mo</td>
-              <td><span class="gate-pill">3 Gates (33%)</span></td>
-              <td><span class="currency-bhd">BD 1,142.727</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">3.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-            <tr>
-              <td style="text-align: center; font-weight: 800; color: #0a2540;">9</td>
-              <td>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                  <span class="mod-doc-badge">SL-POP-ERP-MS-009</span>
-                  <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-009 v1.0</span>
-                </div>
-                <div class="mod-domain-title">Executive Management Dashboard, 8-Module BI & Mobile Cockpit</div>
-              </td>
-              <td><span style="font-weight: 600; color: #1e293b;">4 Weeks</span></td>
-              <td>1.00 Mo</td>
-              <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 1,523.636</span></td>
-              <td>BD 380.909</td>
-              <td><span class="share-badge">4.00%</span></td>
-              <td style="text-align: center;"><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
-              <td><strong>88 Weeks</strong></td>
-              <td><strong>17.60 Mo</strong></td>
-              <td><strong>35 Gates</strong></td>
-              <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 38,090.910</span></td>
-              <td><strong>BD 432.851</strong></td>
-              <td><strong>100.00%</strong></td>
-              <td style="text-align: center;"><strong>Full Suite</strong></td>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-container">
+          <table class="master-table">
+            <thead>
+              <tr>
+                <th style="width: 35px; text-align: center;">#</th>
+                <th>Module Scope &amp; Implementation Domain</th>
+                <th>Timeline</th>
+                <th>Effort</th>
+                <th>Milestone Gates</th>
+                <th>Total Cost (BHD)</th>
+                <th>Weekly Burn</th>
+                <th>Share (%)</th>
+                <th style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">1</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-001</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-001 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">PCode Generation, Cataloguing &amp; Item Master Engine</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">10 Weeks</span></td>
+                <td>2.50 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 3,809.091</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">10.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">2</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-002</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-002 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Vendor &amp; Purchase Management, Supplier Portal &amp; 3-Way Match</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
+                <td>3.00 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 4,570.909</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">12.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">3</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-003</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-003 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Store Verification, Multi-Warehouse Stock &amp; Location Matrix</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
+                <td>3.75 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 5,713.636</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">15.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">4</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-004</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-004 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Sales Process, Mobile POS, Multi-Branch Billing &amp; Return Control</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
+                <td>3.75 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 5,713.636</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">15.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">5</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-005</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-005 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Accounting &amp; Financial Management, General Ledger, AP/AR &amp; VAT</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">13 Weeks</span></td>
+                <td>3.25 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 4,951.818</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">13.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">6</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-006</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-006 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Enterprise Administration, Facility, Fixed Assets, Fleet &amp; Vault</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
+                <td>3.00 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 4,570.909</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">12.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">7</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-007</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-007 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Human Resource Management, Biometrics, Leave, Payroll &amp; Gratuity</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">16 Weeks</span></td>
+                <td>4.00 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 6,094.548</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">16.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">8</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-008</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: ARCH-001 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Hardware Setup, Handheld QR Devices, ESC/POS &amp; Cloud Cluster</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">3 Weeks</span></td>
+                <td>0.75 Mo</td>
+                <td><span class="gate-pill">3 Gates (33%)</span></td>
+                <td><span class="currency-bhd">BD 1,142.727</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">3.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: #0a2540;">9</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                    <span class="mod-doc-badge">SL-POP-ERP-MS-009</span>
+                    <span class="mod-ba-badge"><i class="fa-solid fa-file-contract"></i> BA Ref: DOC-009 v1.0</span>
+                  </div>
+                  <div class="mod-domain-title">Executive Management Dashboard, 8-Module BI &amp; Mobile Cockpit</div>
+                </td>
+                <td><span style="font-weight: 600; color: #1e293b;">4 Weeks</span></td>
+                <td>1.00 Mo</td>
+                <td><span class="gate-pill">4 Gates (25%)</span></td>
+                <td><span class="currency-bhd">BD 1,523.636</span></td>
+                <td>BD 380.909</td>
+                <td><span class="share-badge">4.00%</span></td>
+                <td style="text-align: center;"><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2"><strong>GRAND TOTAL: COMPLETE 9-MODULE AUTOMOTIVE ERP PORTFOLIO</strong></td>
+                <td><strong>88 Weeks</strong></td>
+                <td><strong>17.60 Mo</strong></td>
+                <td><strong>35 Gates</strong></td>
+                <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 38,090.910</span></td>
+                <td><strong>BD 432.851</strong></td>
+                <td><strong>100.00%</strong></td>
+                <td style="text-align: center;"><strong>Full Suite</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
 
