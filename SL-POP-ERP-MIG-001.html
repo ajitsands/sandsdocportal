@@ -1,0 +1,1139 @@
+<?php
+// PHP Backend for Digital Signature & Finalization API (SL-POP-ERP-MIG-001)
+if (session_status() === PHP_SESSION_NONE) {
+    $session_save_dir = __DIR__ . '/.sessions';
+    if (!is_dir($session_save_dir)) {
+        @mkdir($session_save_dir, 0700, true);
+    }
+    if (is_dir($session_save_dir) && is_writable($session_save_dir)) {
+        @session_save_path($session_save_dir);
+    } elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
+}
+
+$doc_id = 'SL-POP-ERP-MIG-001';
+
+$db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
+foreach ($db_candidates as $dbc) {
+    if (file_exists($dbc)) {
+        require_once $dbc;
+        break;
+    }
+}
+
+$is_locked = false;
+if (isset($pdo) && $pdo) {
+    try {
+        $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+        $meta_stmt->execute(array($doc_id));
+        $status_val = $meta_stmt->fetchColumn();
+        if ($status_val === 'FINALIZED_AND_LOCKED') {
+            $is_locked = true;
+        }
+    } catch (Exception $e) {}
+}
+
+$authenticated_user = isset($_SESSION['authenticated_user']) ? $_SESSION['authenticated_user'] : (isset($_COOKIE['sands_auth_device']) ? $_COOKIE['sands_auth_device'] : '');
+
+// Handle Ajax Actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    $action = $_POST['action'];
+    
+    if ($action === 'sign_document') {
+        $role = isset($_POST['role']) ? trim($_POST['role']) : '';
+        $signer_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
+        $signer_designation = isset($_POST['signer_designation']) ? trim($_POST['signer_designation']) : '';
+        $signature_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
+        
+        if (empty($role) || empty($signer_name) || empty($signature_data)) {
+            echo json_encode(array('success' => false, 'message' => 'Missing signature fields.'));
+            exit;
+        }
+        
+        try {
+            $now = date('Y-m-d H:i:s');
+            $chk = $pdo->prepare("SELECT id FROM document_signatures WHERE doc_id = ? AND role = ?");
+            $chk->execute(array($doc_id, $role));
+            if ($row = $chk->fetch()) {
+                $upd = $pdo->prepare("UPDATE document_signatures SET signer_name = ?, signer_designation = ?, signer_email = ?, signature_data = ?, signed_at = ? WHERE id = ?");
+                $upd->execute(array($signer_name, $signer_designation, $authenticated_user, $signature_data, $now, $row['id']));
+            } else {
+                $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $ins->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
+            }
+            
+            echo json_encode(array('success' => true, 'message' => 'Signature recorded successfully!', 'signed_at' => $now));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Database error: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    if ($action === 'get_signatures') {
+        try {
+            $stmt = $pdo->prepare("SELECT role, signer_name, signer_designation, signer_email, signature_data, signed_at FROM document_signatures WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            $signatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(array('success' => true, 'signatures' => $signatures));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Error fetching signatures: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    echo json_encode(array('success' => false, 'message' => 'Unknown action.'));
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SL-POP-ERP-MIG-001 | 5-Year Historical Data Migration, Schema Drift Harmonization, Sales/Purchase Ingestion & Opening Balance Architecture Milestone Agreement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #0a2540;
+      --primary-dark: #07192c;
+      --primary-light: #163e67;
+      --accent: #d97706;
+      --accent-light: #f59e0b;
+      --accent-gold: #fbbf24;
+      --success: #059669;
+      --success-dark: #047857;
+      --danger: #dc2626;
+      --info: #0284c7;
+      --dark: #0f172a;
+      --gray-900: #0f172a;
+      --gray-800: #1e293b;
+      --gray-700: #334155;
+      --gray-600: #475569;
+      --gray-500: #64748b;
+      --gray-400: #94a3b8;
+      --gray-300: #cbd5e1;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --gray-50: #f8fafc;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--gray-800);
+      line-height: 1.6;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .web-action-bar {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .web-action-bar .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
+    .web-action-bar .brand i { color: var(--accent-gold); font-size: 18px; }
+    .web-action-bar .actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #b45309 100%); color: #fff; }
+    .btn-primary:hover { background: linear-gradient(135deg, #b45309 0%, #92400e 100%); color: #fff; }
+    .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; color: #fff; }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 25px auto 50px;
+      padding: 0 20px;
+    }
+
+    .doc-hero {
+      background: linear-gradient(135deg, #0a2540 0%, #07192c 100%);
+      color: #fff;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-hero::after {
+      content: '';
+      position: absolute;
+      right: -50px;
+      bottom: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(217, 119, 6, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-badges { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .badge-tag {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-ref { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-family: 'JetBrains Mono', monospace; }
+    .badge-accent { background: rgba(217, 119, 6, 0.2); color: var(--accent-gold); border: 1px solid rgba(217, 119, 6, 0.4); }
+    .badge-status { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .doc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 27px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 15px;
+      color: #ffffff;
+    }
+    .doc-subtitle {
+      color: #94a3b8;
+      font-size: 14.5px;
+      max-width: 950px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .hero-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 25px;
+    }
+    .kpi-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 16px;
+      border-radius: var(--radius-md);
+    }
+    .kpi-label { font-size: 11.5px; color: #94a3b8; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+    .kpi-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #ffffff; }
+    .kpi-val.highlight { color: var(--accent-gold); }
+
+    .section-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 35px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--gray-100);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title i { color: var(--accent); font-size: 18px; }
+
+    .disclaimer-card {
+      background: #fffbeb;
+      border: 2px solid #fef08a;
+      border-left: 6px solid #d97706;
+      border-radius: var(--radius-md);
+      padding: 22px;
+      margin-bottom: 25px;
+    }
+    .disclaimer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .challenge-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      border-radius: var(--radius-sm);
+    }
+    .challenge-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .challenge-desc { font-size: 13px; color: var(--gray-600); margin-bottom: 12px; line-height: 1.5; }
+    .solution-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 12.5px;
+      color: #1e40af;
+    }
+    .solution-box strong { color: #1d4ed8; }
+
+    table.styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    table.styled-table th {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+    table.styled-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+    }
+    table.styled-table tr:nth-child(even) td { background: var(--gray-50); }
+    table.styled-table tfoot td {
+      background: #0f172a !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .pill-gate { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .pill-cost { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--primary); }
+
+    /* 3-Party Executive Governance Signoff Grid */
+    .signoff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .signoff-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .signoff-card:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+    .signoff-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0a2540;
+      margin-bottom: 3px;
+    }
+    .signoff-subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+    .signoff-box-area {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 14px;
+      text-align: center;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      margin-bottom: 12px;
+    }
+    .signoff-status-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .status-pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .status-signed {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    .btn-sign {
+      width: 100%;
+      justify-content: center;
+      padding: 10px;
+      background: #0a2540;
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-sign:hover {
+      background: #1e293b;
+      color: #ffffff;
+    }
+
+    /* Print Styles */
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    @page landscape-section {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    @media print {
+      .web-action-bar, .btn-sign, .modal-overlay, .actions, .doc-actions {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        font-size: 10.5pt !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .main-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .doc-hero {
+        padding: 22px 20px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
+        margin-bottom: 16px !important;
+      }
+      .section-card {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+        padding: 20px !important;
+        margin-bottom: 16px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .disclaimer-card, .challenge-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .landscape-section {
+        page: landscape-section;
+        page-break-before: always !important;
+        page-break-after: always !important;
+        break-before: page !important;
+        break-after: page !important;
+        width: 100% !important;
+      }
+      .landscape-section .section-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 12px 18px !important;
+        margin: 0 !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .landscape-section .section-header {
+        margin-bottom: 8px !important;
+        padding-bottom: 6px !important;
+      }
+      .landscape-section .section-title {
+        font-size: 16px !important;
+      }
+      .landscape-section p {
+        font-size: 9pt !important;
+        margin-bottom: 8px !important;
+      }
+      .landscape-section table.styled-table {
+        margin: 6px 0 !important;
+        font-size: 9pt !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+      }
+      .landscape-section table.styled-table th {
+        padding: 6px 8px !important;
+        font-size: 9pt !important;
+      }
+      .landscape-section table.styled-table td {
+        padding: 6px 8px !important;
+        font-size: 8.5pt !important;
+        line-height: 1.35 !important;
+      }
+      .landscape-section table.styled-table tfoot td {
+        padding: 6px 8px !important;
+        font-size: 9.5pt !important;
+      }
+      .landscape-section ul {
+        margin-bottom: 0 !important;
+      }
+      .landscape-section li {
+        margin-bottom: 2px !important;
+        font-size: 8.5pt !important;
+      }
+      thead {
+        display: table-header-group !important;
+      }
+      tfoot {
+        display: table-footer-group !important;
+      }
+      tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .signoff-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .signoff-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .sig-box, .signature-section {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 540px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .doc-hero { padding: 25px 20px; }
+      .doc-title { font-size: 22px; }
+      .section-card { padding: 20px; }
+      .table-responsive { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Web Action Top Bar -->
+  <div class="web-action-bar">
+    <div class="brand">
+      <i class="fa-solid fa-database"></i>
+      <span>Popular Auto Spare ERP | Data Migration & File Store Agreement</span>
+    </div>
+    <div class="actions">
+      <a href="index.php" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Portal Home</a>
+      <a href="?doc=SL-POP-ERP-MIG-001.pdf" target="_blank" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Download Signed PDF</a>
+    </div>
+  </div>
+
+  <div class="main-container">
+    
+    <!-- Hero Header -->
+    <div class="doc-hero">
+      <div class="hero-badges">
+        <span class="badge-tag badge-ref">MIG-001 (Ver 1.1)</span>
+        <span class="badge-tag badge-accent"><i class="fa-solid fa-server"></i> MS SQL to MySQL 8.0 Engine</span>
+        <span class="badge-tag badge-status">Submitted & Ready for Sign-off</span>
+      </div>
+      <h1 class="doc-title">5-Year Historical Data Migration, Schema Drift Harmonization, Sales/Purchase Ingestion & Opening Balance Architecture Milestone Agreement</h1>
+      <div class="doc-subtitle">
+        Comprehensive 30-working-day framework for 5-Year Historical Sales & Purchase Ingestion, Vendor Master Harmonization, Multi-Year Schema Drift Reconciliation, Enterprise File Store Archiving, and Financial Opening Balance Initialization for <strong>Popular Auto Spare & A/C Parts Co. W.L.L.</strong>
+      </div>
+      <div class="hero-kpis">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Migration Investment</div>
+          <div class="kpi-val highlight">BD 2,800.000</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Project Duration</div>
+          <div class="kpi-val">30 Working Days</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Historical Depth</div>
+          <div class="kpi-val">5+ Years (2021-2026)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Accounts Cutover</div>
+          <div class="kpi-val" style="color:#38bdf8;">Opening Balances</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Disclaimer Card (Scattered Data & 100% Extraction Non-Guarantee) -->
+    <div class="disclaimer-card">
+      <div class="disclaimer-header">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 18px;"></i>
+        <span>Technical Statement on Historical Data Scattering & Extraction Warranty</span>
+      </div>
+      <p style="font-size: 13px; color: #78350f; line-height: 1.6; margin-bottom: 10px;">
+        <strong>Important Technical Understanding:</strong> The legacy MS SQL Server database has operated for over 5+ years with continuous uncoordinated schema alterations, ad-hoc column additions, unconstrained manual inputs, and scattered orphan records. Due to this historical fragmentation:
+      </p>
+      <ul style="font-size: 12.5px; color: #854d0e; padding-left: 20px; line-height: 1.7;">
+        <li><strong>No 100% Extraction Guarantee for Corrupt / Orphan Data:</strong> While SaNDS Lab guarantees rigorous engineering execution, an unconditional 100% automated recovery of corrupt, orphaned, or unreferenced legacy fragments cannot be technically guaranteed.</li>
+        <li><strong>Industry-Standard 95%+ Target Completeness:</strong> The migration pipeline enforces automated cleansing heuristics targeting 95%+ validated record ingestion across major functional entities.</li>
+        <li><strong>Automated Exception & Quarantine Log:</strong> Any scattered records with missing foreign keys or unresolvable corrupt payloads will be isolated in an <em>Exception Quarantine Log</em> for business review rather than compromising the integrity of the live MySQL ERP.</li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Executive Overview & Core Functional Scope -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><i class="fa-solid fa-circle-info"></i> 1.0 Executive Background & Domain Migration Scope</div>
+        <span class="badge-tag badge-ref">SPEC-MIG-001</span>
+      </div>
+      <p style="margin-bottom: 15px;">
+        <strong>Popular Auto Spare & A/C Parts Co. W.L.L.</strong> currently maintains 5+ years of operational records in Microsoft SQL Server across diverse business domains. The dedicated <strong>30-Working-Day Data Migration Track</strong> operates across four primary operational streams:
+      </p>
+
+      <div class="challenge-grid">
+        <!-- Scope 1: Sales Entries -->
+        <div class="challenge-card">
+          <div class="challenge-title"><i class="fa-solid fa-cart-shopping" style="color: #2563eb;"></i> 1. Sales Entries & POS Ingestion</div>
+          <div class="challenge-desc">Extracting, cleansing, and validating 5 years of historical counter sales, credit invoices, customer quotations, delivery notes, and return credit memos.</div>
+          <div class="solution-box"><strong>Validation Protocol:</strong> Cross-checked against customer master IDs, date ranges, and branch codes. Historical line items mapped to normalized PCodes.</div>
+        </div>
+
+        <!-- Scope 2: Purchase & Vendor Master -->
+        <div class="challenge-card">
+          <div class="challenge-title"><i class="fa-solid fa-truck-ramp-box" style="color: #059669;"></i> 2. Purchase Entries & Vendor Master</div>
+          <div class="challenge-desc">Migration of multi-country Vendor Masters, supplier contacts, historical Purchase Orders (POs), Goods Receipt Notes (GRNs), and supplier invoices with landed-cost components.</div>
+          <div class="solution-box"><strong>Validation Protocol:</strong> Vendor deduplication, currency normalization, and supplier purchase history linkage.</div>
+        </div>
+
+        <!-- Scope 3: Multi-Year Schema Drift -->
+        <div class="challenge-card">
+          <div class="challenge-title"><i class="fa-solid fa-code-compare" style="color: #d97706;"></i> 3. Schema Drift & Column Mismatch</div>
+          <div class="challenge-desc">Older records (2021–2023) and newer entries (2024–2026) have different column layouts, modified field types, and missing nullables resulting from long-term system modifications.</div>
+          <div class="solution-box"><strong>Validation Protocol:</strong> Dual-Pass ETL with heuristic column-mapping dictionary and schema normalization adapters.</div>
+        </div>
+
+        <!-- Scope 4: Enterprise File Store -->
+        <div class="challenge-card">
+          <div class="challenge-title"><i class="fa-solid fa-folder-tree" style="color: #7c3aed;"></i> 4. Legacy Scanned File & Blob Store</div>
+          <div class="challenge-desc">Thousands of legacy scanned supplier invoices, customer POs, and PDF attachments scattered in database blobs and local directories.</div>
+          <div class="solution-box"><strong>Validation Protocol:</strong> Extracted into SHA-256 hashed enterprise object storage with indexed relational UUID pointers in MySQL.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Accounts & Financial Opening Balance Cutover Strategy -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><i class="fa-solid fa-scale-balanced" style="color: #059669;"></i> 2.0 Accounts & Financial Opening Balance Cutover Strategy</div>
+        <span class="badge-tag badge-accent">Clean Accounting Cutover SOP</span>
+      </div>
+      
+      <p style="margin-bottom: 15px;">
+        Enterprise ERP implementations strictly avoid migrating fragmented 5-year line-item journal entries into a new live General Ledger, as un-reconciled legacy adjustments inevitably pollute the new double-entry balance sheet. Instead, the <strong>Popular ERP Financial Cutover SOP</strong> implements a clean, certified <strong>Opening Balance Initialization</strong>:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 20px 0;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+          <div style="font-weight: 700; color: #0a2540; font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-book-journal-whills" style="color:#d97706;"></i> 1. GL Opening Balances</div>
+          <div style="font-size: 12.5px; color: #64748b; line-height: 1.5;">Audited Trial Balance as of cutover date initializes the new 5-group Chart of Accounts (COA) with balanced debits and credits.</div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+          <div style="font-weight: 700; color: #0a2540; font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-users" style="color:#2563eb;"></i> 2. Customer AR Opening Balances</div>
+          <div style="font-size: 12.5px; color: #64748b; line-height: 1.5;">Verified customer-by-customer outstanding balances with aging buckets (30/60/90+ days) and pending debit memos.</div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+          <div style="font-weight: 700; color: #0a2540; font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-truck" style="color:#059669;"></i> 3. Vendor AP Opening Balances</div>
+          <div style="font-size: 12.5px; color: #64748b; line-height: 1.5;">Verified supplier-wise payables with invoice-level reference matching and outstanding PDC commitments.</div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+          <div style="font-weight: 700; color: #0a2540; font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-warehouse" style="color:#7c3aed;"></i> 4. Inventory Valuation Opening</div>
+          <div style="font-size: 12.5px; color: #64748b; line-height: 1.5;">Physical stock count on cutover eve initialized into each branch warehouse with weighted average landed unit cost.</div>
+        </div>
+      </div>
+
+      <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 14px; border-radius: 4px; font-size: 12.5px; color: #1e40af;">
+        <strong>Audit Search Archive:</strong> All historical 5-year sales, purchase vouchers, and receipts will remain fully searchable via a dedicated <em>Historical Query Viewer</em> and File Store for statutory/VAT audits without compromising live financial posting.
+      </div>
+    </div>
+
+    <!-- Section 3: 30-Day Execution Roadmap & Gates (Landscape Page for Full Table Width) -->
+    <div class="landscape-section">
+      <div class="section-card" style="box-shadow: none; padding: 25px 30px;">
+        <div class="section-header">
+          <div class="section-title"><i class="fa-solid fa-calendar-check"></i> 3.0 30-Day Phased Execution Roadmap & Delivery Gates</div>
+          <span class="badge-tag badge-accent">BD 2,800.000 Total Investment</span>
+        </div>
+        
+        <p style="margin-bottom: 20px;">
+          The data migration engagement is structured across <strong>3 milestone-gated phases</strong> totaling 30 working days:
+        </p>
+
+        <div class="table-responsive">
+          <table class="styled-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 70px; text-align: center;">Gate #</th>
+                <th style="width: 300px;">Phase & Scope Description</th>
+                <th style="width: 150px;">Timeline</th>
+                <th>Deliverables & Sign-Off Acceptance Criteria</th>
+                <th style="width: 160px;">Tranche Fee (BHD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: var(--primary);">Gate 1</td>
+                <td>
+                  <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px;">Schema Discovery, Column Drift Mapping & Vendor Master Cleanup</div>
+                  <div style="font-size: 12px; color: var(--gray-600);">MS SQL schema extraction, foreign key dependency mapping, 5-year column mismatch resolution, and Vendor Master deduplication.</div>
+                </td>
+                <td><span class="pill pill-gate">Days 1 – 10 (2 Wks)</span></td>
+                <td>
+                  <ul style="padding-left: 18px; font-size: 12px; color: var(--gray-700); line-height: 1.6;">
+                    <li>Complete Data Dictionary & Schema Drift Matrix</li>
+                    <li>Vendor & Customer Master Cleansed Datasets</li>
+                    <li>Initial Sandbox extraction & Exception Quarantine Report</li>
+                  </ul>
+                </td>
+                <td><span class="pill-cost">BD 933.333 (33.33%)</span></td>
+              </tr>
+
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: var(--primary);">Gate 2</td>
+                <td>
+                  <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px;">Sales/Purchase ETL Ingestion, PCode Cleansing & Enterprise File Store Offloading</div>
+                  <div style="font-size: 12px; color: var(--gray-600);">5-year Sales and Purchase historical batch ingestion, PCode deduplication, and legacy PDF/scanned bill extraction to Hashed File Store.</div>
+                </td>
+                <td><span class="pill pill-gate">Days 11 – 20 (2 Wks)</span></td>
+                <td>
+                  <ul style="padding-left: 18px; font-size: 12px; color: var(--gray-700); line-height: 1.6;">
+                    <li>Staging MySQL 8.0 populated with 5-year sales & purchases</li>
+                    <li>Dedicated File Store operational with indexed attachments</li>
+                    <li>Client sample validation sign-off on transactions</li>
+                  </ul>
+                </td>
+                <td><span class="pill-cost">BD 933.333 (33.33%)</span></td>
+              </tr>
+
+              <tr>
+                <td style="text-align: center; font-weight: 800; color: var(--primary);">Gate 3</td>
+                <td>
+                  <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px;">Opening Balance Cutover, Delta Sync & Final Sign-off</div>
+                  <div style="font-size: 12px; color: var(--gray-600);">Trial balance opening balance import, customer AR / vendor AP balances sign-off, cutover weekend delta sync, and live production handover.</div>
+                </td>
+                <td><span class="pill pill-gate">Days 21 – 30 (2 Wks)</span></td>
+                <td>
+                  <ul style="padding-left: 18px; font-size: 12px; color: var(--gray-700); line-height: 1.6;">
+                    <li>Audited Opening Balances Sign-off Certificate</li>
+                    <li>100% Production Cutover with Zero Interruption</li>
+                    <li>Formal multi-party digital sign-off and lock</li>
+                  </ul>
+                </td>
+                <td><span class="pill-cost">BD 933.334 (33.34%)</span></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" style="text-align: right; padding-right: 20px; font-size: 13.5px;"><strong>TOTAL DATA MIGRATION & FILE STORE CONTRACT VALUE:</strong></td>
+                <td><strong style="color: var(--accent-gold); font-size: 15px;">BD 2,800.000</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: 3-Party Executive Multi-Party Digital Acceptance Console -->
+    <div class="section-card" style="page-break-before: always; page-break-inside: avoid; break-inside: avoid;">
+      <div class="section-header">
+        <div class="section-title"><i class="fa-solid fa-signature" style="color: #d97706;"></i> 4.0 Executive Multi-Party Digital Acceptance Console</div>
+        <span class="badge-tag badge-status">Cryptographic Verification Active</span>
+      </div>
+
+      <p style="margin-bottom: 20px; font-size: 13px; color: var(--gray-600);">
+        By providing digital signatures below, authorized representatives of <strong>Popular Auto Spare & A/C Parts Co. W.L.L.</strong>, <strong>SaNDS Lab Middle East W.L.L.</strong>, and <strong>UniGlobal Consultancy</strong> formally accept this Data Migration Milestone Agreement, the Opening Balance Cutover Strategy, the Technical Data Disclaimer, and the payment schedule of <strong>BD 2,800.000</strong>.
+      </p>
+
+      <div class="signoff-grid">
+        <!-- Signoff 1: Client Executive -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-title">Popular Auto Spare Co. W.L.L</div>
+            <div class="signoff-subtitle">Client Executive Sign-off & Commercial Approval</div>
+            <div class="signoff-box-area" id="sig_area_client">
+              <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+            </div>
+            <div style="margin-bottom: 14px;">
+              <span class="signoff-status-badge status-pending" id="badge_client">PENDING SIGN-OFF</span>
+            </div>
+          </div>
+          <button class="btn-sign" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Authorized Executive Signatory')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
+          </button>
+        </div>
+
+        <!-- Signoff 2: Developer / Architect -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-title">SaNDS Lab Middle East W.L.L</div>
+            <div class="signoff-subtitle">Lead Solutions Architect & Engineering Director</div>
+            <div class="signoff-box-area" id="sig_area_architect">
+              <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+            </div>
+            <div style="margin-bottom: 14px;">
+              <span class="signoff-status-badge status-pending" id="badge_architect">PENDING SIGN-OFF</span>
+            </div>
+          </div>
+          <button class="btn-sign" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Lead Solutions Architect & Managing Director')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
+          </button>
+        </div>
+
+        <!-- Signoff 3: Strategic Advisor -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-title">UniGlobal Consultancy</div>
+            <div class="signoff-subtitle">Executive Strategic Advisor & Governance Lead</div>
+            <div class="signoff-box-area" id="sig_area_advisor">
+              <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
+            </div>
+            <div style="margin-bottom: 14px;">
+              <span class="signoff-status-badge status-pending" id="badge_advisor">PENDING SIGN-OFF</span>
+            </div>
+          </div>
+          <button class="btn-sign" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Executive Strategic Advisor')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Footer -->
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div><strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> &bull; Kingdom of Bahrain &bull; Commercial Registration (CR) Active</div>
+      <div>Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.</div>
+    </footer>
+
+  </div>
+
+  <!-- Unified Signature Capture Modal -->
+  <div class="modal-overlay" id="sigModal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+        <h3 id="modalSignTitle" style="font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 700; color: #0a2540; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-file-signature" style="color: #d97706;"></i> Digital Signature Capture
+        </h3>
+        <button onclick="closeSignModal()" style="background: transparent; border: none; font-size: 22px; color: #64748b; cursor: pointer;">&times;</button>
+      </div>
+      <form id="signForm" onsubmit="handleSignatureSubmit(event)">
+        <input type="hidden" id="modal_party" name="party" value="">
+        <input type="hidden" id="modal_org" name="org" value="">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 11.5px; font-weight: 700; color: #334155; margin-bottom: 4px; text-transform: uppercase;">Signatory Full Name</label>
+          <input type="text" id="signerName" required placeholder="Enter full name" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 11.5px; font-weight: 700; color: #334155; margin-bottom: 4px; text-transform: uppercase;">Signatory Designation / Role</label>
+          <input type="text" id="signerDesignation" required placeholder="e.g. Managing Director" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label style="font-size: 11.5px; font-weight: 700; color: #334155; text-transform: uppercase;">Draw Signature on Canvas</label>
+            <button type="button" onclick="clearSignatureCanvas()" style="background: none; border: none; color: #d97706; font-size: 11px; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-eraser"></i> Clear
+            </button>
+          </div>
+          <canvas id="sigCanvas" style="border: 1.5px solid #cbd5e1; border-radius: 6px; background: #f8fafc; width: 100%; height: 150px; cursor: crosshair; touch-action: none;"></canvas>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" onclick="closeSignModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Cancel</button>
+          <button type="submit" style="padding: 8px 18px; background: #0a2540; color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Confirm & Apply Signature</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Signature Capture & Display Script -->
+  <script>
+    const currentDocId = 'SL-POP-ERP-MIG-001';
+    let canvas, ctx, isDrawing = false;
+
+    function initCanvas() {
+      canvas = document.getElementById('sigCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || 480;
+      canvas.height = rect.height || 150;
+      ctx.strokeStyle = '#0a2540';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      function getPos(e) {
+        const r = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - r.left) * (canvas.width / r.width),
+          y: (clientY - r.top) * (canvas.height / r.height)
+        };
+      }
+
+      function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        e.preventDefault();
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        e.preventDefault();
+      }
+
+      function stopDraw() {
+        isDrawing = false;
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', stopDraw);
+
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      window.addEventListener('touchend', stopDraw);
+    }
+
+    function clearSignatureCanvas() {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    function openSignModal(party, org, defaultRole) {
+      const modal = document.getElementById('sigModal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+
+      document.getElementById('modal_party').value = party;
+      document.getElementById('modal_org').value = org;
+      document.getElementById('modalSignTitle').innerHTML = '<i class="fa-solid fa-file-signature" style="color: #d97706;"></i> Sign as ' + org;
+      document.getElementById('signerDesignation').value = defaultRole || '';
+
+      setTimeout(() => {
+        initCanvas();
+        clearSignatureCanvas();
+      }, 50);
+    }
+
+    function closeSignModal() {
+      const modal = document.getElementById('sigModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleSignatureSubmit(e) {
+      e.preventDefault();
+      const party = document.getElementById('modal_party').value;
+      const org = document.getElementById('modal_org').value;
+      const name = document.getElementById('signerName').value.trim();
+      const role = document.getElementById('signerDesignation').value.trim();
+
+      if (!name || !role) {
+        alert('Please provide both Name and Role.');
+        return;
+      }
+
+      const dataUrl = canvas.toDataURL('image/png');
+      const sigRecord = {
+        party: party,
+        org: org,
+        name: name,
+        role: role,
+        data: dataUrl,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        time: new Date().toLocaleTimeString()
+      };
+
+      localStorage.setItem('sig_' + currentDocId + '_' + party, JSON.stringify(sigRecord));
+      applySignatureToUI(party, sigRecord);
+      closeSignModal();
+
+      // Submit to backend SQLite if available
+      try {
+        fetch(window.location.href, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            action: 'sign_document',
+            role: party,
+            signer_name: name,
+            signer_designation: role,
+            signature_data: dataUrl
+          })
+        }).then(r => r.json()).then(res => {
+          console.log('Backend sign response:', res);
+        }).catch(e => console.log('Backend sync offline:', e));
+      } catch(e) {}
+
+      alert('Signature successfully recorded for ' + org);
+    }
+
+    function applySignatureToUI(party, rec) {
+      const area = document.getElementById('sig_area_' + party);
+      const badge = document.getElementById('badge_' + party);
+
+      if (area) {
+        area.innerHTML = '<div style="text-align:center;">' +
+          '<img src="' + rec.data + '" style="max-height: 48px; max-width: 160px; object-fit: contain; margin-bottom: 4px;" alt="Signature">' +
+          '<div style="font-size: 11px; font-weight: 700; color: #0a2540;">' + rec.name + '</div>' +
+          '<div style="font-size: 9.5px; color: #64748b;">' + rec.role + ' &bull; ' + rec.date + '</div>' +
+          '</div>';
+      }
+
+      if (badge) {
+        badge.className = 'signoff-status-badge status-signed';
+        badge.innerHTML = '<i class="fas fa-check-double"></i> SIGNED & RATIFIED';
+      }
+    }
+
+    function loadSavedSignatures() {
+      ['client', 'architect', 'advisor'].forEach(p => {
+        const saved = localStorage.getItem('sig_' + currentDocId + '_' + p);
+        if (saved) {
+          try {
+            const rec = JSON.parse(saved);
+            applySignatureToUI(p, rec);
+          } catch(e) {}
+        }
+      });
+
+      // Also try fetching from SQLite backend
+      try {
+        fetch(window.location.href, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ action: 'get_signatures' })
+        }).then(r => r.json()).then(res => {
+          if (res && res.success && res.signatures) {
+            res.signatures.forEach(s => {
+              const p = s.role;
+              const rec = {
+                party: p,
+                name: s.signer_name,
+                role: s.signer_designation,
+                data: s.signature_data,
+                date: s.signed_at.split(' ')[0]
+              };
+              applySignatureToUI(p, rec);
+            });
+          }
+        }).catch(e => {});
+      } catch(e) {}
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedSignatures();
+    });
+  </script>
+</body>
+</html>

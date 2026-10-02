@@ -1,3 +1,116 @@
+<?php
+// PHP Backend for Digital Signature & Finalization API (SL-POP-ERP-SUMMARY-001)
+if (session_status() === PHP_SESSION_NONE) {
+    $session_save_dir = __DIR__ . '/.sessions';
+    if (!is_dir($session_save_dir)) {
+        @mkdir($session_save_dir, 0700, true);
+    }
+    if (is_dir($session_save_dir) && is_writable($session_save_dir)) {
+        @session_save_path($session_save_dir);
+    } elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
+}
+
+$doc_id = 'SL-POP-ERP-SUMMARY-001';
+
+$db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
+foreach ($db_candidates as $dbc) {
+    if (file_exists($dbc)) {
+        require_once $dbc;
+        break;
+    }
+}
+
+$is_locked = false;
+if (isset($pdo) && $pdo) {
+    try {
+        $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
+        $meta_stmt->execute(array($doc_id));
+        $status_val = $meta_stmt->fetchColumn();
+        if ($status_val === 'FINALIZED_AND_LOCKED') {
+            $is_locked = true;
+        }
+    } catch (Exception $e) {}
+}
+
+$authenticated_user = isset($_SESSION['authenticated_user']) ? $_SESSION['authenticated_user'] : (isset($_COOKIE['sands_auth_device']) ? $_COOKIE['sands_auth_device'] : '');
+
+// Handle Ajax Actions
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    $action = $_POST['action'];
+    
+    if (!$authenticated_user) {
+        echo json_encode(array('success' => false, 'message' => 'Unauthorized access. Please log in via the portal.'));
+        exit;
+    }
+    
+    if ($action === 'sign_milestone') {
+        $role = isset($_POST['role']) ? trim($_POST['role']) : '';
+        $signer_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
+        $signer_designation = isset($_POST['signer_designation']) ? trim($_POST['signer_designation']) : '';
+        $signature_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
+        
+        if (empty($role) || empty($signer_name) || empty($signature_data)) {
+            echo json_encode(array('success' => false, 'message' => 'Missing required signature fields.'));
+            exit;
+        }
+        
+        try {
+            $now = date('Y-m-d H:i:s');
+            
+            // Check if document record exists in document_meta
+            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM document_meta WHERE doc_id = ?");
+            $check_stmt->execute(array($doc_id));
+            if ($check_stmt->fetchColumn() == 0) {
+                $ins_stmt = $pdo->prepare("INSERT INTO document_meta (doc_id, title, status) VALUES (?, ?, 'IN_REVIEW')");
+                $ins_stmt->execute(array($doc_id, 'Master Executive Milestone Summary & Complete 9-Module Budgeting Roadmap'));
+            }
+            
+            // Check if column exists or update document_signatures
+            if ($db_driver_active === 'mysql') {
+                $sig_stmt = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) 
+                                           VALUES (?, ?, ?, ?, ?, ?, ?)
+                                           ON DUPLICATE KEY UPDATE signer_name = VALUES(signer_name), signer_designation = VALUES(signer_designation), signature_data = VALUES(signature_data), signed_at = VALUES(signed_at)");
+                $sig_stmt->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
+            } else {
+                $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND role = ?");
+                $del->execute(array($doc_id, $role));
+                $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $ins->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
+            }
+            
+            // Log to audit trail
+            $audit_stmt = $pdo->prepare("INSERT INTO audit_trail (user_email, action, details, ip_address) VALUES (?, ?, ?, ?)");
+            $audit_stmt->execute(array($authenticated_user, 'SIGN_DOCUMENT', "Signed $doc_id as $role ($signer_name)", $_SERVER['REMOTE_ADDR']));
+            
+            echo json_encode(array('success' => true, 'message' => 'Master Summary Signature recorded successfully!', 'signed_at' => $now));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Database error: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    if ($action === 'get_signatures') {
+        try {
+            $stmt = $pdo->prepare("SELECT role, signer_name, signer_designation, signer_email, signature_data, signed_at FROM document_signatures WHERE doc_id = ?");
+            $stmt->execute(array($doc_id));
+            $signatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(array('success' => true, 'signatures' => $signatures));
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => 'Error fetching signatures: ' . $e->getMessage()));
+            exit;
+        }
+    }
+    
+    echo json_encode(array('success' => false, 'message' => 'Unknown action.'));
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1110,11 +1223,34 @@
       align-items: center;
     }
 
-    /* Print Optimizations - Precision Landscape Multi-Page Architecture */
-    
-
-    
-    /* =========================================================================
+    /* Print Optimizations */
+    @media print {
+      .web-action-bar, .modal-overlay, .btn-sign, .mod-link-btn {
+        display: none !important;
+      }
+      body {
+        background: #ffffff;
+        font-size: 11pt;
+      }
+      .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .hero-card, .section-card, .stat-card, .signoff-section, .total-cost-hero-box {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+      }
+      .charts-grid {
+        display: block !important;
+      }
+      .chart-box {
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+      }
+    }
+      /* =========================================================================
        COMPREHENSIVE MOBILE RESPONSIVE STYLING
        ========================================================================= */
     @media (max-width: 1100px) {
@@ -1248,467 +1384,7 @@
         font-size: 24px !important;
       }
     }
-  
-    /* =========================================================================
-       MASTER PRINT CSS: PRECISION MULTI-PAGE LANDSCAPE ARCHITECTURE (8 PAGES)
-       ========================================================================= */
-    @page {
-      size: A4 landscape;
-      margin: 6mm 8mm;
-    }
-
-    @media print {
-      *, *:before, *:after {
-        box-shadow: none !important;
-        text-shadow: none !important;
-      }
-      
-      /* Hide web navigation, action bars, and modal controls */
-      .web-action-bar, .modal-overlay, .btn-sign, .mod-link-btn, #sigModal, .interactive-badge, .fa-arrow-left {
-        display: none !important;
-      }
-      
-      body {
-        background: #ffffff !important;
-        font-size: 8.5pt !important;
-        color: #0f172a !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      .container {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin: 0 auto !important;
-        padding: 0 4px !important;
-      }
-
-      .doc-top-bar {
-        padding: 6px 14px !important;
-        border-bottom: 2px solid #d97706 !important;
-        margin-bottom: 8px !important;
-        background: #07192c !important;
-        color: #ffffff !important;
-      }
-      .header-logos img {
-        height: 26px !important;
-      }
-      .doc-meta-badge {
-        padding: 3px 8px !important;
-      }
-      .doc-meta-badge .doc-ref {
-        font-size: 10px !important;
-      }
-      .doc-meta-badge .doc-date {
-        font-size: 8.5px !important;
-      }
-
-      h1, h2, h3, h4, .section-header, .section-title, .chart-box-title {
-        page-break-after: avoid !important;
-        break-after: avoid !important;
-      }
-
-      .section-card {
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 6px !important;
-        padding: 10px 14px !important;
-        margin-bottom: 10px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .section-header {
-        margin-bottom: 10px !important;
-        padding-bottom: 6px !important;
-        border-bottom: 1.5px solid #e2e8f0 !important;
-      }
-      .section-title {
-        font-size: 14px !important;
-      }
-      .section-subtitle {
-        font-size: 9.5px !important;
-        margin-top: 2px !important;
-      }
-
-      /* ---------------- PAGE 1: COVER / EXECUTIVE OVERVIEW & KPIS ---------------- */
-      .hero-card {
-        padding: 10px 14px !important;
-        margin-bottom: 8px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        border-radius: 6px !important;
-      }
-      .hero-badge-pill {
-        font-size: 8.5px !important;
-        padding: 2px 6px !important;
-        margin-bottom: 4px !important;
-      }
-      .hero-title {
-        font-size: 16px !important;
-        margin-bottom: 3px !important;
-      }
-      .hero-subtitle {
-        font-size: 9.5px !important;
-        margin-bottom: 8px !important;
-        line-height: 1.35 !important;
-      }
-      .hero-grid {
-        margin-top: 6px !important;
-        padding-top: 6px !important;
-        gap: 6px !important;
-      }
-      .hero-stat-box {
-        padding: 5px 8px !important;
-      }
-      .hero-stat-box .label {
-        font-size: 8.5px !important;
-      }
-      .hero-stat-box .value {
-        font-size: 13px !important;
-      }
-      .hero-stat-box .subvalue {
-        font-size: 8.5px !important;
-      }
-
-      .stat-row {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 8px !important;
-        margin-bottom: 8px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .stat-card {
-        padding: 8px 10px !important;
-        gap: 8px !important;
-        border-radius: 6px !important;
-      }
-      .stat-icon {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 14px !important;
-        border-radius: 6px !important;
-      }
-      .stat-info .stat-num {
-        font-size: 14px !important;
-      }
-      .stat-info .stat-title {
-        font-size: 9.5px !important;
-      }
-      .stat-info .stat-desc {
-        font-size: 8px !important;
-      }
-
-      /* ---------------- PAGE 2: VISUAL ANALYTICS & CHARTS ---------------- */
-      #sec-visual-analytics {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-      }
-      .charts-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 14px !important;
-        margin-bottom: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .chart-box {
-        padding: 8px 12px !important;
-        border-radius: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        background: #f8fafc !important;
-      }
-      .chart-box-title {
-        font-size: 12px !important;
-        margin-bottom: 6px !important;
-      }
-      .chart-wrapper {
-        height: 230px !important;
-        position: relative !important;
-      }
-
-      /* ---------------- PAGE 3: MASTER 9-MODULE BUDGET MATRIX ---------------- */
-      #sec-master-table {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-      }
-      .table-container {
-        overflow: visible !important;
-        width: 100% !important;
-        margin: 2px 0 !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      table.master-table {
-        width: 100% !important;
-        min-width: 100% !important;
-        font-size: 8pt !important;
-        table-layout: auto !important;
-        border-collapse: collapse !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      table.master-table th {
-        padding: 4px 6px !important;
-        font-size: 8pt !important;
-        background: #0f172a !important;
-        color: #ffffff !important;
-      }
-      table.master-table td {
-        padding: 3.5px 5px !important;
-        font-size: 7.5pt !important;
-      }
-      table.master-table tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-
-      /* ---------------- PAGE 4: 9-MODULE ARCHITECTURAL SCOPE PILLARS ---------------- */
-      #sec-scope-pillars {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-      }
-      .modules-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .mod-card {
-        padding: 6px 8px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        border-radius: 6px !important;
-      }
-      .mod-card-top {
-        margin-bottom: 3px !important;
-      }
-      .mod-badge {
-        font-size: 8px !important;
-        padding: 1px 4px !important;
-      }
-      .mod-cost {
-        font-size: 10px !important;
-      }
-      .mod-title {
-        font-size: 10px !important;
-        margin-bottom: 2px !important;
-      }
-      .mod-desc {
-        font-size: 7.5pt !important;
-        line-height: 1.25 !important;
-        margin-bottom: 4px !important;
-      }
-      .mod-features {
-        gap: 2px !important;
-      }
-      .mod-features li {
-        font-size: 7.5pt !important;
-        line-height: 1.2 !important;
-      }
-
-      /* ---------------- PAGES 5 & 6: COMPLETE 35 MILESTONE TRANCHES ---------------- */
-      #sec-detailed-milestones {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: auto !important;
-        break-inside: auto !important;
-        margin-top: 0 !important;
-      }
-      #sec-milestones-part2 {
-        page-break-before: always !important;
-        break-before: page !important;
-      }
-      .phase-module-item {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-bottom: 6px !important;
-        border-radius: 6px !important;
-      }
-      .phase-mod-header {
-        padding: 5px 8px !important;
-      }
-      .phase-mod-title {
-        font-size: 10px !important;
-      }
-      .phase-grid {
-        padding: 5px 8px !important;
-        gap: 6px !important;
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-      }
-      .phase-item-box {
-        padding: 4px 6px !important;
-        border-radius: 4px !important;
-      }
-      .phase-item-top {
-        margin-bottom: 2px !important;
-      }
-      .phase-item-tag {
-        font-size: 7.5pt !important;
-      }
-      .phase-item-amt {
-        font-size: 8.5pt !important;
-      }
-      .phase-item-desc {
-        font-size: 7.5pt !important;
-        line-height: 1.2 !important;
-        margin-bottom: 3px !important;
-      }
-      .phase-item-time {
-        font-size: 7pt !important;
-      }
-
-      /* ---------------- PAGE 7: TEAM RATE CARD & TOTAL INVESTMENT ---------------- */
-      #sec-team-rate-card {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-      }
-      .rate-card-grid {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 8px !important;
-        margin: 6px 0 !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .rate-box {
-        padding: 6px 8px !important;
-        border-radius: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .rate-box .role-name {
-        font-size: 10px !important;
-        margin-bottom: 2px !important;
-      }
-      .rate-box .bhd-val {
-        font-size: 13px !important;
-      }
-      .rate-box .bhd-sub {
-        font-size: 8.5px !important;
-      }
-
-      #sec-total-investment {
-        page-break-before: auto !important;
-        break-before: auto !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 8px !important;
-      }
-      .total-cost-hero-box {
-        padding: 8px 12px !important;
-        margin: 6px 0 !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        border-radius: 6px !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-      }
-      .total-cost-title {
-        font-size: 13px !important;
-        margin-bottom: 2px !important;
-      }
-      .total-cost-desc {
-        font-size: 9px !important;
-        line-height: 1.3 !important;
-      }
-      .total-cost-amt {
-        font-size: 20px !important;
-      }
-      .total-cost-words {
-        font-size: 8.5px !important;
-      }
-
-      /* Terms & Governance */
-      #sec-terms-governance {
-        page-break-before: auto !important;
-        break-before: auto !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 8px !important;
-      }
-      .terms-box {
-        padding: 8px 12px !important;
-        margin: 6px 0 !important;
-        border-radius: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .terms-box h4 {
-        font-size: 11px !important;
-        margin-bottom: 3px !important;
-      }
-      .terms-box ul {
-        font-size: 8.5pt !important;
-        line-height: 1.35 !important;
-        padding-left: 14px !important;
-      }
-
-      /* ---------------- PAGE 8: STAKEHOLDER SIGN-OFF CONSOLE ---------------- */
-      #sec-signoff {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-        padding: 14px 18px !important;
-      }
-      .signoff-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 10px !important;
-        margin-top: 10px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .signoff-card {
-        padding: 10px 12px !important;
-        border-radius: 6px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      .signoff-card-title {
-        font-size: 11px !important;
-      }
-      .signoff-box-area {
-        height: 65px !important;
-        margin-bottom: 6px !important;
-      }
-      .signoff-status-badge {
-        font-size: 8.5px !important;
-        padding: 2px 5px !important;
-        margin-bottom: 4px !important;
-      }
-
-      .doc-footer {
-        margin-top: 10px !important;
-        padding-top: 6px !important;
-        font-size: 8pt !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-    }
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -1769,7 +1445,7 @@
         </div>
         <div class="hero-stat-box">
           <div class="label"><i class="fa-solid fa-money-bill-wave"></i> Total Investment</div>
-          <div class="value" style="color: #d97706;">BD 34,090.910</div>
+          <div class="value" style="color: #d97706;">BD 38,090.910</div>
           <div class="subvalue">Fixed Baseline in Bahraini Dinars</div>
         </div>
         <div class="hero-stat-box">
@@ -1803,7 +1479,7 @@
       <div class="stat-card">
         <div class="stat-icon icon-amber"><i class="fa-solid fa-coins"></i></div>
         <div class="stat-info">
-          <div class="stat-num">BD 1,363.636</div>
+          <div class="stat-num">BD 1,523.636</div>
           <div class="stat-title">Monthly Team Burn-Rate</div>
           <div class="stat-desc">Fixed transparent rate card</div>
         </div>
@@ -1835,13 +1511,13 @@
         </div>
       </div>
       <div class="total-cost-right">
-        <div class="total-cost-amt">BD 34,090.910</div>
+        <div class="total-cost-amt">BD 38,090.910</div>
         <div class="total-cost-words">Thirty-Four Thousand Ninety Bahraini Dinars & 910 Fils</div>
       </div>
     </div>
 
     <!-- SECTION 1: Visual Graphical Analytics -->
-    <div class="section-card" id="sec-visual-analytics">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Visual Milestone & Budget Analytics</div>
@@ -1854,7 +1530,7 @@
         <div class="chart-box">
           <div class="chart-box-title">
             <span><i class="fa-solid fa-pie-chart"></i> Budget Distribution by Module (BHD)</span>
-            <small style="font-size: 11px; color: var(--gray-500);">Total: BD 34,090.910</small>
+            <small style="font-size: 11px; color: var(--gray-500);">Total: BD 38,090.910</small>
           </div>
           <div class="chart-wrapper">
             <canvas id="budgetChart"></canvas>
@@ -1873,7 +1549,7 @@
     </div>
 
     <!-- SECTION 2: Master Consolidated Milestone & Budget Table -->
-    <div class="section-card" id="sec-master-table">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-table-list"></i> Master 9-Module Budgeting & Milestone Matrix (BHD)</div>
@@ -1910,8 +1586,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">10 Weeks</span></td>
               <td>2.50 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 3,409.091</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 3,809.091</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">10.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-001.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -1927,8 +1603,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,090.909</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 4,570.909</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">12.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-002.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -1944,8 +1620,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 5,113.636</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 5,713.636</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">15.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-003.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -1961,8 +1637,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">15 Weeks</span></td>
               <td>3.75 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 5,113.636</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 5,713.636</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">15.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-004.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -1978,8 +1654,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">13 Weeks</span></td>
               <td>3.25 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,431.818</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 4,951.818</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">13.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-005.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -1995,8 +1671,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">12 Weeks</span></td>
               <td>3.00 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 4,090.909</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 4,570.909</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">12.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-006.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -2012,8 +1688,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">16 Weeks</span></td>
               <td>4.00 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 5,454.548</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 6,094.548</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">16.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-007.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -2029,8 +1705,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">3 Weeks</span></td>
               <td>0.75 Mo</td>
               <td><span class="gate-pill">3 Gates (33%)</span></td>
-              <td><span class="currency-bhd">BD 1,022.727</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 1,142.727</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">3.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-008.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -2046,8 +1722,8 @@
               <td><span style="font-weight: 600; color: #1e293b;">4 Weeks</span></td>
               <td>1.00 Mo</td>
               <td><span class="gate-pill">4 Gates (25%)</span></td>
-              <td><span class="currency-bhd">BD 1,363.636</span></td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 1,523.636</span></td>
+              <td>BD 380.909</td>
               <td><span class="share-badge">4.00%</span></td>
               <td style="text-align: center;"><a href="SL-POP-ERP-MS-009.html" class="mod-link-btn" target="_blank">View <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             </tr>
@@ -2058,8 +1734,8 @@
               <td><strong>88 Weeks</strong></td>
               <td><strong>17.60 Mo</strong></td>
               <td><strong>35 Gates</strong></td>
-              <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 34,090.910</span></td>
-              <td><strong>BD 387.397</strong></td>
+              <td><span class="currency-bhd" style="font-size: 15px; color: var(--accent-gold);">BD 38,090.910</span></td>
+              <td><strong>BD 432.851</strong></td>
               <td><strong>100.00%</strong></td>
               <td style="text-align: center;"><strong>Full Suite</strong></td>
             </tr>
@@ -2069,7 +1745,7 @@
     </div>
 
     <!-- SECTION 3: Card Portfolio Grid with Key Architectural Scope -->
-    <div class="section-card" id="sec-scope-pillars">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-layer-group"></i> 9-Module Architectural Scope & Deliverable Pillars</div>
@@ -2084,7 +1760,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 1</span>
-              <span class="mod-cost-tag">BD 3,409.091</span>
+              <span class="mod-cost-tag">BD 3,809.091</span>
             </div>
             <div class="mod-name">PCode Generation & Universal Item Master</div>
             <div class="mod-desc">
@@ -2102,7 +1778,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 2</span>
-              <span class="mod-cost-tag">BD 4,090.909</span>
+              <span class="mod-cost-tag">BD 4,570.909</span>
             </div>
             <div class="mod-name">Vendor & Purchase Management with 3-Way Match</div>
             <div class="mod-desc">
@@ -2120,7 +1796,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 3</span>
-              <span class="mod-cost-tag">BD 5,113.636</span>
+              <span class="mod-cost-tag">BD 5,713.636</span>
             </div>
             <div class="mod-name">Store Verification & Multi-Warehouse Stock Control</div>
             <div class="mod-desc">
@@ -2138,7 +1814,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 4</span>
-              <span class="mod-cost-tag">BD 5,113.636</span>
+              <span class="mod-cost-tag">BD 5,713.636</span>
             </div>
             <div class="mod-name">Sales Process, Mobile POS & Branch Cash Control</div>
             <div class="mod-desc">
@@ -2156,7 +1832,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 5</span>
-              <span class="mod-cost-tag">BD 4,431.818</span>
+              <span class="mod-cost-tag">BD 4,951.818</span>
             </div>
             <div class="mod-name">Accounting, General Ledger, AP/AR & VAT Compliance</div>
             <div class="mod-desc">
@@ -2174,7 +1850,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 6</span>
-              <span class="mod-cost-tag">BD 4,090.909</span>
+              <span class="mod-cost-tag">BD 4,570.909</span>
             </div>
             <div class="mod-name">Enterprise Administration, Fixed Assets & Fleet</div>
             <div class="mod-desc">
@@ -2192,7 +1868,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 7</span>
-              <span class="mod-cost-tag">BD 5,454.548</span>
+              <span class="mod-cost-tag">BD 6,094.548</span>
             </div>
             <div class="mod-name">HR Management, Biometrics, Payroll & Gratuity</div>
             <div class="mod-desc">
@@ -2210,7 +1886,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 8</span>
-              <span class="mod-cost-tag">BD 1,022.727</span>
+              <span class="mod-cost-tag">BD 1,142.727</span>
             </div>
             <div class="mod-name">Hardware Setup, Scanners, Printers & Cloud Cluster</div>
             <div class="mod-desc">
@@ -2228,7 +1904,7 @@
           <div>
             <div class="mod-card-header">
               <span class="mod-tag">MODULE 9</span>
-              <span class="mod-cost-tag">BD 1,363.636</span>
+              <span class="mod-cost-tag">BD 1,523.636</span>
             </div>
             <div class="mod-name">Executive Management Dashboard & BI Cockpit</div>
             <div class="mod-desc">
@@ -2244,7 +1920,7 @@
     </div>
 
     <!-- SECTION 4: Comprehensive Milestone Tranches Breakdown (Phase by Phase) -->
-    <div class="section-card" id="sec-detailed-milestones">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-list-check"></i> Complete 35 Milestone Tranches Detailed Breakdown (BHD)</div>
@@ -2261,7 +1937,7 @@
             <span class="phase-title-text">Module 1: PCode Generation & Item Master Engine (10 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 3,409.091</span>
+            <span class="mod-cost-tag">BD 3,809.091</span>
             <i class="fa-solid fa-chevron-down" id="p1_icon"></i>
           </div>
         </div>
@@ -2269,7 +1945,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 1.1 (25%)</span>
-              <span class="phase-item-amt">BD 852.273</span>
+              <span class="phase-item-amt">BD 952.273</span>
             </div>
             <div class="phase-item-desc">PCode DB Schema, Data Cleansing Engine & Base Generation Algorithm.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–3</div>
@@ -2277,7 +1953,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 1.2 (25%)</span>
-              <span class="phase-item-amt">BD 852.273</span>
+              <span class="phase-item-amt">BD 952.273</span>
             </div>
             <div class="phase-item-desc">Brand / Model / Spec Dynamic Hierarchy & Automated PCode Generator Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 4–5</div>
@@ -2285,7 +1961,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 1.3 (25%)</span>
-              <span class="phase-item-amt">BD 852.273</span>
+              <span class="phase-item-amt">BD 952.273</span>
             </div>
             <div class="phase-item-desc">Universal Cross-Reference / Interchange Matrix & Barcode Tagging Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 6–8</div>
@@ -2293,7 +1969,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 1.4 (25%)</span>
-              <span class="phase-item-amt">BD 852.273</span>
+              <span class="phase-item-amt">BD 952.273</span>
             </div>
             <div class="phase-item-desc">Real-Time Search, Legacy Migration (50,000+ SKUs) & Multi-Branch Final UAT.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 9–10</div>
@@ -2309,7 +1985,7 @@
             <span class="phase-title-text">Module 2: Vendor & Purchase Management (12 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 4,090.909</span>
+            <span class="mod-cost-tag">BD 4,570.909</span>
             <i class="fa-solid fa-chevron-down" id="p2_icon"></i>
           </div>
         </div>
@@ -2317,7 +1993,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 2.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Supplier Master, Tokenized Vendor Portal & Automated RFQ Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–3</div>
@@ -2325,7 +2001,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 2.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Multi-Vendor Quotation Evaluation Matrix & Automated PO Split Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 4–6</div>
@@ -2333,7 +2009,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 2.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Goods Receipt Note (GRN), Multi-Currency Landed Cost & QC Inspection.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 7–9</div>
@@ -2341,7 +2017,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 2.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">3-Way Invoice Matching, Vendor SLA Scorecards & Multi-Branch Sign-Off.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 10–12</div>
@@ -2357,7 +2033,7 @@
             <span class="phase-title-text">Module 3: Store Verification & Stock Control (15 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 5,113.636</span>
+            <span class="mod-cost-tag">BD 5,713.636</span>
             <i class="fa-solid fa-chevron-down" id="p3_icon"></i>
           </div>
         </div>
@@ -2365,7 +2041,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 3.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Warehouse Spatial Hierarchy (5 Tiers), Bin Matrix & Inward PVN Setup.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–4</div>
@@ -2373,7 +2049,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 3.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Handheld Scanner Engine, Blind 60/40 Cycle Counts & Variance Alerts.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 5–8</div>
@@ -2381,7 +2057,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 3.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Inter-Branch Stock Transfers (GIT), Multi-Tier Discrepancy & FIFO Valuation.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 9–12</div>
@@ -2389,7 +2065,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 3.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Min/Max Safety Stock Auto-Replenishment, Aging & Final Warehouse Sign-Off.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 13–15</div>
@@ -2405,7 +2081,7 @@
             <span class="phase-title-text">Module 4: Sales Process, POS & Branch Financial Control (15 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 5,113.636</span>
+            <span class="mod-cost-tag">BD 5,713.636</span>
             <i class="fa-solid fa-chevron-down" id="p4_icon"></i>
           </div>
         </div>
@@ -2413,7 +2089,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 4.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Multi-Branch POS Architecture, Offline Sync & Cash Drawer Session Control.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–4</div>
@@ -2421,7 +2097,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 4.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Counter & Mobile Handheld POS Billing, Multi-Price Matrix & Barcodes.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 5–8</div>
@@ -2429,7 +2105,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 4.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Credit Customer Governance, Credit Limit Locks, Delivery Notes & B2B Invoices.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 9–12</div>
@@ -2437,7 +2113,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 4.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,278.409</span>
+              <span class="phase-item-amt">BD 1,428.409</span>
             </div>
             <div class="phase-item-desc">Verified Sales Returns, End-of-Day Branch Reconciliation & Audit UAT.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 13–15</div>
@@ -2453,7 +2129,7 @@
             <span class="phase-title-text">Module 5: Accounting & Financial Management (13 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 4,431.818</span>
+            <span class="mod-cost-tag">BD 4,951.818</span>
             <i class="fa-solid fa-chevron-down" id="p5_icon"></i>
           </div>
         </div>
@@ -2461,7 +2137,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 5.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,107.955</span>
+              <span class="phase-item-amt">BD 1,237.955</span>
             </div>
             <div class="phase-item-desc">Dynamic Chart of Accounts (COA), Cost Centers & Auto Journal Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–3</div>
@@ -2469,7 +2145,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 5.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,107.955</span>
+              <span class="phase-item-amt">BD 1,237.955</span>
             </div>
             <div class="phase-item-desc">AP / AR Subledgers, Aging Analysis, Statements & Credit Lock Rules.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 4–6</div>
@@ -2477,7 +2153,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 5.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,107.955</span>
+              <span class="phase-item-amt">BD 1,237.955</span>
             </div>
             <div class="phase-item-desc">Multi-Currency Treasury, Automated Bank Reconciliation & Cashflow Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 7–10</div>
@@ -2485,7 +2161,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 5.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,107.955</span>
+              <span class="phase-item-amt">BD 1,237.955</span>
             </div>
             <div class="phase-item-desc">Bahrain NBR 10% VAT Return Generator, Balance Sheet, P&L & Final Sign-Off.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 11–13</div>
@@ -2501,7 +2177,7 @@
             <span class="phase-title-text">Module 6: Enterprise Administration & Fixed Assets (12 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 4,090.909</span>
+            <span class="mod-cost-tag">BD 4,570.909</span>
             <i class="fa-solid fa-chevron-down" id="p6_icon"></i>
           </div>
         </div>
@@ -2509,7 +2185,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 6.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Facility Management, Maintenance Ticketing, Utility Logs & Lease Alerts.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–3</div>
@@ -2517,7 +2193,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 6.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Fixed Asset Master, QR Tagging, Custodian Tracking & Depreciation Engine.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 4–6</div>
@@ -2525,7 +2201,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 6.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Fleet Logistics, Vehicle Bookings, Fuel Reconciliation & TCO Analytics.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 7–9</div>
@@ -2533,7 +2209,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 6.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,022.727</span>
+              <span class="phase-item-amt">BD 1,142.727</span>
             </div>
             <div class="phase-item-desc">Staff Locker Control, Secure Digital Document Vault & CR Renewal Alerts.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 10–12</div>
@@ -2549,7 +2225,7 @@
             <span class="phase-title-text">Module 7: Human Resource Management & Payroll (16 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 5,454.548</span>
+            <span class="mod-cost-tag">BD 6,094.548</span>
             <i class="fa-solid fa-chevron-down" id="p7_icon"></i>
           </div>
         </div>
@@ -2557,7 +2233,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 7.1 (25%)</span>
-              <span class="phase-item-amt">BD 1,363.637</span>
+              <span class="phase-item-amt">BD 1,523.637</span>
             </div>
             <div class="phase-item-desc">Org Structure, Employee Master, Document Vault & Digital Onboarding.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 1–4</div>
@@ -2565,7 +2241,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 7.2 (25%)</span>
-              <span class="phase-item-amt">BD 1,363.637</span>
+              <span class="phase-item-amt">BD 1,523.637</span>
             </div>
             <div class="phase-item-desc">Biometric Attendance, Shift Rosters & Bahrain Labour Law Leave System.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 5–8</div>
@@ -2573,7 +2249,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 7.3 (25%)</span>
-              <span class="phase-item-amt">BD 1,363.637</span>
+              <span class="phase-item-amt">BD 1,523.637</span>
             </div>
             <div class="phase-item-desc">Automated Payroll, SIO/LMRA Compliance, WPS/CBB Export & Loan Advances.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 9–12</div>
@@ -2581,7 +2257,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 7.4 (25%)</span>
-              <span class="phase-item-amt">BD 1,363.637</span>
+              <span class="phase-item-amt">BD 1,523.637</span>
             </div>
             <div class="phase-item-desc">Performance KPIs, ESS Self-Service Portal, EOSB Gratuity & Production Go-Live.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Weeks 13–16</div>
@@ -2597,7 +2273,7 @@
             <span class="phase-title-text">Module 8: Hardware Integration & Cloud Cluster (3 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 1,022.727</span>
+            <span class="mod-cost-tag">BD 1,142.727</span>
             <i class="fa-solid fa-chevron-down" id="p8_icon"></i>
           </div>
         </div>
@@ -2605,7 +2281,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 8.1 (33.33%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">3-Tier Server Environment (Dev/Stage/Prod), RabbitMQ & Backup Automation.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 1</div>
@@ -2613,7 +2289,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 8.2 (33.33%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Handheld Android QR Scanners, ESC/POS Printers & Biometric Clocks.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 2</div>
@@ -2621,7 +2297,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 8.3 (33.34%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Offline Auto-Sync Engine, Multi-Branch Stress Testing & Go-Live.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 3</div>
@@ -2637,7 +2313,7 @@
             <span class="phase-title-text">Module 9: Executive Management Dashboard & BI Cockpit (4 Weeks)</span>
           </div>
           <div class="phase-pills">
-            <span class="mod-cost-tag">BD 1,363.636</span>
+            <span class="mod-cost-tag">BD 1,523.636</span>
             <i class="fa-solid fa-chevron-down" id="p9_icon"></i>
           </div>
         </div>
@@ -2645,7 +2321,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 9.1 (25%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Data Warehouse OLAP Schema, Non-Blocking ETL Pipelines & KPI Models.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 1</div>
@@ -2653,7 +2329,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 9.2 (25%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Commercial, Stock Velocity, Warehouse Verification & Vendor SLA Cockpit.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 2</div>
@@ -2661,7 +2337,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 9.3 (25%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Financial Liquidity, VAT, HR Payroll, Fixed Assets & Infra Health Analytics.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 3</div>
@@ -2669,7 +2345,7 @@
           <div class="phase-item-card">
             <div class="phase-item-header">
               <span class="phase-item-tag">Milestone 9.4 (25%)</span>
-              <span class="phase-item-amt">BD 340.909</span>
+              <span class="phase-item-amt">BD 380.909</span>
             </div>
             <div class="phase-item-desc">Management Filtering, 7:00 AM WhatsApp/Email Digest & Final Sign-Off.</div>
             <div class="phase-item-time"><i class="fa-solid fa-calendar"></i> Week 4</div>
@@ -2679,13 +2355,13 @@
     </div>
 
     <!-- SECTION 5: Master Resource Rate Card & Team Transparency (Pure BHD) -->
-    <div class="section-card" id="sec-team-rate-card">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-users"></i> Dedicated Engineering Team & Transparent Rate Matrix</div>
           <div class="section-subtitle">Full-time dedicated 5-person engineering team rate card in Bahraini Dinars (BHD)</div>
         </div>
-        <span class="badge-success">Team Monthly Rate: BD 1,363.636</span>
+        <span class="badge-success">Team Monthly Rate: BD 1,523.636</span>
       </div>
 
       <p style="font-size: 13px; color: var(--gray-700); margin-bottom: 15px;">
@@ -2727,13 +2403,13 @@
     </div>
 
     <!-- SECTION 6: Total Project Cost & Milestone Schedule in Bahraini Dinars -->
-    <div class="section-card" id="sec-total-investment">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-coins"></i> Total Project Investment & Milestone Schedule in Bahraini Dinars (BHD)</div>
           <div class="section-subtitle">Consolidated commercial breakdown and 4-milestone payment tranche distribution for Popular Auto Spare Co.</div>
         </div>
-        <span class="badge-accent">Grand Total: BD 34,090.910</span>
+        <span class="badge-accent">Grand Total: BD 38,090.910</span>
       </div>
 
       <div class="table-container">
@@ -2754,98 +2430,98 @@
             <tr>
               <td><span class="mod-tag">MS-001</span></td>
               <td><strong>PCode Generation Module</strong></td>
-              <td><span class="currency-bhd">BD 3,409.091</span></td>
-              <td>BD 852.273</td>
-              <td>BD 852.273</td>
-              <td>BD 852.273</td>
-              <td>BD 852.273</td>
+              <td><span class="currency-bhd">BD 3,809.091</span></td>
+              <td>BD 952.273</td>
+              <td>BD 952.273</td>
+              <td>BD 952.273</td>
+              <td>BD 952.273</td>
               <td>Demonstration & Staging Sign-Off</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-002</span></td>
               <td><strong>Vendor & Purchase Module</strong></td>
-              <td><span class="currency-bhd">BD 4,090.909</span></td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
+              <td><span class="currency-bhd">BD 4,570.909</span></td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
               <td>Supplier Portal & 3-Way Match Verification</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-003</span></td>
               <td><strong>Store Verification Module</strong></td>
-              <td><span class="currency-bhd">BD 5,113.636</span></td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
+              <td><span class="currency-bhd">BD 5,713.636</span></td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
               <td>Scanner Verification & Cycle Count UAT</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-004</span></td>
               <td><strong>Sales Process & POS Module</strong></td>
-              <td><span class="currency-bhd">BD 5,113.636</span></td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
-              <td>BD 1,278.409</td>
+              <td><span class="currency-bhd">BD 5,713.636</span></td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
+              <td>BD 1,428.409</td>
               <td>Counter POS & Cash Drawer Closing UAT</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-005</span></td>
               <td><strong>Accounts & VAT Module</strong></td>
-              <td><span class="currency-bhd">BD 4,431.818</span></td>
-              <td>BD 1,107.955</td>
-              <td>BD 1,107.955</td>
-              <td>BD 1,107.955</td>
-              <td>BD 1,107.955</td>
+              <td><span class="currency-bhd">BD 4,951.818</span></td>
+              <td>BD 1,237.955</td>
+              <td>BD 1,237.955</td>
+              <td>BD 1,237.955</td>
+              <td>BD 1,237.955</td>
               <td>GL Double-Entry & 10% VAT Return Sign-Off</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-006</span></td>
               <td><strong>Enterprise Admin & Fleet</strong></td>
-              <td><span class="currency-bhd">BD 4,090.909</span></td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
-              <td>BD 1,022.727</td>
+              <td><span class="currency-bhd">BD 4,570.909</span></td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
+              <td>BD 1,142.727</td>
               <td>Asset QR Tagging & Fleet TCO Sign-Off</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-007</span></td>
               <td><strong>HRM & Payroll Module</strong></td>
-              <td><span class="currency-bhd">BD 5,454.548</span></td>
-              <td>BD 1,363.637</td>
-              <td>BD 1,363.637</td>
-              <td>BD 1,363.637</td>
-              <td>BD 1,363.637</td>
+              <td><span class="currency-bhd">BD 6,094.548</span></td>
+              <td>BD 1,523.637</td>
+              <td>BD 1,523.637</td>
+              <td>BD 1,523.637</td>
+              <td>BD 1,523.637</td>
               <td>Biometric Sync & WPS CBB Bank Export UAT</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-008</span></td>
               <td><strong>Hardware & Cloud Setup</strong></td>
-              <td><span class="currency-bhd">BD 1,022.727</span></td>
-              <td>BD 340.909</td>
-              <td>BD 340.909</td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 1,142.727</span></td>
+              <td>BD 380.909</td>
+              <td>BD 380.909</td>
+              <td>BD 380.909</td>
               <td>—</td>
               <td>3-Tier Cloud & Hardware Peripherals Setup</td>
             </tr>
             <tr>
               <td><span class="mod-tag">MS-009</span></td>
               <td><strong>Executive BI Dashboard</strong></td>
-              <td><span class="currency-bhd">BD 1,363.636</span></td>
-              <td>BD 340.909</td>
-              <td>BD 340.909</td>
-              <td>BD 340.909</td>
-              <td>BD 340.909</td>
+              <td><span class="currency-bhd">BD 1,523.636</span></td>
+              <td>BD 380.909</td>
+              <td>BD 380.909</td>
+              <td>BD 380.909</td>
+              <td>BD 380.909</td>
               <td>C-Suite Mobile Dashboard & Anomaly Alerts</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
               <td colspan="2"><strong>GRAND TOTAL INVESTMENT (BHD)</strong></td>
-              <td><strong style="color: var(--accent-gold); font-size: 15px;">BD 34,090.910</strong></td>
+              <td><strong style="color: var(--accent-gold); font-size: 15px;">BD 38,090.910</strong></td>
               <td><strong>BD 8,707.955</strong></td>
               <td><strong>BD 8,707.955</strong></td>
               <td><strong>BD 8,707.955</strong></td>
@@ -2858,7 +2534,7 @@
     </div>
 
     <!-- SECTION 7: Terms, Governance & Acceptance SLA -->
-    <div class="section-card" id="sec-terms-governance">
+    <div class="section-card">
       <div class="section-header">
         <div>
           <div class="section-title"><i class="fa-solid fa-scale-balanced"></i> Governance, SLA & Payment Terms</div>
@@ -2886,589 +2562,373 @@
       </div>
     </div>
 
-    <!-- SECTION 8: Stakeholder Authorization & Digital Sign-Off Section -->
-    <section class="doc-section signoff-section" id="sec-signoff" style="background: var(--white); border-radius: var(--radius-xl, 16px); padding: 35px; border: 1px solid var(--gray-200, #e2e8f0); box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1)); margin-bottom: 30px; margin-top: 30px;">
-      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #f1f5f9;">
-        <div class="section-title-wrap">
-          <span class="section-num" style="background: #e67e22; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">FINAL STAGE</span>
-          <h2 class="section-title" style="margin-top: 4px; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: #0a2540;">
-            Stakeholder Authorization & Digital Sign-Off Console
-          </h2>
+    <!-- SECTION 8: Digital Multi-Party Sign-Off Console -->
+    <div class="signoff-section">
+      <div class="section-header">
+        <div>
+          <div class="section-title"><i class="fa-solid fa-signature"></i> Executive Governance & Digital Sign-Off Console</div>
+          <div class="section-subtitle">Multi-party cryptographic verification and authorization for the Master 9-Module ERP Roadmap</div>
         </div>
-        <span class="badge-success" style="background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">
-          <i class="fa-solid fa-shield-halved"></i> OFFICIAL ACCEPTANCE & DIGITAL VERIFICATION
-        </span>
+        <span class="badge-accent">Official Acceptance</span>
       </div>
 
-      <p style="font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 22px;">
-        By affixing digital signatures and authorizations below, all participating executive and technical stakeholders ratify the deliverables, implementation timeline, SLA commitments, and financial disbursement gates for <strong>Master 9-Module ERP Milestone & Budget Roadmap (SL-POP-ERP-SUMMARY-001)</strong>:
+      <p style="font-size: 13px; color: var(--gray-700); margin-bottom: 20px;">
+        By affixing digital signatures below, all participating executive stakeholders ratify this Master Milestone & Budgeting Summary as the official baseline for the Popular Auto Spare ERP implementation.
       </p>
 
-      <!-- Block 1: Engineering Preparation & Multi-Tier Verification Matrix -->
-        <div style="margin-bottom: 28px;">
-          <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-code-branch" style="color: #d97706;"></i> 1. Engineering Preparation & Stakeholder Verification Matrix
-          </h3>
-          <div class="signoff-box-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
-            <!-- Prepared By Developer / Architect -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">DEVELOPER / ARCHITECT</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ancy Varghese Thekkan</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Software Architect, SaNDS Lab</div>
-              <div style="margin-bottom: 8px;">
-                <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-check"></i> Prepared (25-September-2026)
-                </span>
-              </div>
-              <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">COMPLETED</span>
+      <div class="signoff-grid">
+        <!-- Signoff 1 -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-card-title">Popular Auto Spare Co. W.L.L</div>
+            <div class="signoff-card-sub">Client Executive Sign-off & Commercial Approval</div>
+            <div class="signoff-box-area" id="sig_area_client">
+              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
             </div>
-
-            <!-- Verified By CEO / Managing Director -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">VERIFIED BY (DEVELOPER)</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Ajit Kumar KV</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">CEO & Managing Director, SaNDS Lab</div>
-              <div style="margin-bottom: 8px;">
-                <span class="badge-tag badge-success" style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-check"></i> Verified (30-September-2026)
-                </span>
-              </div>
-              <span class="signoff-status-badge status-signed" style="background: #f1f5f9; color: #0f766e; border: 1px solid #ccfbf1; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">CHECKED & VERIFIED</span>
-            </div>
-
-            <!-- Consultant Review -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CONSULTANT REVIEW</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">UniGlobal Business Solutions</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Project Management Consultant</div>
-              <div style="margin-bottom: 8px;" id="sig_badge_consultant_review">
-                <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-clock"></i> In Active Review
-                </span>
-              </div>
-              <span class="signoff-status-badge status-pending" id="badge_consultant_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">IN REVIEW</span>
-            </div>
-
-            <!-- Client Approval -->
-            <div class="signoff-card" style="padding: 16px; border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0a2540; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CLIENT APPROVAL</div>
-              <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Popular Auto Spare & A/C Parts</div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Authorized Executive Signatory</div>
-              <div style="margin-bottom: 8px;" id="sig_badge_client_review">
-                <span class="badge-tag badge-primary" style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-clock"></i> Pending Approval
-                </span>
-              </div>
-              <span class="signoff-status-badge status-pending" id="badge_client_review" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 3px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;">PENDING SIGNATURE</span>
-            </div>
+            <span class="signoff-status-badge status-pending" id="badge_client">PENDING SIGN-OFF</span>
           </div>
+          <button class="btn-sign" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Managing Director / Commercial Lead')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
+          </button>
         </div>
 
-        <!-- Block 2: 3-Party Executive Governance Digital Sign-Off Console -->
-      <div>
-        <h3 style="font-size: 14.5px; font-weight: 700; color: #0a2540; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-signature" style="color: #d97706;"></i> 2. Executive Multi-Party Digital Acceptance Console
-        </h3>
-        <div class="signoff-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
-          <!-- Signoff 1: Client -->
-          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">Popular Auto Spare Co. W.L.L</div>
-              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Client Executive Sign-off & Commercial Approval</div>
-              <div class="signoff-box-area" id="sig_area_client" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-              </div>
-              <div style="margin-bottom: 14px;">
-                <span class="signoff-status-badge status-pending" id="badge_client" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-              </div>
+        <!-- Signoff 2 -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-card-title">SaNDS Lab Middle East W.L.L</div>
+            <div class="signoff-card-sub">Lead Solutions Architect & Engineering Director</div>
+            <div class="signoff-box-area" id="sig_area_architect">
+              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
             </div>
-            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('client', 'Popular Auto Spare Co. W.L.L', 'Authorized Executive Signatory')">
-              <i class="fa-solid fa-pen-nib"></i> Sign as Client Executive
-            </button>
+            <span class="signoff-status-badge status-pending" id="badge_architect">PENDING SIGN-OFF</span>
           </div>
+          <button class="btn-sign" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Enterprise Solutions Architect')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
+          </button>
+        </div>
 
-          <!-- Signoff 2: Developer / Architect -->
-          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">SaNDS Lab Middle East W.L.L</div>
-              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Lead Solutions Architect & Engineering Director</div>
-              <div class="signoff-box-area" id="sig_area_architect" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-              </div>
-              <div style="margin-bottom: 14px;">
-                <span class="signoff-status-badge status-pending" id="badge_architect" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-              </div>
+        <!-- Signoff 3 -->
+        <div class="signoff-card">
+          <div>
+            <div class="signoff-card-title">UniGlobal Consultancy</div>
+            <div class="signoff-card-sub">Executive Strategic Advisor & Governance Lead</div>
+            <div class="signoff-box-area" id="sig_area_advisor">
+              <span style="font-size: 11px; color: var(--gray-400);">No Signature on Record</span>
             </div>
-            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('architect', 'SaNDS Lab Middle East W.L.L', 'Lead Solutions Architect & Managing Director')">
-              <i class="fa-solid fa-pen-nib"></i> Sign as Solutions Architect
-            </button>
+            <span class="signoff-status-badge status-pending" id="badge_advisor">PENDING SIGN-OFF</span>
           </div>
-
-          <!-- Signoff 3: Consultant -->
-          <div class="signoff-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #0a2540; margin-bottom: 3px;">UniGlobal Consultancy</div>
-              <div style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Executive Strategic Advisor & Governance Lead</div>
-              <div class="signoff-box-area" id="sig_area_advisor" style="border: 1.5px dashed #cbd5e1; border-radius: 6px; padding: 14px; text-align: center; min-height: 85px; display: flex; align-items: center; justify-content: center; background: #fafafa; margin-bottom: 12px;">
-                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-pen-nib"></i> No Signature on Record</span>
-              </div>
-              <div style="margin-bottom: 14px;">
-                <span class="signoff-status-badge status-pending" id="badge_advisor" style="background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">PENDING SIGN-OFF</span>
-              </div>
-            </div>
-            <button class="btn btn-primary btn-sign" style="width: 100%; justify-content: center; padding: 10px; background: #0a2540; color: #ffffff; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Executive Strategic Advisor')">
-              <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
-            </button>
-          </div>
+          <button class="btn-sign" onclick="openSignModal('advisor', 'UniGlobal Consultancy', 'Senior Strategic Advisor')">
+            <i class="fa-solid fa-pen-nib"></i> Sign as Strategic Advisor
+          </button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Document Footer -->
-    <footer class="doc-footer" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-      <div><strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> &bull; Kingdom of Bahrain &bull; Commercial Registration (CR) Active</div>
-      <div>Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.</div>
-    </footer>
+    <!-- Footer -->
+    <div class="doc-footer">
+      <div>
+        <strong>Popular Auto Spare & A/C Parts Co. W.L.L</strong> &bull; Kingdom of Bahrain &bull; Commercial Registration (CR) Active
+      </div>
+      <div>
+        Engineered with &hearts; by <strong>SaNDS Lab Middle East W.L.L</strong> &copy; 2026. All Rights Reserved.
+      </div>
+    </div>
 
   </div>
 
-  <!-- Unified Signature Capture Modal -->
-  <div class="modal-overlay" id="sigModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-    <div class="modal-box" style="background: #ffffff; border-radius: 12px; max-width: 540px; width: 100%; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); position: relative;">
-      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-        <h3 class="modal-title" id="modalSignTitle" style="font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 700; color: #0a2540; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-file-signature" style="color: #d97706;"></i> Digital Signature Capture
-        </h3>
-        <button class="close-modal" onclick="closeSignModal()" style="background: transparent; border: none; font-size: 22px; color: #64748b; cursor: pointer;">&times;</button>
+  <!-- Signature Modal -->
+  <div class="modal-overlay" id="sigModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-signature"></i> Digital Signature Capture</div>
+        <button class="close-modal" onclick="closeSignModal()">&times;</button>
       </div>
-      <form id="signForm" onsubmit="handleSignatureSubmit(event)">
-        <input type="hidden" id="modal_party" name="party" value="">
-        <input type="hidden" id="modal_org" name="org" value="">
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 11.5px; font-weight: 700; color: #334155; margin-bottom: 4px; text-transform: uppercase;">Signatory Full Name</label>
-          <input type="text" class="form-control" id="signerName" required placeholder="Enter full name" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+      <div class="form-group">
+        <label>Signer Full Name</label>
+        <input type="text" class="form-control" id="signerName" placeholder="Enter your full official name">
+      </div>
+      <div class="form-group">
+        <label>Signer Title / Designation</label>
+        <input type="text" class="form-control" id="signerDesignation" placeholder="e.g. Managing Director">
+      </div>
+      <div class="form-group">
+        <label>Draw Signature on Canvas</label>
+        <canvas class="sig-pad-canvas" id="sigCanvas"></canvas>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" class="btn btn-outline" style="color: var(--gray-700); font-size: 11px;" onclick="clearCanvas()">
+          <i class="fa-solid fa-eraser"></i> Clear Canvas
+        </button>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" style="color: var(--gray-700);" onclick="closeSignModal()">Cancel</button>
+          <button type="button" class="btn btn-accent" id="btnSubmitSign" onclick="submitSignature()">Confirm & Apply</button>
         </div>
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 11.5px; font-weight: 700; color: #334155; margin-bottom: 4px; text-transform: uppercase;">Signatory Designation / Role</label>
-          <input type="text" class="form-control" id="signerDesignation" required placeholder="e.g. Managing Director" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-        </div>
-        <div class="form-group" style="margin-bottom: 12px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <label style="font-size: 11.5px; font-weight: 700; color: #334155; text-transform: uppercase;">Draw Signature on Canvas</label>
-            <button type="button" onclick="clearSignatureCanvas()" style="background: none; border: none; color: #d97706; font-size: 11px; font-weight: 700; cursor: pointer;">
-              <i class="fa-solid fa-eraser"></i> Clear
-            </button>
-          </div>
-          <canvas class="sig-pad-canvas" id="sigCanvas" style="border: 1.5px solid #cbd5e1; border-radius: 6px; background: #f8fafc; width: 100%; height: 150px; cursor: crosshair; touch-action: none;"></canvas>
-        </div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
-          <button type="button" class="btn btn-outline" onclick="closeSignModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btnSubmitSign" style="padding: 8px 18px; background: #0a2540; color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Confirm & Apply Signature</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 
-  <!-- Signature Capture & Display Script -->
   <script>
-    const currentDocId = 'SL-POP-ERP-SUMMARY-001';
-    let canvas, ctx, isDrawing = false;
+    // Accordion toggle
+    function togglePhase(id) {
+      const content = document.getElementById(id + '_content');
+      const icon = document.getElementById(id + '_icon');
+      if (content.style.display === 'none') {
+        content.style.display = 'grid';
+        icon.className = 'fa-solid fa-chevron-down';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-right';
+      }
+    }
 
-    function initCanvas() {
-      canvas = document.getElementById('sigCanvas');
-      if (!canvas) return;
-      ctx = canvas.getContext('2d');
+    // Render Charts
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Budget Donut Chart
+      const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+      new Chart(ctxBudget, {
+        type: 'doughnut',
+        data: {
+          labels: [
+            'M1: PCode Master',
+            'M2: Vendor & Purchase',
+            'M3: Store Verification',
+            'M4: Sales & POS',
+            'M5: Accounts & VAT',
+            'M6: Admin & Fixed Assets',
+            'M7: HRM & Payroll',
+            'M8: Hardware Setup',
+            'M9: Executive BI Dashboard'
+          ],
+          datasets: [{
+            data: [3409.091, 4090.909, 5113.636, 5113.636, 4431.818, 4090.909, 5454.548, 1022.727, 1363.636],
+            backgroundColor: [
+              '#3b82f6',
+              '#06b6d4',
+              '#10b981',
+              '#f59e0b',
+              '#8b5cf6',
+              '#ec4899',
+              '#6366f1',
+              '#64748b',
+              '#0a2540'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                boxWidth: 12,
+                font: { size: 11, family: 'Inter' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const val = context.raw;
+                  const total = 38090.910;
+                  const pct = ((val / total) * 100).toFixed(1);
+                  return ` BD ${val.toLocaleString('en-US', {minimumFractionDigits: 3})} (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
 
+      // 2. Timeline Bar Chart
+      const ctxTime = document.getElementById('timelineChart').getContext('2d');
+      new Chart(ctxTime, {
+        type: 'bar',
+        data: {
+          labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9'],
+          datasets: [{
+            label: 'Timeline (Weeks)',
+            data: [10, 12, 15, 15, 13, 12, 16, 3, 4],
+            backgroundColor: '#0a2540',
+            borderRadius: 6,
+            hoverBackgroundColor: '#d97706'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.raw} Working Weeks`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 18,
+              ticks: {
+                stepSize: 2,
+                font: { size: 11, family: 'Inter' }
+              },
+              title: {
+                display: true,
+                text: 'Weeks',
+                font: { size: 11, weight: 'bold' }
+              }
+            },
+            x: {
+              ticks: {
+                font: { size: 11, family: 'Inter' }
+              }
+            }
+          }
+        }
+      });
+    });
+
+    // Signature Canvas Logic
+    let currentRole = '';
+    const canvas = document.getElementById('sigCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width || 480;
-      canvas.height = rect.height || 150;
-      ctx.strokeStyle = '#0a2540';
-      ctx.lineWidth = 2.5;
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.lineWidth = 2;
       ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      function getPos(e) {
-        const r = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return {
-          x: (clientX - r.left) * (canvas.width / r.width),
-          y: (clientY - r.top) * (canvas.height / r.height)
-        };
-      }
-
-      function startDraw(e) {
-        isDrawing = true;
-        const pos = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);
-        e.preventDefault();
-      }
-
-      function draw(e) {
-        if (!isDrawing) return;
-        const pos = getPos(e);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        e.preventDefault();
-      }
-
-      function stopDraw() {
-        isDrawing = false;
-      }
-
-      canvas.addEventListener('mousedown', startDraw);
-      canvas.addEventListener('mousemove', draw);
-      window.addEventListener('mouseup', stopDraw);
-
-      canvas.addEventListener('touchstart', startDraw, { passive: false });
-      canvas.addEventListener('touchmove', draw, { passive: false });
-      window.addEventListener('touchend', stopDraw);
+      ctx.strokeStyle = '#0a2540';
     }
 
-    function clearSignatureCanvas() {
-      if (ctx && canvas) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
     }
 
-    function openSignModal(party, org, defaultRole) {
-      const modal = document.getElementById('sigModal');
-      if (!modal) return;
-      modal.style.display = 'flex';
+    function startDrawing(e) {
+      isDrawing = true;
+      const pos = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      e.preventDefault();
+    }
 
-      document.getElementById('modal_party').value = party;
-      document.getElementById('modal_org').value = org;
-      document.getElementById('modalSignTitle').innerHTML = '<i class="fa-solid fa-file-signature" style="color: #d97706;"></i> Sign as ' + org;
-      document.getElementById('signerDesignation').value = defaultRole || '';
+    function draw(e) {
+      if (!isDrawing) return;
+      const pos = getPos(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      e.preventDefault();
+    }
 
-      setTimeout(() => {
-        initCanvas();
-        clearSignatureCanvas();
-      }, 50);
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', stopDrawing);
+
+    canvas.addEventListener('touchstart', startDrawing, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing);
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function openSignModal(role, orgName, defaultDesignation) {
+      currentRole = role;
+      document.getElementById('sigModal').style.display = 'flex';
+      document.getElementById('signerDesignation').value = defaultDesignation;
+      resizeCanvas();
+      clearCanvas();
     }
 
     function closeSignModal() {
-      const modal = document.getElementById('sigModal');
-      if (modal) modal.style.display = 'none';
+      document.getElementById('sigModal').style.display = 'none';
+      currentRole = '';
     }
 
-    function handleSignatureSubmit(e) {
-      e.preventDefault();
-      const party = document.getElementById('modal_party').value;
-      const org = document.getElementById('modal_org').value;
+    function submitSignature() {
       const name = document.getElementById('signerName').value.trim();
-      const role = document.getElementById('signerDesignation').value.trim();
-
-      if (!name || !role) {
-        alert('Please provide both Name and Role.');
+      const designation = document.getElementById('signerDesignation').value.trim();
+      if (!name) {
+        alert('Please enter the signer full name.');
         return;
       }
+      const sigData = canvas.toDataURL('image/png');
 
-      const dataUrl = canvas.toDataURL('image/png');
-      const sigRecord = {
-        party: party,
-        org: org,
-        name: name,
-        role: role,
-        data: dataUrl,
-        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-        time: new Date().toLocaleTimeString()
-      };
+      const formData = new FormData();
+      formData.append('action', 'sign_milestone');
+      formData.append('role', currentRole);
+      formData.append('signer_name', name);
+      formData.append('signer_designation', designation);
+      formData.append('signature_data', sigData);
 
-      localStorage.setItem('sig_' + currentDocId + '_' + party, JSON.stringify(sigRecord));
-      applySignatureToUI(party, sigRecord);
-      closeSignModal();
+      document.getElementById('btnSubmitSign').disabled = true;
+      document.getElementById('btnSubmitSign').textContent = 'Recording Signature...';
 
-      if (typeof Swal !== 'undefined') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Signature Recorded & Ratified',
-          text: 'Document signed officially by ' + name + ' (' + org + ')',
-          confirmButtonColor: '#0a2540'
-        });
-      } else {
-        alert('Signature successfully recorded for ' + org);
-      }
-    }
-
-    function applySignatureToUI(party, rec) {
-      const area = document.getElementById('sig_area_' + party);
-      const badge = document.getElementById('badge_' + party);
-
-      if (area) {
-        area.innerHTML = '<div style="text-align:center;">' +
-          '<img src="' + rec.data + '" style="max-height: 48px; max-width: 160px; object-fit: contain; margin-bottom: 4px;" alt="Signature">' +
-          '<div style="font-size: 11px; font-weight: 700; color: #0a2540;">' + rec.name + '</div>' +
-          '<div style="font-size: 9.5px; color: #64748b;">' + rec.role + ' &bull; ' + rec.date + '</div>' +
-          '</div>';
-      }
-
-      if (badge) {
-        badge.className = 'signoff-status-badge status-signed';
-        badge.style.background = '#dcfce7';
-        badge.style.color = '#15803d';
-        badge.style.border = '1px solid #bbf7d0';
-        badge.innerHTML = '<i class="fas fa-check-double"></i> SIGNED & RATIFIED';
-      }
-
-      if (party === 'client') {
-        const bRev = document.getElementById('badge_client_review');
-        const sRev = document.getElementById('sig_badge_client_review');
-        if (bRev) {
-          bRev.className = 'signoff-status-badge status-signed';
-          bRev.style.background = '#dcfce7';
-          bRev.style.color = '#15803d';
-          bRev.innerHTML = 'APPROVED & SIGNED';
+      fetch(window.location.href, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Signature applied successfully to Master Executive Summary (SL-POP-ERP-SUMMARY-001)!');
+          window.location.reload();
+        } else {
+          alert('Error: ' + data.message);
+          document.getElementById('btnSubmitSign').disabled = false;
+          document.getElementById('btnSubmitSign').textContent = 'Confirm & Apply';
         }
-        if (sRev) {
-          sRev.innerHTML = '<span class="badge-tag badge-success" style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:4px; font-size:10.5px; font-weight:700;"><i class="fas fa-check"></i> ' + rec.name + ' (' + rec.date + ')</span>';
-        }
-      } else if (party === 'advisor' || party === 'consultant') {
-        const bRev = document.getElementById('badge_consultant_review');
-        const sRev = document.getElementById('sig_badge_consultant_review');
-        if (bRev) {
-          bRev.className = 'signoff-status-badge status-signed';
-          bRev.style.background = '#dcfce7';
-          bRev.style.color = '#15803d';
-          bRev.innerHTML = 'REVIEWED & VERIFIED';
-        }
-        if (sRev) {
-          sRev.innerHTML = '<span class="badge-tag badge-success" style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:4px; font-size:10.5px; font-weight:700;"><i class="fas fa-check"></i> ' + rec.name + ' (' + rec.date + ')</span>';
-        }
-      }
-    }
-
-    function loadSavedSignatures() {
-      ['client', 'architect', 'advisor', 'consultant'].forEach(p => {
-        const saved = localStorage.getItem('sig_' + currentDocId + '_' + p);
-        if (saved) {
-          try {
-            const rec = JSON.parse(saved);
-            applySignatureToUI(p, rec);
-          } catch(e) {}
-        }
+      })
+      .catch(err => {
+        alert('Server communication error: ' + err);
+        document.getElementById('btnSubmitSign').disabled = false;
+        document.getElementById('btnSubmitSign').textContent = 'Confirm & Apply';
       });
     }
 
-    // Universal High-Precision Scroll Spy for Navigation
-    function initScrollSpy() {
-      const navLinks = document.querySelectorAll('.sidebar-menu li a, .sidebar-menu a');
-      if (!navLinks || navLinks.length === 0) return;
-
-      const targetSections = [];
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('#') && href.length > 1) {
-          try {
-            const targetEl = document.querySelector(href);
-            if (targetEl) {
-              targetSections.push({ link: link, el: targetEl });
+    // Fetch existing signatures
+    window.addEventListener('DOMContentLoaded', () => {
+      const formData = new FormData();
+      formData.append('action', 'get_signatures');
+      fetch(window.location.href, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.signatures) {
+          data.signatures.forEach(sig => {
+            const sigArea = document.getElementById(`sig_area_${sig.role}`);
+            const badge = document.getElementById(`badge_${sig.role}`);
+            if (sigArea) {
+              sigArea.innerHTML = `<img src="${sig.signature_data}" alt="Signature"><br><small style="font-size: 10px; color: var(--gray-600);">${sig.signer_name} (${sig.signed_at})</small>`;
             }
-          } catch(e) {}
-        }
-      });
-
-      if (targetSections.length === 0) return;
-
-      function onScroll() {
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
-        let activeLink = null;
-
-        for (let i = 0; i < targetSections.length; i++) {
-          const item = targetSections[i];
-          const rect = item.el.getBoundingClientRect();
-          const topOffset = rect.top + scrollY;
-          if (scrollY >= topOffset - 180) {
-            activeLink = item.link;
-          }
-        }
-
-        if (!activeLink && targetSections.length > 0) {
-          activeLink = targetSections[0].link;
-        }
-
-        if ((window.innerHeight + scrollY) >= (document.documentElement.scrollHeight - 60) && targetSections.length > 0) {
-          activeLink = targetSections[targetSections.length - 1].link;
-        }
-
-        navLinks.forEach(l => l.classList.remove('active'));
-        if (activeLink) {
-          activeLink.classList.add('active');
-        }
-      }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      setTimeout(onScroll, 100);
-      onScroll();
-    }
-
-    // Master Graphical Analytics (Budget Doughnut & Timeline Bar Chart)
-    function initMasterCharts() {
-      const canvasBudget = document.getElementById('budgetChart');
-      const canvasTimeline = document.getElementById('timelineChart');
-
-      if (typeof Chart === 'undefined') {
-        console.warn('Chart.js not loaded yet. Retrying in 200ms...');
-        setTimeout(initMasterCharts, 200);
-        return;
-      }
-
-      if (canvasBudget) {
-        const ctxBudget = canvasBudget.getContext('2d');
-        new Chart(ctxBudget, {
-          type: 'doughnut',
-          data: {
-            labels: [
-              'M1: PCode & Item Master',
-              'M2: Vendor & Purchase',
-              'M3: Store Verification',
-              'M4: Sales & POS Billing',
-              'M5: Accounts & VAT',
-              'M6: Enterprise Admin',
-              'M7: HRM & Payroll',
-              'M8: Hardware & Servers',
-              'M9: Executive BI Dashboard'
-            ],
-            datasets: [{
-              data: [3409.091, 4090.909, 5113.636, 5113.636, 4431.818, 4090.909, 5454.548, 1022.727, 1363.636],
-              backgroundColor: [
-                '#0284c7',
-                '#0d9488',
-                '#10b981',
-                '#f59e0b',
-                '#6366f1',
-                '#ec4899',
-                '#8b5cf6',
-                '#64748b',
-                '#d97706'
-              ],
-              borderWidth: 2,
-              borderColor: '#ffffff',
-              hoverOffset: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'right',
-                labels: {
-                  boxWidth: 12,
-                  padding: 10,
-                  font: {
-                    family: 'Inter',
-                    size: 11,
-                    weight: '500'
-                  },
-                  color: '#334155'
-                }
-              },
-              tooltip: {
-                backgroundColor: '#0a2540',
-                padding: 10,
-                cornerRadius: 6,
-                callbacks: {
-                  label: function(context) {
-                    const val = context.parsed;
-                    const total = 34090.910;
-                    const pct = ((val / total) * 100).toFixed(1);
-                    return ` ${context.label}: BD ${val.toLocaleString('en-US', {minimumFractionDigits: 3})} (${pct}%)`;
-                  }
-                }
-              }
-            },
-            cutout: '60%'
-          }
-        });
-      }
-
-      if (canvasTimeline) {
-        const ctxTimeline = canvasTimeline.getContext('2d');
-        new Chart(ctxTimeline, {
-          type: 'bar',
-          data: {
-            labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9'],
-            datasets: [{
-              label: 'Duration (Weeks)',
-              data: [10, 12, 15, 15, 13, 12, 16, 3, 4],
-              backgroundColor: '#0a2540',
-              borderRadius: 6,
-              hoverBackgroundColor: '#d97706'
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Engineering Weeks',
-                  font: { family: 'Inter', size: 11, weight: '600' },
-                  color: '#64748b'
-                },
-                grid: {
-                  color: '#f1f5f9'
-                },
-                ticks: {
-                  color: '#64748b',
-                  font: { family: 'Inter', size: 11 }
-                }
-              },
-              x: {
-                grid: {
-                  display: false
-                },
-                ticks: {
-                  color: '#1e293b',
-                  font: { family: 'Outfit', size: 12, weight: '700' }
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              },
-              tooltip: {
-                backgroundColor: '#0a2540',
-                padding: 10,
-                cornerRadius: 6,
-                callbacks: {
-                  title: function(items) {
-                    const names = [
-                      'Module 1: PCode & Item Master',
-                      'Module 2: Vendor & Purchase',
-                      'Module 3: Store Verification',
-                      'Module 4: Sales & POS Billing',
-                      'Module 5: Accounts & VAT',
-                      'Module 6: Enterprise Admin',
-                      'Module 7: HRM & Payroll',
-                      'Module 8: Hardware & Servers',
-                      'Module 9: Executive BI Dashboard'
-                    ];
-                    return names[items[0].dataIndex] || items[0].label;
-                  },
-                  label: function(context) {
-                    return ` Implementation Effort: ${context.parsed.y} Working Weeks (${(context.parsed.y / 4).toFixed(2)} Months)`;
-                  }
-                }
-              }
+            if (badge) {
+              badge.textContent = 'SIGNED & APPROVED';
+              badge.className = 'signoff-status-badge status-signed';
             }
-          }
-        });
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initMasterCharts();
-      loadSavedSignatures();
-      initScrollSpy();
+          });
+        }
+      })
+      .catch(e => console.log('Sig load info:', e));
     });
   </script>
-
 </body>
 </html>

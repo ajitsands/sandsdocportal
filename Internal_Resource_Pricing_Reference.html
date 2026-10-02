@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTERNAL ONLY: Resource Cost & Employee Pricing Reference</title>
+  <title>INTERNAL ONLY: Resource Cost, Executive Advisory & Employee Pricing Reference</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -17,6 +17,8 @@
       --gray-200: #e2e8f0;
       --gray-100: #f1f5f9;
       --white: #ffffff;
+      --blue-subtle: #f0f9ff;
+      --amber-subtle: #fffbeb;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -26,7 +28,7 @@
       font-size: 13px;
     }
     .container {
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
       background: #fff;
       padding: 35px;
@@ -51,11 +53,18 @@
       font-size: 22px;
       margin-bottom: 6px;
     }
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary);
+      font-size: 15px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
     p { margin-bottom: 12px; }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 16px 0 24px;
+      margin: 12px 0 20px;
       font-size: 12px;
     }
     th {
@@ -66,10 +75,24 @@
       font-weight: 600;
     }
     td {
-      padding: 10px 14px;
+      padding: 9px 14px;
       border-bottom: 1px solid var(--gray-200);
     }
     tr:nth-child(even) td { background: #f8fafc; }
+    .tier-header td {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+      font-weight: 800;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .subtotal-row td {
+      background: #f1f5f9 !important;
+      color: #1e293b !important;
+      font-weight: 700;
+      border-top: 1px solid #cbd5e1;
+    }
     .total-row td {
       background: #0f172a !important;
       color: #fff !important;
@@ -87,7 +110,6 @@
       body { padding: 12px !important; font-size: 12px !important; }
       .container { padding: 16px !important; }
       .table-responsive, table { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; display: block !important; }
-      .grid, .kpi-grid, .stat-grid { grid-template-columns: 1fr !important; }
     }
 
   </style>
@@ -95,21 +117,25 @@
 <body>
   <div class="container">
     <div class="badge-confidential">STRICTLY INTERNAL - NOT FOR CLIENT DISTRIBUTION</div>
-    <h1>SaNDS Lab: Master Employee Pricing & Cost Matrix</h1>
-    <p>This master rate card defines the baseline employee costs in Indian Rupees (INR) and Bahraini Dinars (BHD) used for estimating all 9 ERP process modules for Popular Auto Spare & A/C Parts Co. W.L.L.</p>
+    <h1>SaNDS Lab: Master Resource Cost, Executive Advisory & Pricing Matrix</h1>
+    <p>This master rate card defines the baseline employee costs in Indian Rupees (INR) and Bahraini Dinars (BHD), coupled with the <strong>Executive Steering, Domain Specialist, and Security Advisory Tier</strong> used for estimating all 9 ERP process modules for Popular Auto Spare & A/C Parts Co. W.L.L. (Total Project Contract Value: <strong>BD 38,090.910</strong> across 88 Working Weeks / 17.60 Months).</p>
     
-    <h3>1. Monthly Base Rate Card (1 BHD = 220.00 INR)</h3>
+    <h3>1. Monthly Consolidated Rate Card (1 BHD = 220.00 INR)</h3>
     <table>
       <thead>
         <tr>
-          <th>Designation / Role</th>
-          <th>Monthly Rate (INR)</th>
-          <th>Monthly Rate (BHD)</th>
-          <th>Weekly Rate (BHD)</th>
-          <th>Hourly Rate (160h/mo)</th>
+          <th>Designation / Domain Role</th>
+          <th>Monthly (INR)</th>
+          <th>Monthly (BHD)</th>
+          <th>Weekly (BHD)</th>
+          <th>Hourly (160h/mo)</th>
         </tr>
       </thead>
       <tbody>
+        <!-- TIER 1: Dedicated Engineering Squad -->
+        <tr class="tier-header">
+          <td colspan="5">A. Core Dedicated Engineering Squad (Direct Employee Costs)</td>
+        </tr>
         <tr>
           <td><strong>Project Manager</strong></td>
           <td>₹ 120,000</td>
@@ -145,21 +171,63 @@
           <td>BD 39.773</td>
           <td>BD 0.994</td>
         </tr>
-        <tr class="total-row">
-          <td><strong>Total Dedicated Team (Per Month)</strong></td>
+        <tr class="subtotal-row">
+          <td><strong>Subtotal: Core Engineering Squad</strong></td>
           <td><strong>₹ 300,000</strong></td>
           <td><strong>BD 1,363.636</strong></td>
           <td><strong>BD 340.909</strong></td>
           <td><strong>BD 8.523</strong></td>
         </tr>
+
+        <!-- TIER 2: Higher Officials & Domain Advisory -->
+        <tr class="tier-header">
+          <td colspan="5">B. Executive Steering, Domain Experts & Advisory Tier</td>
+        </tr>
+        <tr>
+          <td><strong>Executive Steering & C-Level Governance Director</strong></td>
+          <td>₹ 15,000</td>
+          <td><strong>BD 68.182</strong></td>
+          <td>BD 17.045</td>
+          <td>BD 0.426</td>
+        </tr>
+        <tr>
+          <td><strong>Principal Automotive ERP Domain Specialist</strong></td>
+          <td>₹ 12,000</td>
+          <td><strong>BD 54.545</strong></td>
+          <td>BD 13.636</td>
+          <td>BD 0.341</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise Security, VAPT & Cloud Governance Specialist</strong></td>
+          <td>₹ 8,200</td>
+          <td><strong>BD 37.273</strong></td>
+          <td>BD 9.318</td>
+          <td>BD 0.233</td>
+        </tr>
+        <tr class="subtotal-row">
+          <td><strong>Subtotal: Executive & Domain Advisory</strong></td>
+          <td><strong>₹ 35,200</strong></td>
+          <td><strong>BD 160.000</strong></td>
+          <td><strong>BD 40.000</strong></td>
+          <td><strong>BD 1.000</strong></td>
+        </tr>
+
+        <!-- GRAND TOTAL -->
+        <tr class="total-row">
+          <td><strong>TOTAL PROJECT DELIVERY MATRIX (PER MONTH)</strong></td>
+          <td><strong>₹ 335,200</strong></td>
+          <td><strong>BD 1,523.636</strong></td>
+          <td><strong>BD 380.909</strong></td>
+          <td><strong>BD 9.523</strong></td>
+        </tr>
       </tbody>
     </table>
 
-    <h3>2. Module 1: PCode Generation Cost Summary (10 Weeks / 2.5 Months)</h3>
+    <h3>2. Module 1: PCode Generation Cost Breakdown (10 Weeks / 2.5 Months)</h3>
     <table>
       <thead>
         <tr>
-          <th>Role</th>
+          <th>Category / Component</th>
           <th>Effort Allocation</th>
           <th>Total Cost (INR)</th>
           <th>Total Cost (BHD)</th>
@@ -167,49 +235,31 @@
       </thead>
       <tbody>
         <tr>
-          <td>Project Manager</td>
+          <td>Core Dedicated Engineering Squad (5 Members)</td>
           <td>2.5 Months (10 Wks)</td>
-          <td>₹ 300,000.00</td>
-          <td>BD 1,363.638</td>
+          <td>₹ 750,000.00</td>
+          <td>BD 3,409.091</td>
         </tr>
         <tr>
-          <td>Back end Lead Eng</td>
+          <td>Executive Steering, Domain Experts & Advisory Tier</td>
           <td>2.5 Months (10 Wks)</td>
-          <td>₹ 125,000.00</td>
-          <td>BD 568.183</td>
-        </tr>
-        <tr>
-          <td>Front End Lead Eng</td>
-          <td>2.5 Months (10 Wks)</td>
-          <td>₹ 125,000.00</td>
-          <td>BD 568.183</td>
-        </tr>
-        <tr>
-          <td>Database and Cloud</td>
-          <td>2.5 Months (10 Wks)</td>
-          <td>₹ 112,500.00</td>
-          <td>BD 511.363</td>
-        </tr>
-        <tr>
-          <td>QA (Testing)</td>
-          <td>2.5 Months (10 Wks)</td>
-          <td>₹ 87,500.00</td>
-          <td>BD 397.728</td>
+          <td>₹ 88,000.00</td>
+          <td>BD 400.000</td>
         </tr>
         <tr class="total-row">
           <td><strong>Total Module 1 Baseline Cost</strong></td>
-          <td><strong>2.5 Months</strong></td>
-          <td><strong>₹ 750,000.00</strong></td>
-          <td><strong>BD 3,409.091</strong></td>
+          <td><strong>2.5 Months (10 Wks)</strong></td>
+          <td><strong>₹ 838,000.00</strong></td>
+          <td><strong>BD 3,809.091</strong></td>
         </tr>
       </tbody>
     </table>
 
-    <h3>3. Module 3: Store Verification & Stock Control Cost Summary (15 Weeks / 3.75 Months)</h3>
+    <h3>3. Module 2: Vendor & Purchase Process Cost Breakdown (12 Weeks / 3.0 Months)</h3>
     <table>
       <thead>
         <tr>
-          <th>Role</th>
+          <th>Category / Component</th>
           <th>Effort Allocation</th>
           <th>Total Cost (INR)</th>
           <th>Total Cost (BHD)</th>
@@ -217,97 +267,61 @@
       </thead>
       <tbody>
         <tr>
-          <td>Project Manager</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 450,000.00</td>
-          <td>BD 2,045.456</td>
-        </tr>
-        <tr>
-          <td>Back end Lead Eng</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 187,500.00</td>
-          <td>BD 852.274</td>
-        </tr>
-        <tr>
-          <td>Front End Lead Eng</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 187,500.00</td>
-          <td>BD 852.274</td>
-        </tr>
-        <tr>
-          <td>Database and Cloud</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 168,750.00</td>
-          <td>BD 767.044</td>
-        </tr>
-        <tr>
-          <td>QA (Testing)</td>
-          <td>3.75 Months (15 Wks)</td>
-          <td>₹ 131,250.00</td>
-          <td>BD 596.591</td>
-        </tr>
-        <tr class="total-row">
-          <td><strong>Total Module 3 Baseline Cost</strong></td>
-          <td><strong>3.75 Months (15 Wks)</strong></td>
-          <td><strong>₹ 1,125,000.00</strong></td>
-          <td><strong>BD 5,113.636</strong></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3>4. Module 2: Vendor & Purchase Process Flow Cost Summary (12 Weeks / 3.0 Months)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Role</th>
-          <th>Effort Allocation</th>
-          <th>Total Cost (INR)</th>
-          <th>Total Cost (BHD)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Project Manager</td>
+          <td>Core Dedicated Engineering Squad (5 Members)</td>
           <td>3.0 Months (12 Wks)</td>
-          <td>₹ 360,000.00</td>
-          <td>BD 1,636.365</td>
+          <td>₹ 900,000.00</td>
+          <td>BD 4,090.909</td>
         </tr>
         <tr>
-          <td>Back end Lead Eng</td>
+          <td>Executive Steering, Domain Experts & Advisory Tier</td>
           <td>3.0 Months (12 Wks)</td>
-          <td>₹ 150,000.00</td>
-          <td>BD 681.819</td>
-        </tr>
-        <tr>
-          <td>Front End Lead Eng</td>
-          <td>3.0 Months (12 Wks)</td>
-          <td>₹ 150,000.00</td>
-          <td>BD 681.819</td>
-        </tr>
-        <tr>
-          <td>Database and Cloud</td>
-          <td>3.0 Months (12 Wks)</td>
-          <td>₹ 135,000.00</td>
-          <td>BD 613.635</td>
-        </tr>
-        <tr>
-          <td>QA (Testing)</td>
-          <td>3.0 Months (12 Wks)</td>
-          <td>₹ 105,000.00</td>
-          <td>BD 477.273</td>
+          <td>₹ 105,600.00</td>
+          <td>BD 480.000</td>
         </tr>
         <tr class="total-row">
           <td><strong>Total Module 2 Baseline Cost</strong></td>
           <td><strong>3.0 Months (12 Wks)</strong></td>
-          <td><strong>₹ 900,000.00</strong></td>
-          <td><strong>BD 4,090.909</strong></td>
+          <td><strong>₹ 1,005,600.00</strong></td>
+          <td><strong>BD 4,570.909</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>4. Module 3: Store Verification & Stock Control Cost Breakdown (15 Weeks / 3.75 Months)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Category / Component</th>
+          <th>Effort Allocation</th>
+          <th>Total Cost (INR)</th>
+          <th>Total Cost (BHD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Core Dedicated Engineering Squad (5 Members)</td>
+          <td>3.75 Months (15 Wks)</td>
+          <td>₹ 1,125,000.00</td>
+          <td>BD 5,113.636</td>
+        </tr>
+        <tr>
+          <td>Executive Steering, Domain Experts & Advisory Tier</td>
+          <td>3.75 Months (15 Wks)</td>
+          <td>₹ 132,000.00</td>
+          <td>BD 600.000</td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Total Module 3 Baseline Cost</strong></td>
+          <td><strong>3.75 Months (15 Wks)</strong></td>
+          <td><strong>₹ 1,257,000.00</strong></td>
+          <td><strong>BD 5,713.636</strong></td>
         </tr>
       </tbody>
     </table>
 
     <div class="card">
-      <strong>Engineering Baseline & Scope Scaling:</strong>
-      <p style="margin-top: 5px; margin-bottom: 0;">Standard baseline for Module 2 (Vendor Master, Tokenized Supplier Portal, MOQ Engine, Multi-Vendor Evaluation Matrix, 3-Way Matching & PO Split) is estimated at <strong>12 Working Weeks (BD 4,090.909)</strong>. If extended to a relaxed <strong>15-Week timeline</strong> with additional legacy migration buffer, the cost scales to <strong>BD 5,113.636</strong> (identical to Module 3 rate).</p>
+      <strong>Enterprise Architecture & Governance Strategy:</strong>
+      <p style="margin-top: 5px; margin-bottom: 0;">By maintaining the core dedicated engineering squad at its baseline (₹300,000 / BD 1,363.636 per month) and provisioning the <strong>Executive Steering, Domain Specialist & Security Advisory Tier</strong> (₹35,200 / BD 160.000 per month), the overall engagement delivers institutional governance, industry best practices, and zero-defect delivery across all 9 modules (Total: <strong>BD 38,090.910</strong> over 88 Working Weeks).</p>
     </div>
   </div>
 </body>

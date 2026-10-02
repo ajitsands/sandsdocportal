@@ -44,7 +44,7 @@ $routes = array(
         'scope'    => 'Consolidated 9-Module Portfolio (Enterprise Suite)',
         'ba_ref'   => 'EXEC-SUMMARY (Ver 1.0)',
         'date'     => '30/09/2026',
-        'desc'     => 'Executive Master Summary and comprehensive budgeting roadmap across all 9 ERP modules for Popular Auto Spare & A/C Parts Co. W.L.L. Includes visual analytics, milestone payment schedules (Total Project Cost: BD 34,090.910), 35 verified milestone delivery gates, dedicated engineering resource rate cards, and multi-party cryptographic digital sign-off console.'
+        'desc'     => 'Executive Master Summary and comprehensive budgeting roadmap across all 9 ERP modules for Popular Auto Spare & A/C Parts Co. W.L.L. Includes visual analytics, milestone payment schedules (Total Project Cost: BD 38,090.910), 35 verified milestone delivery gates, dedicated engineering resource rate cards, and multi-party cryptographic digital sign-off console.'
     ),
     'SL-POP-ERP-MS-001' => array(
         'title'    => 'Module 1: PCode Generation & Item Master Milestone & Payment Structure',
@@ -55,7 +55,7 @@ $routes = array(
         'scope'    => 'Multi Branch System',
         'ba_ref'   => 'DOC-001 (Ver 1.0)',
         'date'     => '21/09/2026',
-        'desc'     => 'Comprehensive 10-week implementation roadmap, dedicated resource allocation matrix, 5 milestone deliverables, payment schedule (BD 3,409.091 + BD 5,000 Advance), 15-day grace period SLA, Bahrain public holidays working calendar, hardware procurement policies, and Force Majeure provisions.'
+        'desc'     => 'Comprehensive 10-week implementation roadmap, dedicated resource allocation matrix, 5 milestone deliverables, payment schedule (BD 3,809.091 + BD 5,000 Advance), 15-day grace period SLA, Bahrain public holidays working calendar, hardware procurement policies, and Force Majeure provisions.'
     ),
     'SL-POP-ERP-MS-002' => array(
         'title'    => 'Module 2: Vendor & Purchase Management Milestone & Payment Structure',
@@ -66,7 +66,7 @@ $routes = array(
         'scope'    => 'Centralized Procurement & Multi-Country Suppliers',
         'ba_ref'   => 'DOC-002 (Ver 1.0)',
         'date'     => '27/09/2026',
-        'desc'     => 'End-to-end 12-week implementation roadmap for Multi-Country Vendor Master, Transaction-Linked Supplier Chat Portal, Low-Stock & Less-Item MOQ Buffering Engine, CTO Strategic Requisition Approval, Multi-Vendor RFQ Comparison Matrix, Automated PO Split Engine, and 3-Way Matching Invoice/PVN Governance (BD 4,090.909).'
+        'desc'     => 'End-to-end 12-week implementation roadmap for Multi-Country Vendor Master, Transaction-Linked Supplier Chat Portal, Low-Stock & Less-Item MOQ Buffering Engine, CTO Strategic Requisition Approval, Multi-Vendor RFQ Comparison Matrix, Automated PO Split Engine, and 3-Way Matching Invoice/PVN Governance (BD 4,570.909).'
     ),
                     'SL-POP-ERP-MS-009' => array(
         'title'    => 'Module 9: Executive Management Dashboard, Cross-Module BI Analytics, 8-Module KPI Engine & Mobile Reporting Milestone',
@@ -77,7 +77,7 @@ $routes = array(
         'scope'    => 'Cross-Module BI, 8-Module KPIs & Mobile Executive Cockpit',
         'ba_ref'   => 'DOC-009 (Ver 1.0)',
         'date'     => '30/09/2026',
-        'desc'     => 'Comprehensive 4-week implementation roadmap for Cross-Module Data Warehouse OLAP Aggregation, Real-Time Executive KPI Metric Calculations across all 8 ERP Modules (Commercial Sales, Stock Turnover, Financial Liquidity, Vendor SLAs, Payroll Ratios & Infrastructure Health), Anomaly Detection Alerts, Automated 7:00 AM WhatsApp/Email Executive Digests, and Role-Based Mobile Executive Access (BD 1,363.636).'
+        'desc'     => 'Comprehensive 4-week implementation roadmap for Cross-Module Data Warehouse OLAP Aggregation, Real-Time Executive KPI Metric Calculations across all 8 ERP Modules (Commercial Sales, Stock Turnover, Financial Liquidity, Vendor SLAs, Payroll Ratios & Infrastructure Health), Anomaly Detection Alerts, Automated 7:00 AM WhatsApp/Email Executive Digests, and Role-Based Mobile Executive Access (BD 1,523.636).'
     ),
     'SL-POP-ERP-MS-008' => array(
         'title'    => 'Module 8: Hardware Integration, QR Code Handheld Device, Biometric & Cloud Infrastructure Setup Milestone',
@@ -88,7 +88,7 @@ $routes = array(
         'scope'    => 'QR Handheld Scanners, Biometrics, Thermal Printers & Cloud Servers',
         'ba_ref'   => 'ARCH-001 (Ver 1.0)',
         'date'     => '30/09/2026',
-        'desc'     => 'Comprehensive 3-week implementation roadmap for 3-Tier Cloud Server Infrastructure (Dev/Staging/Prod), RabbitMQ Message Queue & Offline Sync Daemon, Android Mobile Handheld QR Scanner Engine, ESC/POS Thermal Receipt & Barcode Printers, RJ11 Cash Drawers, and Multi-Branch ZKTeco/Hikvision Biometric Time-Clock Integration (BD 1,022.727).'
+        'desc'     => 'Comprehensive 3-week implementation roadmap for 3-Tier Cloud Server Infrastructure (Dev/Staging/Prod), RabbitMQ Message Queue & Offline Sync Daemon, Android Mobile Handheld QR Scanner Engine, ESC/POS Thermal Receipt & Barcode Printers, RJ11 Cash Drawers, and Multi-Branch ZKTeco/Hikvision Biometric Time-Clock Integration (BD 1,142.727).'
     ),
     'SL-POP-ERP-MS-007' => array(
         'title'    => 'Module 7: Human Resource Management, Biometric Attendance, Bahrain Labour Law Leave, Automated Payroll & Gratuity Milestone',
@@ -99,7 +99,7 @@ $routes = array(
         'scope'    => 'HR Management, Biometric Attendance & Payroll Engine',
         'ba_ref'   => 'DOC-007 (Ver 1.0)',
         'date'     => '04/07/2026',
-        'desc'     => 'Comprehensive 16-week implementation roadmap for Multi-Branch Org Structure, Employee 360 Master & Expiry Vault, Recruitment & Digital Onboarding, Physical Biometric & Mobile Geofence Attendance Sync, Shift Rosters & Bahrain Labour Law Statutory Leaves, Automated Monthly Payroll Engine, SIO/GOSI & LMRA Compliance, Central Bank of Bahrain (CBB) WPS Bank Export, Employee Loans & Advances, Performance KPIs, Employee Self-Service (ESS), and Bahrain End-of-Service Benefit (EOSB / Gratuity) Settlement (BD 5,454.548).'
+        'desc'     => 'Comprehensive 16-week implementation roadmap for Multi-Branch Org Structure, Employee 360 Master & Expiry Vault, Recruitment & Digital Onboarding, Physical Biometric & Mobile Geofence Attendance Sync, Shift Rosters & Bahrain Labour Law Statutory Leaves, Automated Monthly Payroll Engine, SIO/GOSI & LMRA Compliance, Central Bank of Bahrain (CBB) WPS Bank Export, Employee Loans & Advances, Performance KPIs, Employee Self-Service (ESS), and Bahrain End-of-Service Benefit (EOSB / Gratuity) Settlement (BD 6,094.548).'
     ),
     'SL-POP-ERP-MS-006' => array(
         'title'    => 'Module 6: Enterprise Administration, Facility Management, Fixed Assets, Fleet & Corporate Document Control Milestone',
@@ -110,7 +110,7 @@ $routes = array(
         'scope'    => 'Enterprise Administration, Fixed Assets & Fleet Governance',
         'ba_ref'   => 'DOC-006 (Ver 1.0)',
         'date'     => '06/07/2026',
-        'desc'     => 'Comprehensive 12-week implementation roadmap for Branch Infrastructure & Facility Ops, Centralized Multi-Category Fixed Assets Registry with Straight-Line & Declining Balance Depreciation Engine, Corporate Vehicle Fleet Tracking & Routine Maintenance Logs, Vendor Service Level Agreements (SLA) & Contract Governance, Corporate Legal Document Control with Expiry Alerts (CR, Municipality, Civil Defense, Leases), and Consumable Stationery & Store Requisition Management (BD 4,090.909).'
+        'desc'     => 'Comprehensive 12-week implementation roadmap for Branch Infrastructure & Facility Ops, Centralized Multi-Category Fixed Assets Registry with Straight-Line & Declining Balance Depreciation Engine, Corporate Vehicle Fleet Tracking & Routine Maintenance Logs, Vendor Service Level Agreements (SLA) & Contract Governance, Corporate Legal Document Control with Expiry Alerts (CR, Municipality, Civil Defense, Leases), and Consumable Stationery & Store Requisition Management (BD 4,570.909).'
     ),
     'SL-POP-ERP-MS-005' => array(
         'title'    => 'Module 5: Accounting & Financial Management, General Ledger, Treasury, AP/AR & VAT Compliance Milestone',
@@ -121,7 +121,7 @@ $routes = array(
         'scope'    => 'Double-Entry GL, Treasury, AP/AR, Landed Cost & VAT Compliance',
         'ba_ref'   => 'DOC-005 (Ver 1.0)',
         'date'     => '04/07/2026',
-        'desc'     => 'Comprehensive 13-week implementation roadmap for 5-Group Dynamic Chart of Accounts, Double-Entry General Ledger, 3-Way AP Matching, Landed-Cost COGS Apportionment, AR Overdue Credit Risk Locks, Multi-Bank Reconciliation (BRS), Post-Dated Cheques (PDC) Lifecycle, Multi-Currency FX Engine, GCC VAT Compliance, Consolidated Balance Sheet/P&L, and 10-Phase New Branch Setup SOP (BD 4,431.818).'
+        'desc'     => 'Comprehensive 13-week implementation roadmap for 5-Group Dynamic Chart of Accounts, Double-Entry General Ledger, 3-Way AP Matching, Landed-Cost COGS Apportionment, AR Overdue Credit Risk Locks, Multi-Bank Reconciliation (BRS), Post-Dated Cheques (PDC) Lifecycle, Multi-Currency FX Engine, GCC VAT Compliance, Consolidated Balance Sheet/P&L, and 10-Phase New Branch Setup SOP (BD 4,951.818).'
     ),
     'SL-POP-ERP-MS-004' => array(
         'title'    => 'Module 4: Sales Process, POS, Multi-Branch Billing, Sales Return & Branch Financial Control Milestone',
@@ -132,7 +132,7 @@ $routes = array(
         'scope'    => 'Counter & Mobile POS, Multi-Branch Billing & GL Accounting',
         'ba_ref'   => 'DOC-004 (Ver 1.0)',
         'date'     => '30/03/2026',
-        'desc'     => 'End-to-end 15-week implementation roadmap for Centralized Customer Master & Credit Matrix, Mobile Android Handheld Floor POS, 1-Scan Dynamic QR Cart Handoff, Multi-Salesperson Commission Split, Quotations/Delivery Notes/VAT Tax Invoices/Cash Memos, Unified Sales Returns & Condition Grading, Branch Vouchers Suite (CRV/CPV/JV/Contra/Petty Cash), and End-of-Day (EOD) Physical Cash Drawer Count with hard Day-Closing lock (BD 5,113.636).'
+        'desc'     => 'End-to-end 15-week implementation roadmap for Centralized Customer Master & Credit Matrix, Mobile Android Handheld Floor POS, 1-Scan Dynamic QR Cart Handoff, Multi-Salesperson Commission Split, Quotations/Delivery Notes/VAT Tax Invoices/Cash Memos, Unified Sales Returns & Condition Grading, Branch Vouchers Suite (CRV/CPV/JV/Contra/Petty Cash), and End-of-Day (EOD) Physical Cash Drawer Count with hard Day-Closing lock (BD 5,713.636).'
     ),
     'SL-POP-ERP-MS-003' => array(
         'title'    => 'Module 3: Store Verification, Stock Control & Location Management Milestone & Payment Structure',
@@ -143,7 +143,51 @@ $routes = array(
         'scope'    => 'Multi Branch & Central Warehouse',
         'ba_ref'   => 'DOC-003 (Ver 1.0)',
         'date'     => '27/09/2026',
-        'desc'     => 'End-to-end 15-week implementation roadmap for Inward Store Verification (PVN), 60/40 sampling daily stock verification with day-closing hard lock, weighted risk score matrix, 5-tier location architecture (Zone/Rack/Shelf/Bin), 7-stage multi-branch stock transfer with driver handheld scan, and centralized damaged goods scrapping governance (BD 5,113.636).'
+        'desc'     => 'End-to-end 15-week implementation roadmap for Inward Store Verification (PVN), 60/40 sampling daily stock verification with day-closing hard lock, weighted risk score matrix, 5-tier location architecture (Zone/Rack/Shelf/Bin), 7-stage multi-branch stock transfer with driver handheld scan, and centralized damaged goods scrapping governance (BD 5,713.636).'
+    ),
+        'SL-POP-ERP-MIG-001' => array(
+        'title'    => '5-Year Historical Data Migration, Schema Drift Harmonization & Enterprise File Store Milestone Agreement',
+        'html'     => 'SL-POP-ERP-MIG-001.html',
+        'pdf'      => 'SL-POP-ERP-MIG-001.pdf',
+        'status'   => 'Submitted & Ready for Sign-off',
+        'timeline' => '30 Working Days (6 Weeks / 1.5 Mo)',
+        'scope'    => '5-Year MS SQL to MySQL 8.0 & Enterprise File Store',
+        'ba_ref'   => 'MIG-001 (Ver 1.0)',
+        'date'     => '02/10/2026',
+        'desc'     => 'End-to-end 30-working-day implementation roadmap for 5-Year Historical Data Extraction from Microsoft SQL Server, Multi-Year Schema Drift Harmonization, Column Mismatch Reconciliation, Automotive Part Number (PCode) Deduplication, Hashed Enterprise File Store for Legacy Invoices/Attachments, and Financial Ledger Trial Balance Parity Certification (BD 2,800.000).'
+    ),
+    'SL-POP-ERP-SRV-001' => array(
+        'title'    => 'Dedicated Enterprise Cloud Server Infrastructure, cPanel/CloudLinux Hosting, Imunify360 Security Suite & 24/7 Managed SLA Maintenance Agreement',
+        'html'     => 'SL-POP-ERP-SRV-001.html',
+        'pdf'      => 'SL-POP-ERP-SRV-001.pdf',
+        'status'   => 'Submitted & Ready for Sign-off',
+        'timeline' => 'Continuous Monthly Hosting & Maintenance SLA',
+        'scope'    => '3 vCPU, 12 GB RAM, 200 GB NVMe, cPanel, CloudLinux, Imunify360, JetBackup 500GB & 24/7 Support',
+        'ba_ref'   => 'SRV-001 (Ver 1.0)',
+        'date'     => '02/10/2026',
+        'desc'     => 'Enterprise dedicated cloud server specification and fully managed SLA maintenance agreement. Includes 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup + 500 GB dedicated offsite backup storage, 99.9% uptime SLA, and 24/7 proactive DevOps maintenance (BD 44.000 / Month).'
+    ),
+    'SL-POP-ERP-AI-001' => array(
+        'title'    => 'Vigilo AI: Intelligent Computer Vision CCTV Surveillance, Automated Threat Detection & Forensic Video Analytics Specification Agreement',
+        'html'     => 'SL-POP-ERP-AI-001.html',
+        'pdf'      => 'SL-POP-ERP-AI-001.pdf',
+        'status'   => 'Submitted & Ready for Sign-off',
+        'timeline' => 'Vision AI Deployment & Stream Integration',
+        'scope'    => 'Zero Hardware CCTV Upgrade, 6 Inbuilt Vision Models & Talk-to-CCTV Natural Language Search',
+        'ba_ref'   => 'AI-001 (Ver 1.0)',
+        'date'     => '02/10/2026',
+        'desc'     => 'Vigilo AI platform deployment agreement converting existing CCTV & NVR feeds into an active AI Security Agent. Includes 0 new camera hardware requirement, < 5-second real-time multi-channel alerts, 6 inbuilt Computer Vision models (Perimeter Guard, POS Cash Counter Shield, Natural Language "Talk to CCTV" Search, Visual Identity Journey Re-ID, High-Value Rack Protection & Aisle Hazard Detection), 80% video storage compression, and modular custom domain AI model roadmap (Minimum Base Package: BD 3,000.000).'
+    ),
+    'SL-POP-ERP-HW-001' => array(
+        'title'    => 'Enterprise Handheld PDA Mobile Computer, POS Barcode & QR Scanner Hardware Procurement Specification Agreement',
+        'html'     => 'SL-POP-ERP-HW-001.html',
+        'pdf'      => 'SL-POP-ERP-HW-001.pdf',
+        'status'   => 'Submitted & Ready for Sign-off',
+        'timeline' => 'Hardware Procurement, MDM Staging & Branch Handover (10–14 Days)',
+        'scope'    => '22 Zebra TC21 Android Touch PDAs + 7 High-Speed Counter 1D/2D QR Scanners',
+        'ba_ref'   => 'HW-001 (Ver 1.0)',
+        'date'     => '02/10/2026',
+        'desc'     => 'Enterprise mobility and barcode hardware procurement agreement. Covers 22 units of Zebra TC21 (TC210K) Android Touch Computer Handheld PDAs (@ BD 300.000) for warehouse stock verification and mobile POS floor sales, and 7 units of Desktop Countertop 1D/2D & QR Code Barcode Scanners (@ BD 35.000) for branch retail checkouts, complete with MDM Kiosk mode staging and 1-Year Warranty (Total Investment: BD 6,845.000).'
     ),
     'SL-POP-ERP-ARCH-001' => array(
         'title'    => 'ERP Technical Architecture & Cybersecurity Specification',
@@ -3895,7 +3939,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Total Project Investment</div>
-          <div class="meta-item-val" style="color:#d97706; font-size:16px;">BD 34,090.910</div>
+          <div class="meta-item-val" style="color:#d97706; font-size:16px;">BD 38,090.910</div>
         </div>
         <div>
           <div class="meta-item-label">Milestone Tranches</div>
@@ -3904,7 +3948,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive master executive summary and budgeting roadmap covering all 9 ERP modules for Popular Auto Spare & A/C Parts Co. W.L.L. Includes visual analytics, milestone payment schedules (Total Contract Value: BD 34,090.910), 35 verified milestone delivery gates, dedicated engineering resource allocation rate cards, and multi-party cryptographic digital sign-off console.
+        Comprehensive master executive summary and budgeting roadmap covering all 9 ERP modules for Popular Auto Spare & A/C Parts Co. W.L.L. Includes visual analytics, milestone payment schedules (Total Contract Value: BD 38,090.910), 35 verified milestone delivery gates, dedicated engineering resource allocation rate cards, and multi-party cryptographic digital sign-off console.
       </p>
 
       <div class="doc-actions">
@@ -3915,6 +3959,202 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         <a href="?doc=SL-POP-ERP-SUMMARY-001.pdf" target="_blank" class="btn btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Download Master PDF (15 Pages)
+        </a>
+      </div>
+    </div>
+
+
+        <!-- DOCUMENT: 5-YEAR HISTORICAL DATA MIGRATION & FILE STORE -->
+    <div class="doc-card" style="border-top: 4px solid #dc2626;">
+      <div class="doc-header-row">
+        <div>
+          <span class="doc-ref-badge" style="background:#fee2e2; color:#b91c1c;">MIG-001 (Ver 1.0)</span>
+          <h2 class="doc-title">5-Year Historical Data Migration, Schema Drift Harmonization & Enterprise File Store Milestone Agreement</h2>
+        </div>
+        <span class="doc-status-badge" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Submitted & Ready for Sign-off
+        </span>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div>
+          <div class="meta-item-label">Timeline</div>
+          <div class="meta-item-val">30 Working Days (6 Wks)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Historical Depth</div>
+          <div class="meta-item-val">5+ Years (MS SQL Server)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Migration Investment</div>
+          <div class="meta-item-val" style="color:#dc2626; font-weight:700;">BD 2,800.000</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Delivery Gates</div>
+          <div class="meta-item-val">3 Verified Gates (33.3%)</div>
+        </div>
+      </div>
+
+      <p class="doc-desc">
+        Comprehensive 30-working-day implementation roadmap covering 5-Year Historical Data Extraction from Microsoft SQL Server, Multi-Year Schema Drift Harmonization, Column Mismatch Reconciliation, Automotive Part Number (PCode) Deduplication, Hashed Enterprise File Store for Legacy Invoices/Attachments, and Financial Ledger Trial Balance Parity Certification (BD 2,800.000).
+      </p>
+
+      <div class="doc-actions">
+        <a href="?doc=SL-POP-ERP-MIG-001" class="btn btn-primary" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Open Data Migration Document
+        </a>
+        <a href="?doc=SL-POP-ERP-MIG-001.pdf" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Signed PDF
+        </a>
+      </div>
+    </div>
+
+
+    <!-- DOCUMENT: DEDICATED CLOUD SERVER & 24/7 SLA MAINTENANCE AGREEMENT -->
+    <div class="doc-card" style="border-top: 4px solid #059669;">
+      <div class="doc-header-row">
+        <div>
+          <span class="doc-ref-badge" style="background:#d1fae5; color:#047857;">SRV-001 (Ver 1.0)</span>
+          <h2 class="doc-title">Dedicated Enterprise Cloud Server Infrastructure, cPanel/CloudLinux Hosting, Imunify360 Security Suite & 24/7 Managed SLA Maintenance Agreement</h2>
+        </div>
+        <span class="doc-status-badge" style="background:#d1fae5; color:#047857; border-color:#a7f3d0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Submitted & Ready for Sign-off
+        </span>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div>
+          <div class="meta-item-label">Hardware Profile</div>
+          <div class="meta-item-val">3 vCPU • 12 GB RAM • 200 GB NVMe</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Security & OS Suite</div>
+          <div class="meta-item-val">CloudLinux + cPanel + Imunify360</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Monthly Retainer</div>
+          <div class="meta-item-val" style="color:#059669; font-weight:700;">BD 44.000 / Month</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Support SLA & Backup</div>
+          <div class="meta-item-val">24/7 Monitoring + JetBackup 500GB</div>
+        </div>
+      </div>
+
+      <p class="doc-desc">
+        Dedicated cloud infrastructure specification and managed maintenance agreement. Fully provisioned with 3 vCPU cores, 12 GB RAM, 200 GB NVMe storage, 4 TB bandwidth, dedicated static IP, CloudLinux OS Enterprise, cPanel/WHM license, Imunify360 AI Security Suite, JetBackup with 500 GB offsite storage tier, and 24/7 DevOps monitoring and proactive maintenance (BD 44.000 / Month).
+      </p>
+
+      <div class="doc-actions">
+        <a href="?doc=SL-POP-ERP-SRV-001" class="btn btn-primary" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Open Server Agreement
+        </a>
+        <a href="?doc=SL-POP-ERP-SRV-001.pdf" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Signed PDF (4 Pages)
+        </a>
+      </div>
+    </div>
+
+
+    <!-- DOCUMENT: VIGILO AI INTELLIGENT CCTV SURVEILLANCE & COMPUTER VISION -->
+    <div class="doc-card" style="border-top: 4px solid #8b5cf6;">
+      <div class="doc-header-row">
+        <div>
+          <span class="doc-ref-badge" style="background:#ede9fe; color:#6d28d9;">AI-001 (Ver 1.0)</span>
+          <h2 class="doc-title">Vigilo AI: Intelligent Computer Vision CCTV Surveillance, Automated Threat Detection & Forensic Video Analytics Specification Agreement</h2>
+        </div>
+        <span class="doc-status-badge" style="background:#ede9fe; color:#6d28d9; border-color:#ddd6fe;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Submitted & Ready for Sign-off
+        </span>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div>
+          <div class="meta-item-label">AI Engine & Product</div>
+          <div class="meta-item-val">Vigilo AI (by SaNDS Lab)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Hardware Retrofit</div>
+          <div class="meta-item-val" style="color:#059669; font-weight:700;">0 New Hardware (Existing CCTV)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Base Commercials</div>
+          <div class="meta-item-val" style="color:#7c3aed; font-weight:700;">BD 3,000.000 (Base Suite)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Inbuilt Models</div>
+          <div class="meta-item-val">6 Production Vision Models</div>
+        </div>
+      </div>
+
+      <p class="doc-desc">
+        Transforms existing CCTV cameras and NVR feeds into a real-time Vision AI security agent without new hardware. Includes sub-5-second alerts, 6 inbuilt Computer Vision models (Perimeter Guard, POS Cash Counter Shield, Natural Language "Talk to CCTV" Search, Visual Identity Journey Re-ID, High-Value Rack Protection & Aisle Hazard Detection), proprietary 80% video storage compression, and modular custom domain AI model roadmap (BD 3,000.000 Minimum Base Package).
+      </p>
+
+      <div class="doc-actions">
+        <a href="?doc=SL-POP-ERP-AI-001" class="btn btn-primary" style="background: linear-gradient(135deg, #7c3aed 0%, #4338ca 100%);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Open Vigilo AI Agreement
+        </a>
+        <a href="?doc=SL-POP-ERP-AI-001.pdf" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Signed PDF (4 Pages)
+        </a>
+      </div>
+    </div>
+
+
+    <!-- DOCUMENT: ENTERPRISE HANDHELD PDA & BARCODE SCANNER HARDWARE PROCUREMENT -->
+    <div class="doc-card" style="border-top: 4px solid #d97706;">
+      <div class="doc-header-row">
+        <div>
+          <span class="doc-ref-badge" style="background:#fef3c7; color:#b45309;">HW-001 (Ver 1.0)</span>
+          <h2 class="doc-title">Enterprise Handheld PDA Mobile Computer, POS Barcode & QR Scanner Hardware Procurement Specification Agreement</h2>
+        </div>
+        <span class="doc-status-badge" style="background:#fef3c7; color:#b45309; border-color:#fde68a;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Submitted & Ready for Sign-off
+        </span>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div>
+          <div class="meta-item-label">Handheld PDA Fleet</div>
+          <div class="meta-item-val">22 × Zebra TC21 (TC210K)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Counter Scanners</div>
+          <div class="meta-item-val">7 × 1D/2D QR Scanners</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Total Procurement</div>
+          <div class="meta-item-val" style="color:#d97706; font-weight:700;">BD 6,845.000</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Warranty & Staging</div>
+          <div class="meta-item-val">1-Year Warranty + MDM Kiosk</div>
+        </div>
+      </div>
+
+      <p class="doc-desc">
+        Enterprise mobility and barcode hardware procurement agreement. Covers 22 units of Zebra TC21 (TC210K) Android Touch Computer Handheld PDAs (@ BD 300.000) for warehouse stock verification and mobile POS floor sales, and 7 units of Desktop Countertop 1D/2D & QR Code Barcode Scanners (@ BD 35.000) for branch retail checkouts, complete with MDM Kiosk mode staging and 1-Year Warranty (Total Investment: BD 6,845.000).
+      </p>
+
+      <div class="doc-actions">
+        <a href="?doc=SL-POP-ERP-HW-001" class="btn btn-primary" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Open Hardware Agreement
+        </a>
+        <a href="?doc=SL-POP-ERP-HW-001.pdf" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Signed PDF (4 Pages)
         </a>
       </div>
     </div>
@@ -3992,7 +4232,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 3,409.091</div>
+          <div class="meta-item-val">BD 3,809.091</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4001,7 +4241,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 10-week implementation roadmap covering Multi-Branch Architecture, PCode Generation Engine, Item Master, dedicated resource allocation matrix, 5 milestone deliverables, payment schedule (BD 3,409.091 + BD 5,000 Advance), 15-day grace period SLA, Bahrain public holidays working calendar, and Force Majeure provisions.
+        Comprehensive 10-week implementation roadmap covering Multi-Branch Architecture, PCode Generation Engine, Item Master, dedicated resource allocation matrix, 5 milestone deliverables, payment schedule (BD 3,809.091 + BD 5,000 Advance), 15-day grace period SLA, Bahrain public holidays working calendar, and Force Majeure provisions.
       </p>
 
       <div class="doc-actions">
@@ -4040,7 +4280,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 4,090.909</div>
+          <div class="meta-item-val">BD 4,570.909</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4049,7 +4289,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        End-to-end 12-week implementation roadmap for Multi-Country Vendor Master, Transaction-Linked Supplier Chat Portal, Low-Stock & Less-Item MOQ Buffering Engine, CTO Strategic Requisition Approval, Multi-Vendor RFQ Comparison Matrix, Automated PO Split Engine, and 3-Way Matching Invoice/PVN Governance (BD 4,090.909).
+        End-to-end 12-week implementation roadmap for Multi-Country Vendor Master, Transaction-Linked Supplier Chat Portal, Low-Stock & Less-Item MOQ Buffering Engine, CTO Strategic Requisition Approval, Multi-Vendor RFQ Comparison Matrix, Automated PO Split Engine, and 3-Way Matching Invoice/PVN Governance (BD 4,570.909).
       </p>
 
       <div class="doc-actions">
@@ -4088,7 +4328,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 5,113.636</div>
+          <div class="meta-item-val">BD 5,713.636</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4097,7 +4337,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        End-to-end 15-week implementation roadmap covering Inward Store Verification (PVN), 60/40 sampling daily stock verification with day-closing hard lock, weighted risk score matrix, 5-tier location architecture (Zone/Rack/Shelf/Bin), 7-stage multi-branch stock transfer with driver handheld scan, and centralized damaged goods scrapping governance (BD 5,113.636).
+        End-to-end 15-week implementation roadmap covering Inward Store Verification (PVN), 60/40 sampling daily stock verification with day-closing hard lock, weighted risk score matrix, 5-tier location architecture (Zone/Rack/Shelf/Bin), 7-stage multi-branch stock transfer with driver handheld scan, and centralized damaged goods scrapping governance (BD 5,713.636).
       </p>
 
       <div class="doc-actions">
@@ -4136,7 +4376,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 5,113.636</div>
+          <div class="meta-item-val">BD 5,713.636</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4145,7 +4385,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 15-week implementation roadmap for Centralized Customer Master & Credit Matrix, Mobile Android Handheld Floor POS, 1-Scan Dynamic QR Cart Handoff, Multi-Salesperson Commission Split, Quotations/Delivery Notes/VAT Tax Invoices/Cash Memos, Unified Sales Returns & Condition Grading, Branch Vouchers Suite (CRV/CPV/JV/Contra/Petty Cash), and End-of-Day (EOD) Physical Cash Drawer Count with hard Day-Closing lock (BD 5,113.636).
+        Comprehensive 15-week implementation roadmap for Centralized Customer Master & Credit Matrix, Mobile Android Handheld Floor POS, 1-Scan Dynamic QR Cart Handoff, Multi-Salesperson Commission Split, Quotations/Delivery Notes/VAT Tax Invoices/Cash Memos, Unified Sales Returns & Condition Grading, Branch Vouchers Suite (CRV/CPV/JV/Contra/Petty Cash), and End-of-Day (EOD) Physical Cash Drawer Count with hard Day-Closing lock (BD 5,713.636).
       </p>
 
       <div class="doc-actions">
@@ -4184,7 +4424,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 4,431.818</div>
+          <div class="meta-item-val">BD 4,951.818</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4193,7 +4433,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 13-week implementation roadmap for 5-Group Dynamic Chart of Accounts, Double-Entry General Ledger, 3-Way AP Matching, Landed-Cost COGS Apportionment, AR Overdue Credit Risk Locks, Multi-Bank Reconciliation (BRS), Post-Dated Cheques (PDC) Lifecycle, Multi-Currency FX Engine, GCC VAT Compliance, Consolidated Balance Sheet/P&L, and 10-Phase New Branch Setup SOP (BD 4,431.818).
+        Comprehensive 13-week implementation roadmap for 5-Group Dynamic Chart of Accounts, Double-Entry General Ledger, 3-Way AP Matching, Landed-Cost COGS Apportionment, AR Overdue Credit Risk Locks, Multi-Bank Reconciliation (BRS), Post-Dated Cheques (PDC) Lifecycle, Multi-Currency FX Engine, GCC VAT Compliance, Consolidated Balance Sheet/P&L, and 10-Phase New Branch Setup SOP (BD 4,951.818).
       </p>
 
       <div class="doc-actions">
@@ -4232,7 +4472,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 4,090.909</div>
+          <div class="meta-item-val">BD 4,570.909</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4241,7 +4481,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 12-week implementation roadmap for Branch Infrastructure & Facility Ops, Centralized Multi-Category Fixed Assets Registry with Straight-Line & Declining Balance Depreciation Engine, Corporate Vehicle Fleet Tracking & Routine Maintenance Logs, Vendor Service Level Agreements (SLA) & Contract Governance, Corporate Legal Document Control with Expiry Alerts (CR, Municipality, Civil Defense, Leases), and Consumable Stationery & Store Requisition Management (BD 4,090.909).
+        Comprehensive 12-week implementation roadmap for Branch Infrastructure & Facility Ops, Centralized Multi-Category Fixed Assets Registry with Straight-Line & Declining Balance Depreciation Engine, Corporate Vehicle Fleet Tracking & Routine Maintenance Logs, Vendor Service Level Agreements (SLA) & Contract Governance, Corporate Legal Document Control with Expiry Alerts (CR, Municipality, Civil Defense, Leases), and Consumable Stationery & Store Requisition Management (BD 4,570.909).
       </p>
 
       <div class="doc-actions">
@@ -4280,7 +4520,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 5,454.548</div>
+          <div class="meta-item-val">BD 6,094.548</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4289,7 +4529,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 16-week implementation roadmap for Multi-Branch Org Structure, Employee 360 Master & Expiry Vault, Recruitment & Digital Onboarding, Physical Biometric & Mobile Geofence Attendance Sync, Shift Rosters & Bahrain Labour Law Statutory Leaves, Automated Monthly Payroll Engine, SIO/GOSI & LMRA Compliance, Central Bank of Bahrain (CBB) WPS Bank Export, Employee Loans & Advances, Performance KPIs, Employee Self-Service (ESS), and Bahrain End-of-Service Benefit (EOSB / Gratuity) Settlement (BD 5,454.548).
+        Comprehensive 16-week implementation roadmap for Multi-Branch Org Structure, Employee 360 Master & Expiry Vault, Recruitment & Digital Onboarding, Physical Biometric & Mobile Geofence Attendance Sync, Shift Rosters & Bahrain Labour Law Statutory Leaves, Automated Monthly Payroll Engine, SIO/GOSI & LMRA Compliance, Central Bank of Bahrain (CBB) WPS Bank Export, Employee Loans & Advances, Performance KPIs, Employee Self-Service (ESS), and Bahrain End-of-Service Benefit (EOSB / Gratuity) Settlement (BD 6,094.548).
       </p>
 
       <div class="doc-actions">
@@ -4329,7 +4569,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 1,022.727</div>
+          <div class="meta-item-val">BD 1,142.727</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4338,7 +4578,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 3-week implementation roadmap for 3-Tier Cloud Server Infrastructure (Dev/Staging/Prod), RabbitMQ Message Queue & Offline Sync Daemon, Android Mobile Handheld QR Scanner Engine, ESC/POS Thermal Receipt & Barcode Printers, RJ11 Cash Drawers, and Multi-Branch ZKTeco/Hikvision Biometric Time-Clock Integration (BD 1,022.727).
+        Comprehensive 3-week implementation roadmap for 3-Tier Cloud Server Infrastructure (Dev/Staging/Prod), RabbitMQ Message Queue & Offline Sync Daemon, Android Mobile Handheld QR Scanner Engine, ESC/POS Thermal Receipt & Barcode Printers, RJ11 Cash Drawers, and Multi-Branch ZKTeco/Hikvision Biometric Time-Clock Integration (BD 1,142.727).
       </p>
 
       <div class="doc-actions">
@@ -4378,7 +4618,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         </div>
         <div>
           <div class="meta-item-label">Milestone Fee</div>
-          <div class="meta-item-val">BD 1,363.636</div>
+          <div class="meta-item-val">BD 1,523.636</div>
         </div>
         <div>
           <div class="meta-item-label">Date of Submission</div>
@@ -4387,7 +4627,7 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
       </div>
 
       <p class="doc-desc">
-        Comprehensive 4-week implementation roadmap for Cross-Module Data Warehouse OLAP Aggregation, Real-Time Executive KPI Metric Calculations across all 8 ERP Modules (Commercial Sales, Stock Turnover, Financial Liquidity, Vendor SLAs, Payroll Ratios & Infrastructure Health), Anomaly Detection Alerts, Automated 7:00 AM WhatsApp/Email Executive Digests, and Role-Based Mobile Executive Access (BD 1,363.636).
+        Comprehensive 4-week implementation roadmap for Cross-Module Data Warehouse OLAP Aggregation, Real-Time Executive KPI Metric Calculations across all 8 ERP Modules (Commercial Sales, Stock Turnover, Financial Liquidity, Vendor SLAs, Payroll Ratios & Infrastructure Health), Anomaly Detection Alerts, Automated 7:00 AM WhatsApp/Email Executive Digests, and Role-Based Mobile Executive Access (BD 1,523.636).
       </p>
 
       <div class="doc-actions">
