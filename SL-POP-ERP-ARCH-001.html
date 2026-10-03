@@ -1133,7 +1133,7 @@
     </div>
   </div>
 
-  <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'info@sandslab.com')): ?>
+  <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'projects@sandslab.com')): ?>
     <!-- Super Admin Controls Banner (No Print) -->
     <div class="superadmin-banner no-print">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -2231,7 +2231,7 @@
               <img class="sig-img-preview" src="<?php echo $sands_sig['signature_data']; ?>" alt="Signature" />
               <div style="display:flex; justify-content:center; align-items:center; gap:4px;">
                 <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
-                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'info@sandslab.com')): ?>
+                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'projects@sandslab.com')): ?>
                   <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($sands_sig['email']) ? $sands_sig['email'] : 'ajit@sandslab.com', ENT_QUOTES); ?>', 'SaNDS Lab')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:8px; font-weight:700; border-radius:3px; padding:1px 4px; cursor:pointer;" title="Clear signature">🗑️ Clear</button>
                 <?php endif; ?>
               </div>
@@ -2259,7 +2259,7 @@
               <img class="sig-img-preview" src="<?php echo $popular_sig['signature_data']; ?>" alt="Signature" />
               <div style="display:flex; justify-content:center; align-items:center; gap:4px;">
                 <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
-                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'info@sandslab.com')): ?>
+                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'projects@sandslab.com')): ?>
                   <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($popular_sig['email']) ? $popular_sig['email'] : 'director@popularbahrain.com', ENT_QUOTES); ?>', 'Popular Auto Spare')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:8px; font-weight:700; border-radius:3px; padding:1px 4px; cursor:pointer;" title="Clear signature">🗑️ Clear</button>
                 <?php endif; ?>
               </div>
@@ -2287,7 +2287,7 @@
               <img class="sig-img-preview" src="<?php echo $uniglobal_sig['signature_data']; ?>" alt="Signature" />
               <div style="display:flex; justify-content:center; align-items:center; gap:4px;">
                 <span class="sig-status-badge sig-status-signed">✅ Digitally Signed</span>
-                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'info@sandslab.com')): ?>
+                <?php if (!empty($authenticated_user) && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'projects@sandslab.com')): ?>
                   <button type="button" onclick="adminClearSingleSig(this, '<?php echo htmlspecialchars(!empty($uniglobal_sig['email']) ? $uniglobal_sig['email'] : 'consultant@uniglobal.com', ENT_QUOTES); ?>', 'UniGlobal Consultancy')" class="no-print" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; font-size:8px; font-weight:700; border-radius:3px; padding:1px 4px; cursor:pointer;" title="Clear signature">🗑️ Clear</button>
                 <?php endif; ?>
               </div>

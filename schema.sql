@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `ip_cache` (
 -- Initial Seed Data: Authorized Stakeholders
 INSERT INTO `authorized_users` (`email`, `full_name`, `organization`, `role`, `is_active`) VALUES
 ('ajit@sandslab.com', 'Ajit Kumar KV', 'SaNDS Lab Middle East W.L.L', 'Super Admin', 1),
-('info@sandslab.com', 'SaNDS Lab Administration', 'SaNDS Lab Middle East W.L.L', 'Admin', 1),
+('projects@sandslab.com', 'SaNDS Lab Administration', 'SaNDS Lab Middle East W.L.L', 'Admin', 1),
 ('director@popularbahrain.com', 'Managing Director', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client Director', 1),
 ('popularpartsbh@gmail.com', 'Executive Team', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client', 1),
 ('cto@popularbahrain.com', 'Chief Technology Officer', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client CTO', 1),

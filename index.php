@@ -35,6 +35,17 @@ require_once __DIR__ . '/db.php';
 // 2. DOCUMENT ROUTING TABLE
 // =========================================================================
 $routes = array(
+    'SL-POP-ERP-PAY-001' => array(
+        'title'    => '★ MASTER PAYMENT GOVERNANCE: Payment Schedule Rules, Regulations, Governance & Master Disbursement Structure',
+        'html'     => 'SL-POP-ERP-PAY-001.html',
+        'pdf'      => 'SL-POP-ERP-PAY-001.pdf',
+        'status'   => 'Submitted & Ready for Sign-off',
+        'timeline' => '88 Dedicated Engineering Weeks (17.6 Mo)',
+        'scope'    => 'Master Payment Governance, BD 5,000 Token, Termination & Consultant Liability Rules',
+        'ba_ref'   => 'PAY-001 (Ver 1.2 Final)',
+        'date'     => '03/10/2026',
+        'desc'     => 'Consolidated commercial master rulebook codifying all 35 payment milestone gates (BD 38,090.910), 15-day UAT grace period SLA with automatic deemed approval mechanism, BD 5,000 signing token mobilization advance (adjusted at final migration/gates), development suspension authority & 5-working-day restart guarantee, continuous uninterrupted development clause, 2-year resource price lock, 10%–20% post-2-year rate escalation, vendor delivery delay 10-day cure SLA, mandatory 30-day written notice for client termination without cause with 100% non-refundable deposit terms, complete exclusion of SaNDS Lab liability towards client-appointed consultant UniGlobal Consultancy, and tripartite digital sign-off console.'
+    ),
     'SL-POP-ERP-SUMMARY-001' => array(
         'title'    => '★ MASTER SUMMARY: Complete 9-Module ERP Milestone & Commercial Budget Roadmap',
         'html'     => 'SL-POP-ERP-SUMMARY-001.html',
@@ -496,7 +507,7 @@ if (isset($_GET['logout']) || isset($_GET['switch_user']) || isset($_GET['reset'
 // 4. SUPER ADMIN USER MANAGEMENT HANDLERS (ajit@sandslab.com)
 // =========================================================================
 $authenticated_user = is_device_authenticated();
-$is_super_admin = ($authenticated_user && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'info@sandslab.com'));
+$is_super_admin = ($authenticated_user && (strtolower($authenticated_user) === 'ajit@sandslab.com' || strtolower($authenticated_user) === 'projects@sandslab.com'));
 
 $admin_msg = '';
 $admin_error = '';
@@ -3909,6 +3920,9 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
             $val = $arch_meta_stmt->fetchColumn();
             if ($val) $arch_status = $val;
         }
+        $pay_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'SL-POP-ERP-PAY-001'");
+        $pay_status = $pay_meta_stmt ? $pay_meta_stmt->fetchColumn() : 'IN_REVIEW';
+        $pay_is_locked = ($pay_status === 'FINALIZED_AND_LOCKED');
     }
   ?>
 
@@ -4204,6 +4218,54 @@ $ms7_meta_stmt = $pdo->query("SELECT status FROM document_meta WHERE doc_id = 'S
         <a href="?doc=SL-POP-ERP-ARCH-001.pdf" target="_blank" class="btn btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Download Signed PDF (7 Pages)
+        </a>
+      </div>
+    </div>
+
+    <!-- MASTER DOCUMENT: PAYMENT RULES, REGULATIONS & DISBURSEMENT STRUCTURE (JUST BEFORE MODULE 1) -->
+    <div class="doc-card" style="border-top: 4px solid #2563eb; background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100px);">
+      <div class="doc-header-row">
+        <div>
+          <span class="doc-ref-badge" style="background:#dbeafe; color:#1e40af; font-weight:800;">★ MASTER GOVERNANCE: PAY-001 (Ver 1.2 Final)</span>
+          <h2 class="doc-title" style="color: #0a2540;">Payment Schedule Rules, Regulations, Governance & Master Disbursement Structure</h2>
+        </div>
+        <span class="doc-status-badge" style="<?php echo ($pay_is_locked) ? 'background:#dcfce7; color:#15803d; border-color:#bbf7d0;' : 'background:#dbeafe; color:#1e40af; border-color:#bfdbfe;'; ?>">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <?php echo ($pay_is_locked) ? '✅ Finalized & Executed' : 'Submitted & Ready for Sign-off'; ?>
+        </span>
+      </div>
+
+      <div class="doc-meta-grid">
+        <div>
+          <div class="meta-item-label">Total Portfolio Effort</div>
+          <div class="meta-item-val">88 Weeks (17.6 Mo)</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Milestone Tranches</div>
+          <div class="meta-item-val">9 Modules • 35 Gates</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Signing Token Advance</div>
+          <div class="meta-item-val" style="color:#2563eb; font-weight:700;">BD 5,000.000</div>
+        </div>
+        <div>
+          <div class="meta-item-label">Total Core Investment</div>
+          <div class="meta-item-val" style="color:#d97706; font-size:16px;">BD 38,090.910</div>
+        </div>
+      </div>
+
+      <p class="doc-desc">
+        Comprehensive commercial master rulebook codifying all 35 payment milestone gates (Total: BD 38,090.910), 15-day UAT verification SLA with automatic deemed approval mechanism, BD 5,000.000 signing token advance (reconciled at final migration/closing gates), development suspension authority upon payment default with guaranteed 5-working-day restart SLA, 2-year resource price lock, 10%–20% post-2-year rate escalation, and multi-party cryptographic digital sign-off console.
+      </p>
+
+      <div class="doc-actions">
+        <a href="?doc=SL-POP-ERP-PAY-001" class="btn btn-primary" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); font-weight: 700;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Open Payment Governance Document
+        </a>
+        <a href="?doc=SL-POP-ERP-PAY-001.pdf" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Master PDF (14 Pages)
         </a>
       </div>
     </div>

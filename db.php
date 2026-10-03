@@ -240,7 +240,7 @@ if ($pdo) {
         if ($cnt == 0) {
             $initial_users = array(
                 array('ajit@sandslab.com', 'Ajit Kumar KV', 'SaNDS Lab Middle East W.L.L', 'Super Admin', 1),
-                array('info@sandslab.com', 'SaNDS Lab Administration', 'SaNDS Lab Middle East W.L.L', 'Admin', 1),
+                array('projects@sandslab.com', 'SaNDS Lab Administration', 'SaNDS Lab Middle East W.L.L', 'Admin', 1),
                 array('director@popularbahrain.com', 'Managing Director', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client Director', 1),
                 array('popularpartsbh@gmail.com', 'Executive Team', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client', 1),
                 array('cto@popularbahrain.com', 'Chief Technology Officer', 'Popular Auto Spare & A/C Parts Co. W.L.L', 'Client CTO', 1),
