@@ -194,49 +194,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
       padding: 32px 24px;
     }
 
-    .sidebar-nav {
-      width: 260px;
-      flex-shrink: 0;
+    /* Sticky Navigation Sidebar */
+    .sticky-sidebar {
       position: sticky;
-      top: 80px;
+      top: 70px;
       height: fit-content;
       background: var(--card-bg);
       border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 16px 12px;
+      padding: 20px;
       box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      width: 280px;
+      flex-shrink: 0;
     }
 
-    .nav-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      padding: 8px 12px 12px;
+    .sidebar-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
       font-weight: 700;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 8px;
+      color: var(--secondary);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .nav-link {
+    .sidebar-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sidebar-menu li a {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 12px;
-      color: var(--text);
-      text-decoration: none;
+      padding: 10px 14px;
       border-radius: 6px;
-      font-size: 12.5px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
       font-weight: 500;
-      transition: all 0.15s ease;
-      margin-bottom: 2px;
+      transition: all 0.2s ease;
     }
 
-    .nav-link i { width: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-    .nav-link:hover { background: var(--bg); color: var(--primary); }
-    .nav-link:hover i { color: var(--primary); }
-    .nav-link.active { background: var(--primary-light); color: var(--primary-dark); font-weight: 600; }
-    .nav-link.active i { color: var(--primary); }
+    .sidebar-menu li a:hover,
+    .sidebar-menu li a.active {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 700;
+      border-left: 3px solid #d97706;
+    }
+
+    .sidebar-menu li a i {
+      width: 18px;
+      font-size: 14px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .sidebar-menu li a:hover i,
+    .sidebar-menu li a.active i {
+      color: #d97706;
+    }
+
+    .sidebar-card {
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .sidebar-card-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
 
     .main-content { flex: 1; min-width: 0; }
 
@@ -407,7 +451,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     @media (max-width: 1024px) {
       .layout-container { flex-direction: column; }
-      .sidebar-nav { width: 100%; position: static; }
+      .sticky-sidebar { width: 100%; position: static; }
       .grid-2, .grid-3, .signoff-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -430,16 +474,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
   <div class="layout-container">
     
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar-nav">
-      <div class="nav-title">Navigation</div>
-      <a href="#executive-summary" class="nav-link active"><i class="fas fa-info-circle"></i> Executive Summary</a>
-      <a href="#module-scope" class="nav-link"><i class="fas fa-network-wired"></i> Functional Scope (ARCH-001)</a>
-      <a href="#pricing-matrix" class="nav-link"><i class="fas fa-calculator"></i> Resource Pricing (3 Wks)</a>
-      <a href="#detailed-milestones" class="nav-link"><i class="fas fa-list-check"></i> Milestone Roadmap (1-3)</a>
-      <a href="#payment-schedule" class="nav-link"><i class="fas fa-credit-card"></i> Invoicing Schedule</a>
-      <a href="#governance-sla" class="nav-link"><i class="fas fa-shield-halved"></i> SLA, Grace Period & Terms</a>
-      <a href="#digital-signoff" class="nav-link"><i class="fas fa-signature"></i> Digital Sign-Off</a>
+    <!-- Sticky Navigation Sidebar -->
+    <aside class="sticky-sidebar">
+      <div class="sidebar-title">
+        <i class="fas fa-compass"></i> Navigation
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="#executive-summary" class="active"><i class="fas fa-info-circle"></i> Executive Summary</a></li>
+        <li><a href="#module-scope"><i class="fas fa-sitemap"></i> Functional Scope (ARCH-001)</a></li>
+        <li><a href="#pricing-matrix"><i class="fas fa-calculator"></i> Resource Pricing (3 Weeks)</a></li>
+        <li><a href="#detailed-milestones"><i class="fas fa-tasks"></i> Milestone Roadmap (1-3)</a></li>
+        <li><a href="#payment-schedule"><i class="fas fa-credit-card"></i> Invoicing Schedule</a></li>
+        <li><a href="#governance-sla"><i class="fas fa-shield-alt"></i> SLA, Grace Period & Terms</a></li>
+        <li><a href="#digital-signoff"><i class="fas fa-file-signature"></i> Digital Sign-Off</a></li>
+      </ul>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">
+          <i class="fas fa-chart-pie"></i> Module 8 At A Glance
+        </div>
+        <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
+          <div><strong>Timeline:</strong> 3 Weeks (0.75 Mo)</div>
+          <div><strong>Total Baseline:</strong> BD 1,142.727</div>
+          <div><strong>Milestones:</strong> 3 × 33.33% Phases</div>
+          <div><strong>BA Source:</strong> ARCH-001 v1.0</div>
+          <div><strong>Scope:</strong> Hardware, Server HA, PDA & Printers</div>
+        </div>
+        <button onclick="window.print()" style="width: 100%; margin-top: 14px; padding: 9px 12px; font-size: 12px; background: #0f172a; color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;">
+          <i class="fas fa-file-pdf"></i> Export / Print PDF
+        </button>
+      </div>
     </aside>
 
     <!-- Main Content Area -->
