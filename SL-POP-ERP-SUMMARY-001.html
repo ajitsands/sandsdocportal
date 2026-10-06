@@ -1,116 +1,3 @@
-<?php
-// PHP Backend for Digital Signature & Finalization API (SL-POP-ERP-SUMMARY-001)
-if (session_status() === PHP_SESSION_NONE) {
-    $session_save_dir = __DIR__ . '/.sessions';
-    if (!is_dir($session_save_dir)) {
-        @mkdir($session_save_dir, 0700, true);
-    }
-    if (is_dir($session_save_dir) && is_writable($session_save_dir)) {
-        @session_save_path($session_save_dir);
-    } elseif (is_dir(sys_get_temp_dir()) && is_writable(sys_get_temp_dir())) {
-        @session_save_path(sys_get_temp_dir());
-    }
-    @session_start();
-}
-
-$doc_id = 'SL-POP-ERP-SUMMARY-001';
-
-$db_candidates = array(__DIR__ . '/db.php', dirname(__DIR__) . '/db.php');
-foreach ($db_candidates as $dbc) {
-    if (file_exists($dbc)) {
-        require_once $dbc;
-        break;
-    }
-}
-
-$is_locked = false;
-if (isset($pdo) && $pdo) {
-    try {
-        $meta_stmt = $pdo->prepare("SELECT status FROM document_meta WHERE doc_id = ?");
-        $meta_stmt->execute(array($doc_id));
-        $status_val = $meta_stmt->fetchColumn();
-        if ($status_val === 'FINALIZED_AND_LOCKED') {
-            $is_locked = true;
-        }
-    } catch (Exception $e) {}
-}
-
-$authenticated_user = isset($_SESSION['authenticated_user']) ? $_SESSION['authenticated_user'] : (isset($_COOKIE['sands_auth_device']) ? $_COOKIE['sands_auth_device'] : '');
-
-// Handle Ajax Actions
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    header('Content-Type: application/json');
-    $action = $_POST['action'];
-    
-    if (!$authenticated_user) {
-        echo json_encode(array('success' => false, 'message' => 'Unauthorized access. Please log in via the portal.'));
-        exit;
-    }
-    
-    if ($action === 'sign_milestone') {
-        $role = isset($_POST['role']) ? trim($_POST['role']) : '';
-        $signer_name = isset($_POST['signer_name']) ? trim($_POST['signer_name']) : '';
-        $signer_designation = isset($_POST['signer_designation']) ? trim($_POST['signer_designation']) : '';
-        $signature_data = isset($_POST['signature_data']) ? trim($_POST['signature_data']) : '';
-        
-        if (empty($role) || empty($signer_name) || empty($signature_data)) {
-            echo json_encode(array('success' => false, 'message' => 'Missing required signature fields.'));
-            exit;
-        }
-        
-        try {
-            $now = date('Y-m-d H:i:s');
-            
-            // Check if document record exists in document_meta
-            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM document_meta WHERE doc_id = ?");
-            $check_stmt->execute(array($doc_id));
-            if ($check_stmt->fetchColumn() == 0) {
-                $ins_stmt = $pdo->prepare("INSERT INTO document_meta (doc_id, title, status) VALUES (?, ?, 'IN_REVIEW')");
-                $ins_stmt->execute(array($doc_id, 'Master Executive Milestone Summary & Complete 9-Module Budgeting Roadmap'));
-            }
-            
-            // Check if column exists or update document_signatures
-            if ($db_driver_active === 'mysql') {
-                $sig_stmt = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) 
-                                           VALUES (?, ?, ?, ?, ?, ?, ?)
-                                           ON DUPLICATE KEY UPDATE signer_name = VALUES(signer_name), signer_designation = VALUES(signer_designation), signature_data = VALUES(signature_data), signed_at = VALUES(signed_at)");
-                $sig_stmt->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
-            } else {
-                $del = $pdo->prepare("DELETE FROM document_signatures WHERE doc_id = ? AND role = ?");
-                $del->execute(array($doc_id, $role));
-                $ins = $pdo->prepare("INSERT INTO document_signatures (doc_id, role, signer_name, signer_designation, signer_email, signature_data, signed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $ins->execute(array($doc_id, $role, $signer_name, $signer_designation, $authenticated_user, $signature_data, $now));
-            }
-            
-            // Log to audit trail
-            $audit_stmt = $pdo->prepare("INSERT INTO audit_trail (user_email, action, details, ip_address) VALUES (?, ?, ?, ?)");
-            $audit_stmt->execute(array($authenticated_user, 'SIGN_DOCUMENT', "Signed $doc_id as $role ($signer_name)", $_SERVER['REMOTE_ADDR']));
-            
-            echo json_encode(array('success' => true, 'message' => 'Master Summary Signature recorded successfully!', 'signed_at' => $now));
-            exit;
-        } catch (Exception $e) {
-            echo json_encode(array('success' => false, 'message' => 'Database error: ' . $e->getMessage()));
-            exit;
-        }
-    }
-    
-    if ($action === 'get_signatures') {
-        try {
-            $stmt = $pdo->prepare("SELECT role, signer_name, signer_designation, signer_email, signature_data, signed_at FROM document_signatures WHERE doc_id = ?");
-            $stmt->execute(array($doc_id));
-            $signatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode(array('success' => true, 'signatures' => $signatures));
-            exit;
-        } catch (Exception $e) {
-            echo json_encode(array('success' => false, 'message' => 'Error fetching signatures: ' . $e->getMessage()));
-            exit;
-        }
-    }
-    
-    echo json_encode(array('success' => false, 'message' => 'Unknown action.'));
-    exit;
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1596,7 +1483,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       </div>
       <div class="total-cost-right">
         <div class="total-cost-amt">BD 38,090.910</div>
-        <div class="total-cost-words">Thirty-Eight Thousand Ninety Bahraini Dinars & 910 Fils</div>
+        <div class="total-cost-words">Thirty-Four Thousand Ninety Bahraini Dinars & 910 Fils</div>
       </div>
     </div>
 
@@ -3100,63 +2987,55 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
       }
       const sigData = canvas.toDataURL('image/png');
 
-      const formData = new FormData();
-      formData.append('action', 'sign_milestone');
-      formData.append('role', currentRole);
-      formData.append('signer_name', name);
-      formData.append('signer_designation', designation);
-      formData.append('signature_data', sigData);
+      const sigRecord = {
+        party: currentRole,
+        name: name,
+        role: designation,
+        data: sigData,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        time: new Date().toLocaleTimeString()
+      };
 
-      document.getElementById('btnSubmitSign').disabled = true;
-      document.getElementById('btnSubmitSign').textContent = 'Recording Signature...';
+      try {
+        localStorage.setItem('sig_SL-POP-ERP-SUMMARY-001_' + currentRole, JSON.stringify(sigRecord));
+      } catch(e) {}
 
-      fetch(window.location.href, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert('Signature applied successfully to Master Executive Summary (SL-POP-ERP-SUMMARY-001)!');
-          window.location.reload();
-        } else {
-          alert('Error: ' + data.message);
-          document.getElementById('btnSubmitSign').disabled = false;
-          document.getElementById('btnSubmitSign').textContent = 'Confirm & Apply';
+      applySignatureToUI(currentRole, sigRecord);
+      closeSignModal();
+      document.getElementById('btnSubmitSign').disabled = false;
+      document.getElementById('btnSubmitSign').textContent = 'Confirm & Apply Signature';
+      alert('Master Executive Summary Signature successfully recorded for ' + currentRole.toUpperCase() + '!');
+    }
+
+    function applySignatureToUI(role, rec) {
+      const sigArea = document.getElementById(`sig_area_${role}`);
+      const badge = document.getElementById(`badge_${role}`);
+      if (sigArea) {
+        sigArea.innerHTML = `<img src="${rec.data}" style="max-height: 48px; max-width: 160px; object-fit: contain; margin-bottom: 4px;" alt="Signature"><br><div style="font-size: 11px; font-weight: 700; color: #0a2540;">${rec.name}</div><div style="font-size: 9.5px; color: #64748b;">${rec.role} &bull; ${rec.date || ''}</div>`;
+      }
+      if (badge) {
+        badge.textContent = 'SIGNED & RATIFIED';
+        badge.className = 'signoff-status-badge status-signed';
+        badge.style.background = '#dcfce7';
+        badge.style.color = '#15803d';
+        badge.style.border = '1px solid #bbf7d0';
+      }
+    }
+
+    function loadSavedSignatures() {
+      ['client', 'architect', 'advisor'].forEach(p => {
+        const saved = localStorage.getItem('sig_SL-POP-ERP-SUMMARY-001_' + p);
+        if (saved) {
+          try {
+            const rec = JSON.parse(saved);
+            applySignatureToUI(p, rec);
+          } catch(e) {}
         }
-      })
-      .catch(err => {
-        alert('Server communication error: ' + err);
-        document.getElementById('btnSubmitSign').disabled = false;
-        document.getElementById('btnSubmitSign').textContent = 'Confirm & Apply';
       });
     }
 
-    // Fetch existing signatures
     window.addEventListener('DOMContentLoaded', () => {
-      const formData = new FormData();
-      formData.append('action', 'get_signatures');
-      fetch(window.location.href, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.signatures) {
-          data.signatures.forEach(sig => {
-            const sigArea = document.getElementById(`sig_area_${sig.role}`);
-            const badge = document.getElementById(`badge_${sig.role}`);
-            if (sigArea) {
-              sigArea.innerHTML = `<img src="${sig.signature_data}" alt="Signature"><br><small style="font-size: 10px; color: var(--gray-600);">${sig.signer_name} (${sig.signed_at})</small>`;
-            }
-            if (badge) {
-              badge.textContent = 'SIGNED & APPROVED';
-              badge.className = 'signoff-status-badge status-signed';
-            }
-          });
-        }
-      })
-      .catch(e => console.log('Sig load info:', e));
+      loadSavedSignatures();
     });
   </script>
 </body>
