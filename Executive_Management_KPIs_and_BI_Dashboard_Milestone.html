@@ -328,7 +328,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
     .roadmap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .roadmap-header h4 { font-family: 'Space Grotesk', sans-serif; font-size: 13.5px; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
-    .roadmap-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .roadmap-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .roadmap-list {
+        grid-template-columns: 1fr;
+      }
+    }
     .roadmap-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 500; color: var(--text-muted); }
     .roadmap-item.active { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; font-weight: 700; box-shadow: 0 0 0 1px #3b82f6; }
     .roadmap-item.done { background: #f0fdf4; border-color: #86efac; color: #15803d; font-weight: 600; }
