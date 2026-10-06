@@ -454,6 +454,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
       .sticky-sidebar { width: 100%; position: static; }
       .grid-2, .grid-3, .signoff-grid { grid-template-columns: 1fr; }
     }
+  
+    /* Print Styles */
+    @media print {
+      .global-header-bar, .sticky-sidebar, .sign-btn, #finalize-block, .modal-overlay {
+        display: none !important;
+      }
+      body {
+        padding-top: 0 !important;
+        background: #fff !important;
+        color: #000;
+        font-size: 11pt;
+      }
+      .layout-container {
+        display: block !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .main-content {
+        width: 100% !important;
+      }
+      .doc-hero, .doc-section {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        margin-bottom: 20px !important;
+        page-break-inside: avoid;
+      }
+      .feature-card, .step-item, .sign-card, .custom-table-wrap {
+        page-break-inside: avoid;
+      }
+    }
   </style>
 </head>
 <body>
